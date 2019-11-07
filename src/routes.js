@@ -1,6 +1,5 @@
 const express =  require('express');
 const multer = require('multer');
-var bodyParser = require('body-parser');
 
 const uploadConfig = require('./config/upload')
 const UserController = require('./controllers/UserController');
@@ -13,15 +12,7 @@ const ComplaintController = require('./controllers/ComplaintController');
 
 
 const routes = express.Router();
-routes.use(bodyParser.json())
 const upload = multer(uploadConfig);
-routes.use(bodyParser.urlencoded({extended: true}))
-
-routes.get('/', (req, res, next)=>{
-    res.json({message:'Acess'})
-});
-
-
 
 
 routes.post('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture);
