@@ -111,7 +111,8 @@ module.exports = {
                     pass,
                     firstName: fullname.split(" ")[0],
                     lastName: fullname.split(" ").slice(1).join(' '),
-                    male
+                    male,
+                    profilePicture: "InitialProfile.png"
                 });
     
     
