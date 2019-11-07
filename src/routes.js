@@ -14,6 +14,7 @@ const ComplaintController = require('./controllers/ComplaintController');
 const routes = express.Router();
 const upload = multer(uploadConfig);
 
+routes.post('/', console.log(process.PORT));
 
 routes.post('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture);
 routes.post('/createlogin', UserController.createLogin);
