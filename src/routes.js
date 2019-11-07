@@ -19,6 +19,7 @@ const upload = multer(uploadConfig);
 routes.post('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture);
 routes.post('/createlogin', UserController.createLogin);
 routes.get('/getuserbyemail', UserController.getUserByEmail);
+routes.get('/showallusers', UserController.showallusers);
 routes.get('/getuserbyid', UserController.getUserById);
 routes.delete('/deleteuserbyemail', UserController.deleteUserByEmail);
 // routes.put('/updateBornByTokenAndUserId', UserController.editBorn);

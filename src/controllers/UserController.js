@@ -15,6 +15,13 @@ module.exports = {
         return res.json(user);
     },
 
+    async showAllUsers(req, res) {
+
+        const users = await User.find();
+
+        return res.json(users);
+    },
+
     async getUserById(req, res) {
         const { user } = req.headers;
 
