@@ -15,7 +15,7 @@ module.exports = {
         return res.json(user);
     },
 
-    async showAllUsers(req, res) {
+    async showallusers(req, res) {
 
         const users = await User.find();
 
