@@ -20,7 +20,7 @@ const PostSchema = new mongoose.Schema({
 });
 
 PostSchema.virtual('picture_url').get(function() {
-    return `http://localhost:3333/files/${this.picture}`
+    return `https://back-apipets.herokuapp.com/files/${this.picture}`
 })
 
 module.exports = mongoose.model('Post', PostSchema);
