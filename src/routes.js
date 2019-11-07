@@ -17,6 +17,12 @@ routes.use(bodyParser.json())
 const upload = multer(uploadConfig);
 routes.use(bodyParser.urlencoded({extended: true}))
 
+routes.get('/', (req, res, next)=>{
+    res.json({message:'Acess'})
+});
+
+
+
 
 routes.post('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture);
 routes.post('/createlogin', UserController.createLogin);
