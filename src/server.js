@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
 
 const routes = require('./routes');
 
@@ -14,10 +15,10 @@ mongoose.connect('mongodb://petspets:petspets@petsdb-shard-00-00-i0iht.mongodb.n
 
 //GET, POST, PUT, DELETE
 
-
+app.use(cors())
 app.use(express.json());
 app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')))
 app.use(routes);
 
-app.listen(process.PORT);
+app.listen(3333);
 
