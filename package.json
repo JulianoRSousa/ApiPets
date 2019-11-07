@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "api": "node src/server.js",
+    "api": "nodemon src/server.js",
     "start": "node src/server.js"
   },
   "dependencies": {
