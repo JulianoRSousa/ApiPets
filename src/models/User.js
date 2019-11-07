@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.virtual('picture_url').get(function() {
-    return `http://192.168.0.15:3333/files/${this.profilePicture}`
+    return `https://back-apipets.herokuapp.com/files/${this.profilePicture}`
 })
 
 module.exports = mongoose.model('User', UserSchema);

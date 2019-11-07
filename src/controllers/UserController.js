@@ -104,27 +104,33 @@ module.exports = {
         console.log(req.headers);
 
         const getuser = await User.findOne({ email });
-        if (!getuser) {
-            let user = await User.create({
-                email,
-                pass,
-                firstName: fullname.split(" ")[0],
-                lastName: fullname.split(" ").slice(1).join(' '),
-                male
-            });
-
-
-
-            const auth = await Auth.create({
-                user: user._id,
-                auth: true,
-            });
-
-            await auth.populate('user').execPopulate();
-
-            return res.status(201).json(auth);
+        try {
+            if (!getuser) {
+                let user = await User.create({
+                    email,
+                    pass,
+                    firstName: fullname.split(" ")[0],
+                    lastName: fullname.split(" ").slice(1).join(' '),
+                    male
+                });
+    
+    
+    
+                const auth = await Auth.create({
+                    user: user._id,
+                    auth: true,
+                });
+    
+                await auth.populate('user').execPopulate();
+    
+                return res.status(201).json(auth);
+            }
+            return res.status(202).json({ 'Error': 'This email is already registered!' })
+        } catch (error) {
+            console.log(error.message);
         }
         
-        return res.status(202).json({ 'Error': 'This email is already registered!' })
+        
+        
     }
 };
