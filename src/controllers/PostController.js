@@ -42,6 +42,11 @@ module.exports = {
                 user: user_id,
                 pet: pet_id,
             })
+            console.log((date.getDate(),'/',
+            (date.getMonth() + 1),'/',
+            date.getFullYear(),' ',
+            date.getHours(),':',
+            date.getMinutes()))
             return res.json(post);
         // }
 
