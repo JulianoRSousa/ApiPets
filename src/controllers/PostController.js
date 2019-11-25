@@ -31,7 +31,7 @@ module.exports = {
         if (await Auth.findOne({ _id: token }).length !== 0) {
             var date = new Date();
             const post = await Post.create({
-                picture: filename,
+                picture: "petProfile",
                 status,
                 description,
                 postDate: (date.getDate() + '/' +
@@ -44,7 +44,7 @@ module.exports = {
             })
             return res.json(post);
         }
-        
-        return res.json({"message":"Erro"});
+
+        return res.json();
     }
 };
