@@ -5,7 +5,7 @@ module.exports = {
     async getPostByStatus(req, res) {
         const { status } = req.query;
 
-        const post = await Post.find({ status: status});
+        const post = await Post.find({ status: status });
 
         return res.json(post);
     },
@@ -13,34 +13,38 @@ module.exports = {
     async getPostByUser(req, res) {
         const { user } = req.query;
 
-        const post = await Post.find({ user: user});
+        const post = await Post.find({ user: user });
 
         return res.json(post);
     },
 
-    async getAllPosts(req, res){
+    async getAllPosts(req, res) {
         const posts = await Post.find({})
         return res.json(posts)
     },
 
     async store(req, res) {
         const { filename } = req.file;
-        const { status, description, postDate } = req.body;
-        const { user_id, pet_id } = req.headers;
-
+        const { status, description } = req.body;
+        const { user_id, pet_id, token } = req.headers;
         
-        const post = await Post.create({
-            picture: filename,
-            status,
-            description,
-            postDate,
-            user: user_id,
-            pet: pet_id, 
-        })
+        if (await Auth.findOne({ _id: token }).length !== 0) {
+            var date = new Date();
+            const post = await Post.create({
+                picture: filename,
+                status,
+                description,
+                postDate: (date.getDate() + '/' +
+                    (date.getMonth() + 1) + '/' +
+                    date.getFullYear() + ' ' +
+                    date.getHours() + ':' +
+                    date.getMinutes()),
+                user: user_id,
+                pet: pet_id,
+            })
+            return res.json(post);
+        }
         
-
-        
-
-        return res.json(post);
+        return res.json({"message":"Erro"});
     }
 };
