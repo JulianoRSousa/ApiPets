@@ -25,13 +25,14 @@ module.exports = {
     },
 
     async store(req, res) {
-        const  filename  = req.file;
+        const { filename } = req.file;
         const { status, description } = req.body;
         const { user_id, pet_id, token } = req.headers;
 
         const auth = await Auth.findOne({ _id: token })
 
-        console.log(req.file)
+        console.log("req.file == ",req.file);
+        console.log("req.file.filename == ",req.file.filename);
 
         if (auth) {
             try {
