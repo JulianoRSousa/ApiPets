@@ -47,7 +47,7 @@ module.exports = {
             return res.status(201).json(user);
         }
 
-        return res.status(202).json({ 'Error': 'This email is already registred!' })
+        return res.status(202).json({ 'Error': 'No changes done' })
     },
 
     async deleteUserByEmail(req, res) {

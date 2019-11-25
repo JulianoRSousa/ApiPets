@@ -7,11 +7,15 @@ const routes = require('./routes');
 
 
 const app = express();
-
-mongoose.connect('mongodb://petspets:petspets@petsdb-shard-00-00-i0iht.mongodb.net:27017,petsdb-shard-00-01-i0iht.mongodb.net:27017,petsdb-shard-00-02-i0iht.mongodb.net:27017/test?ssl=true&replicaSet=PetsDB-shard-0&authSource=admin&retryWrites=true&w=majority',{
+try {
+    mongoose.connect('mongodb://petspets:petspets@petsdb-shard-00-00-i0iht.mongodb.net:27017,petsdb-shard-00-01-i0iht.mongodb.net:27017,petsdb-shard-00-02-i0iht.mongodb.net:27017/test?ssl=true&replicaSet=PetsDB-shard-0&authSource=admin&retryWrites=true&w=majority',{
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
+} catch (error) {
+    console.log(error.message())
+}
+
 
 //GET, POST, PUT, DELETE
 

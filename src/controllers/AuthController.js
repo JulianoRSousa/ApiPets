@@ -23,12 +23,6 @@ module.exports = {
 
 
     async gettrue(req, res){
-        var date = new Date();
-            console.log("Date equals = ",date.getDate(),'/',
-            (date.getMonth() + 1),'/',
-            date.getFullYear(),' ',
-            date.getHours(),':',
-            date.getMinutes())
         return res.json({auth:true});
     },
 
