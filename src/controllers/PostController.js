@@ -24,7 +24,7 @@ module.exports = {
     },
 
     async store(req, res) {
-        const { filename } = req.file;
+        // const { filename } = req.file;
         const { status, description } = req.body;
         const { user_id, pet_id, token } = req.headers;
         
@@ -42,7 +42,7 @@ module.exports = {
             date.getHours(),';',
             date.getMinutes()))
             const post = await Post.create({
-                picture: filename,
+                picture: "InitialProfile.png",
                 status,
                 description,
                 postDate: date.getDate() + '/' +
