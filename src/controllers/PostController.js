@@ -28,35 +28,37 @@ module.exports = {
         // const { filename } = req.file;
         const { status, description } = req.body;
         const { user_id, pet_id, token } = req.headers;
-        
+
         const auth = await Auth.findOne({ _id: token })
+
         if (auth) {
-            console.log(token,"<<<<< - token");
-            console.log('entrou no if')
-        }else{
-            console.log(token,"<<<<< - token");
+            try {
+                var date = new Date();
+                const post = await Post.create({
+                    picture: "InitialProfile.png",
+                    status,
+                    description,
+                    postDate: date.getDate() + '/' +
+                        (date.getMonth() + 1) + '/' +
+                        date.getFullYear(),
+                    postTime: date.getHours() + ':' +
+                        date.getMinutes(),
+                    user: user_id,
+                    pet: pet_id,
+                })
+                return res.json(post);
+
+            } catch (error) {
+                console.log(error.message())
+            }
+
+
+        } else {
+            console.log(token, "<<<<< - token");
             console.log('Não entrou no if')
         }
-            var date = new Date();
-            console.log("date time is = ",date.getDate(),';',
-            (date.getMonth() + 1),';',
-            date.getFullYear(),' ',
-            date.getHours(),';',
-            date.getMinutes())
-            const post = await Post.create({
-                picture: "InitialProfile.png",
-                status,
-                description,
-                postDate: date.getDate() + '/' +
-                    (date.getMonth() + 1) + '/' +
-                    date.getFullYear() + ' ' +
-                    date.getHours() + ':' +
-                    date.getMinutes(),
-                user: user_id,
-                pet: pet_id,
-            })
-            
-            return res.json(post);
+
+
         // }
 
         // return res.json();

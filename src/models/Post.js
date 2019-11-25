@@ -5,6 +5,7 @@ const PostSchema = new mongoose.Schema({
     status: String,
     description: String,
     postDate: String,
+    postTime: String,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
