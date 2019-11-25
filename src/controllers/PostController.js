@@ -1,4 +1,5 @@
 const Post = require('../models/Post');
+const Auth = require('../models/Auth');
 
 module.exports = {
 
