@@ -31,6 +31,11 @@ module.exports = {
 
         const auth = await Auth.findOne({ _id: token })
 
+        if(req.file){
+            console.log("Entrou no if")
+        }else{
+            console.log("Não Entrou no if");
+        }
         console.log("req.file == ",req.file);
         console.log("req.file.filename == ",req.file.filename);
 
