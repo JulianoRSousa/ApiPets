@@ -29,7 +29,8 @@ module.exports = {
         const { status, description } = req.body;
         const { user_id, pet_id, token } = req.headers;
         
-        if (await Auth.findOne({ _id: token }).length !== 0) {
+        const auth = await Auth.findOne({ _id: token })
+        if (auth.length !== 0) {
             console.log(token,"<<<<< - token");
             console.log('entrou no if')
         }else{
@@ -37,11 +38,11 @@ module.exports = {
             console.log('Não entrou no if')
         }
             var date = new Date();
-            console.log("date time is = ",(date.getDate(),';',
+            console.log("date time is = ",date.getDate(),';',
             (date.getMonth() + 1),';',
             date.getFullYear(),' ',
             date.getHours(),';',
-            date.getMinutes()))
+            date.getMinutes())
             const post = await Post.create({
                 picture: "InitialProfile.png",
                 status,
