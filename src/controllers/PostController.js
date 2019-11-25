@@ -30,7 +30,7 @@ module.exports = {
         const { user_id, pet_id, token } = req.headers;
         
         const auth = await Auth.findOne({ _id: token })
-        if (auth.length !== 0) {
+        if (auth) {
             console.log(token,"<<<<< - token");
             console.log('entrou no if')
         }else{
