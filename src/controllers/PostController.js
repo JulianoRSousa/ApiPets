@@ -31,44 +31,37 @@ module.exports = {
 
         const auth = await Auth.findOne({ _id: token })
 
-        if(req.file){
-            console.log("Entrou no if")
-        }else{
-            console.log("Não Entrou no if");
-        }
-        console.log("req.file == ",req.file);
-        console.log("req.file.filename == ",req.file.filename);
+        try {
+            if (req.file) {
 
-        if (auth) {
-            try {
-                var date = new Date();
-                const post = await Post.create({
-                    picture: filename,
-                    status,
-                    description,
-                    postDate: date.getDate() + '/' +
-                        (date.getMonth() + 1) + '/' +
-                        date.getFullYear(),
-                    postTime: date.getHours() + ':' +
-                        date.getMinutes(),
-                    user: user_id,
-                    pet: pet_id,
-                })
-                return res.json(post);
+                if (auth) {
+                    try {
+                        var date = new Date();
+                        const post = await Post.create({
+                            picture: filename,
+                            status,
+                            description,
+                            postDate: date.getDate() + '/' +
+                                (date.getMonth() + 1) + '/' +
+                                date.getFullYear(),
+                            postTime: date.getHours() + ':' +
+                                date.getMinutes(),
+                            user: user_id,
+                            pet: pet_id,
+                        })
+                        return res.json(post);
 
-            } catch (error) {
-                console.log(error)
+                    } catch (error) {
+                        console.log(error)
+                    }
+                } else {
+                    console.log(token, "<<<<< - token");
+                    console.log('Não entrou no if')
+                }
             }
-
-
-        } else {
-            console.log(token, "<<<<< - token");
-            console.log('Não entrou no if')
+        } catch (error) {
+            console.log(error.message)
         }
-
-
-        // }
-
-        // return res.json();
     }
+
 };
