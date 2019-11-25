@@ -30,6 +30,11 @@ module.exports = {
         
         // if (await Auth.findOne({ _id: token }).length !== 0) {
             var date = new Date();
+            console.log((date.getDate(),'/',
+            (date.getMonth() + 1),'/',
+            date.getFullYear(),' ',
+            date.getHours(),':',
+            date.getMinutes()))
             const post = await Post.create({
                 picture: filename,
                 status,
@@ -42,11 +47,7 @@ module.exports = {
                 user: user_id,
                 pet: pet_id,
             })
-            console.log((date.getDate(),'/',
-            (date.getMonth() + 1),'/',
-            date.getFullYear(),' ',
-            date.getHours(),':',
-            date.getMinutes()))
+            
             return res.json(post);
         // }
 
