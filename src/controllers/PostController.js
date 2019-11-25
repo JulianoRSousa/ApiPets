@@ -31,7 +31,7 @@ module.exports = {
         if (await Auth.findOne({ _id: token }).length !== 0) {
             var date = new Date();
             const post = await Post.create({
-                picture: "petProfile",
+                picture: filename,
                 status,
                 description,
                 postDate: (date.getDate() + '/' +
