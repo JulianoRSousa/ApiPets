@@ -28,7 +28,7 @@ module.exports = {
         const { status, description } = req.body;
         const { user_id, pet_id, token } = req.headers;
         
-        if (await Auth.findOne({ _id: token }).length !== 0) {
+        // if (await Auth.findOne({ _id: token }).length !== 0) {
             var date = new Date();
             const post = await Post.create({
                 picture: filename,
@@ -43,8 +43,8 @@ module.exports = {
                 pet: pet_id,
             })
             return res.json(post);
-        }
+        // }
 
-        return res.json();
+        // return res.json();
     }
 };
