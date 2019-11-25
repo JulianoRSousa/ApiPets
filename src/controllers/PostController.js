@@ -30,7 +30,7 @@ module.exports = {
         
         // if (await Auth.findOne({ _id: token }).length !== 0) {
             var date = new Date();
-            console.log((date.getDate(),'/',
+            console.log("date time is = "(date.getDate(),'/',
             (date.getMonth() + 1),'/',
             date.getFullYear(),' ',
             date.getHours(),':',
