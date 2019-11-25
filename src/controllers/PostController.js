@@ -25,7 +25,7 @@ module.exports = {
     },
 
     async store(req, res) {
-        const { filename } = req.file;
+        const { filename } = req.file.filename;
         const { status, description } = req.body;
         const { user_id, pet_id, token } = req.headers;
 
@@ -54,13 +54,10 @@ module.exports = {
                     } catch (error) {
                         console.log(error)
                     }
-                } else {
-                    console.log(token, "<<<<< - token");
-                    console.log('Não entrou no if')
                 }
             }
         } catch (error) {
-            console.log(error.message)
+            console.log("error.message = ",error.message,)
         }
     }
 
