@@ -37,7 +37,7 @@ module.exports = {
             console.log('Não entrou no if')
         }
             var date = new Date();
-            console.log("date time is = "(date.getDate(),';',
+            console.log("date time is = ",(date.getDate(),';',
             (date.getMonth() + 1),';',
             date.getFullYear(),' ',
             date.getHours(),';',
