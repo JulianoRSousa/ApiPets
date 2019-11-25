@@ -31,6 +31,8 @@ module.exports = {
 
         const auth = await Auth.findOne({ _id: token })
 
+        console.log(req.file)
+
         if (auth) {
             try {
                 var date = new Date();
