@@ -23,31 +23,6 @@ module.exports = {
         const posts = await Post.find({})
         return res.json(posts)
     },
-
-     async UploadPicture(req, res) {
-        const { filename } = req.file.filename;
-         const { token } = req.headers;
-
-        const auth = await Auth.findOne({ _id: token })
-
-        try {
-            if (req.file) {
-                if (auth) {
-                    try {
-                        const post = await Post.create({
-                            picture: filename,
-                        })
-                        return res.json(post);
-
-                    } catch (error) {
-                        console.log(error)
-                    }
-                }
-            }
-        } catch (error) {
-            console.log("error.message = ",error.message,)
-        }
-    },
     
     async store(req, res) {
         const { status, description } = req.body;
