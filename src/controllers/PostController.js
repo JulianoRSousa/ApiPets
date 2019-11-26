@@ -24,8 +24,32 @@ module.exports = {
         return res.json(posts)
     },
 
-    async store(req, res) {
+     async UploadPicture(req, res) {
         const { filename } = req.file.filename;
+
+        const auth = await Auth.findOne({ _id: token })
+
+        try {
+            if (req.file) {
+                if (auth) {
+                    try {
+                        var date = new Date();
+                        const post = await Post.create({
+                            picture: filename,
+                        })
+                        return res.json(post);
+
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            }
+        } catch (error) {
+            console.log("error.message = ",error.message,)
+        }
+    },
+    
+    async store(req, res) {
         const { status, description } = req.body;
         const { user_id, pet_id, token } = req.headers;
 
@@ -33,12 +57,11 @@ module.exports = {
 
         try {
             if (req.file) {
-
                 if (auth) {
                     try {
                         var date = new Date();
                         const post = await Post.create({
-                            picture: filename,
+                            picture: "petProfile.png",
                             status,
                             description,
                             postDate: date.getDate() + '/' +
