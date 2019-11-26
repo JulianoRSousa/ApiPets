@@ -26,6 +26,7 @@ module.exports = {
 
      async UploadPicture(req, res) {
         const { filename } = req.file.filename;
+         const { token } = req.headers;
 
         const auth = await Auth.findOne({ _id: token })
 
@@ -33,7 +34,6 @@ module.exports = {
             if (req.file) {
                 if (auth) {
                     try {
-                        var date = new Date();
                         const post = await Post.create({
                             picture: filename,
                         })
