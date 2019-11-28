@@ -8,11 +8,7 @@ const User = require('../models/User');
 module.exports = {
 
     async getUserByEmail(req, res) {
-        const { email } = req.headers;
-        const email2 = req.headers.email.toLowerCase();
-
-        console.log("email = ",email);
-        console.log("email2 = ", email2);
+        const email = req.headers.email.toLowerCase();
 
         const user = await User.find({ email });
 
@@ -55,7 +51,7 @@ module.exports = {
     },
 
     async deleteUserByEmail(req, res) {
-        const { email } = req.headers;
+        const email = req.headers.email.toLowerCase();
 
         const deleted = await User.findOneAndDelete({ email })
         if (deleted == null)
