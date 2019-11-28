@@ -9,8 +9,12 @@ module.exports = {
 
     async getUserByEmail(req, res) {
         const { email } = req.headers;
+        const email2 = req.headers.email.toLowerCase();
 
-        const user = await User.find({ email: email.toLowerCase() });
+        console.log("email = ",email);
+        console.log("email2 = ", email2);
+
+        const user = await User.find({ email });
 
         return res.json(user);
     },
@@ -103,11 +107,11 @@ module.exports = {
 
         console.log(req.headers);
 
-        const getuser = await User.findOne({ email });
+        const getuser = await User.findOne({ email: email.toLowerCase() });
         try {
             if (!getuser) {
                 let user = await User.create({
-                    email,
+                    email: email.toLowerCase(),
                     pass,
                     firstName: fullname.split(" ")[0],
                     lastName: fullname.split(" ").slice(1).join(' '),
