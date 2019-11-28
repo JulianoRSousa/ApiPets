@@ -22,6 +22,7 @@ routes.get('/getuserbyemail', UserController.getUserByEmail);
 routes.get('/showallusers', UserController.showallusers);
 routes.get('/getuserbyid', UserController.getUserById);
 routes.delete('/deleteuserbyemail', UserController.deleteUserByEmail);
+routes.delete('/deleteuserbyid', UserController.deleteUserById);
 // routes.put('/updateBornByTokenAndUserId', UserController.editBorn);
 
 routes.post('/createpet', upload.single('profilePicture'), PetController.store);

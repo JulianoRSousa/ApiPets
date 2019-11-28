@@ -5,7 +5,7 @@ module.exports = {
     async getComplaintByPostId(req, res) {
         const { post_id } = req.query;
 
-        const complaint = await Complaint.find({ post_id: post_id.toLowerCase()});
+        const complaint = await Complaint.find({ post_id });
 
         return res.json(complaint);
     },

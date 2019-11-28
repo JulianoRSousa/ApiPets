@@ -51,9 +51,18 @@ module.exports = {
     },
 
     async deleteUserByEmail(req, res) {
-        const email = req.headers.email;
+        const email = req.headers.email.toLowerCase();
 
         const deleted = await User.findOneAndDelete({ email })
+        if (deleted == null)
+            return res.status(202).json({ 'Error': 'This email was not found!' })
+        return res.status(200).json(deleted)
+    },
+
+    async deleteUserById(req, res) {
+        const { user_id } = req.headers;
+
+        const deleted = await User.findOneAndDelete({ _id: user_id })
         if (deleted == null)
             return res.status(202).json({ 'Error': 'This email was not found!' })
         return res.status(200).json(deleted)
