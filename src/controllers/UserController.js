@@ -10,7 +10,7 @@ module.exports = {
     async getUserByEmail(req, res) {
         const { email } = req.headers;
 
-        const user = await User.find({ email: email });
+        const user = await User.find({ email: email.toLowerCase() });
 
         return res.json(user);
     },
