@@ -51,7 +51,7 @@ module.exports = {
     },
 
     async deleteUserByEmail(req, res) {
-        const email = req.headers.email.toLowerCase();
+        const email = req.headers.email;
 
         const deleted = await User.findOneAndDelete({ email })
         if (deleted == null)
@@ -99,15 +99,14 @@ module.exports = {
 
 
     async createLogin(req, res) {
-        const { email, pass, fullname, male  } = req.headers;
+        const email = req.headers.email.toLowerCase();
+        const { pass, fullname, male } = req.headers;
 
-        console.log(req.headers);
-
-        const getuser = await User.findOne({ email: email.toLowerCase() });
+        const getuser = await User.findOne({ email });
         try {
             if (!getuser) {
                 let user = await User.create({
-                    email: email.toLowerCase(),
+                    email,
                     pass,
                     firstName: fullname.split(" ")[0],
                     lastName: fullname.split(" ").slice(1).join(' '),
