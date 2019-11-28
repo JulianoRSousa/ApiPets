@@ -23,8 +23,8 @@ module.exports = {
         const posts = await Post.find({})
         return res.json(posts)
     },
-
-    async store(req, res) {
+    
+  async store(req, res) {
         const { filename } = req.file.filename;
         const { status, description } = req.body;
         const { user_id, pet_id, token } = req.headers;

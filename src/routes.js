@@ -28,7 +28,6 @@ routes.post('/createpet', upload.single('profilePicture'), PetController.store);
 routes.get('/getpetbyuserid', PetController.getPetByUserId);
 routes.delete('/deletepet', PetController.deletepet);
 
-// routes.post('/createpost', PostController.store);
 routes.post('/createpost', upload.single('picture'), PostController.store);
 routes.get('/getpostbystate', PostController.getPostByStatus);
 routes.get('/getpostbyuser', PostController.getPostByUser);
