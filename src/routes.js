@@ -16,7 +16,7 @@ const upload = multer(uploadConfig);
 
 
 
-routes.post('/setprofile', UserController.setProfilePicture);
+routes.post('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture);
 routes.post('/createlogin', UserController.createLogin);
 routes.get('/getuserbyemail', UserController.getUserByEmail);
 routes.get('/showallusers', UserController.showallusers);

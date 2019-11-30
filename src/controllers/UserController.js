@@ -34,25 +34,28 @@ module.exports = {
     async setProfilePicture(req, res) {
         const { profilePicture } = req.file;
         const { token } = req.headers;
-        
         let user = null;
-
         await Auth.findOne({ token }).then(Response => {
-           user = Response.data.user
+            user = Response.data.user
         })
 
-        console.log("User = ",user);
-        let filter = "{ user_id: "+user+" }";
-        console.log("filter = ", filter);
-        // if (user) {
-        //     user = await User.updateOne({
-        //         profilePicture: profilePicture,
-        //     });
-        //     user = await User.updateOne({})
-        //     return res.status(201).json(user);
-        // }
+        if (user) {
+            console.log("Autenticou user")
+            try {
+                const filter = { user_id: user._id };
+                console.log("filter = ",filter)
+                const update = { profilePicture: profilePicture };
+                console.log("Update = ", update.filename)
+                user = await User.findOneAndUpdate({ filter, update })
+                return res.status(201).json(user);
 
-        // return res.status(202).json({ 'Error': 'No changes done' })
+            } catch (error) {
+                console.log("Erro = ", error.message)
+            }
+            
+        }
+
+        return res.status(202).json({ 'Error': 'No changes done' })
     },
 
     async deleteUserByEmail(req, res) {
