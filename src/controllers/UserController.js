@@ -46,7 +46,7 @@ module.exports = {
             try {
                 const filter = { user_id: user };
                 console.log("filter = ",filter)
-                const update = { profilePicture: profilePicture, male: male };
+                const update = { male: male };
                 console.log("Update = ", update)
                 user = await User.findOneAndUpdate({ filter, update })
                 return res.status(201).json(user);
