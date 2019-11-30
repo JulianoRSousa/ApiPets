@@ -35,7 +35,7 @@ module.exports = {
         const { profilePicture } = req.file;
         const { token } = req.headers;
         let user = null;
-        
+
         await Auth.findOne({ _id: token }).then(Response => {
             console.log("response.user = ", Response.user),
             user = Response.data.user
@@ -44,7 +44,7 @@ module.exports = {
         if (user) {
             console.log("Autenticou user")
             try {
-                const filter = { user_id: user._id };
+                const filter = { user_id: user };
                 console.log("filter = ",filter)
                 const update = { profilePicture: profilePicture };
                 console.log("Update = ", update.filename)
