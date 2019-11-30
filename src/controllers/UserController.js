@@ -35,12 +35,9 @@ module.exports = {
         const { profilePicture } = req.file;
         const { token } = req.headers;
         let user = null;
-        const authent = await Auth.findOne({ _id: token }).then(Response => {})
-        console.log("Authent = ", authent)
+        
         await Auth.findOne({ _id: token }).then(Response => {
-            console.log("response = ", Response),
-            console.log("response.data = ", Response.data),
-            console.log("response.data.user = ", Response.data.user),
+            console.log("response.user = ", Response.user),
             user = Response.data.user
         })
 
