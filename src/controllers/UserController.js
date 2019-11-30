@@ -38,7 +38,7 @@ module.exports = {
 
         await Auth.findOne({ _id: token }).then(Response => {
             console.log("response.user = ", Response.user),
-            user = Response.data.user
+            user = Response.user
         })
 
         if (user) {
