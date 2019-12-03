@@ -7,24 +7,26 @@ module.exports = {
 
     async confirmauth(req, res) {
         const { token } = req.headers;
-        if(token!="000000000000000000000000"){
-        try {
-            const authenticated = await Auth.findOne({ _id: token });
-            if(authenticated.length !== 0){
-            await authenticated.populate('user').execPopulate();
-            return res.status(200).json(authenticated);
-            }else{
+        if (token == "000000000000000000000000" || token == null) {
+            return res.json({ 'error': 'Code 0s' });
+        } else {
+            try {
+                const authenticated = await Auth.findOne({ _id: token });
+                if (authenticated.length !== 0) {
+                    await authenticated.populate('user').execPopulate();
+                    return res.status(200).json(authenticated);
+                } else {
+                }
+            } catch (error) {
+                console.log(error);
+                return res.status(200).json(authenticated);
             }
-        } catch (error) {
-            console.log(error);
-            return res.status(200).json(authenticated);
         }
-    }
     },
 
 
-    async gettrue(req, res){
-        return res.json({auth:true});
+    async gettrue(req, res) {
+        return res.json({ auth: true });
     },
 
 
@@ -40,58 +42,58 @@ module.exports = {
     },
 
 
-    async createauth(req, res){
+    async createauth(req, res) {
 
         const { email, pass } = req.headers;
 
         let user = await User.findOne({ email, pass });
 
-        if(user != null){            
+        if (user != null) {
 
-            await Auth.deleteMany({user: user._id});
+            await Auth.deleteMany({ user: user._id });
 
             const authenticated = await Auth.create({
                 user: user._id,
                 auth: true,
             });
             await authenticated.populate('user').execPopulate();
-        return res.status(201).json(authenticated);
+            return res.status(201).json(authenticated);
         }
-    return res.status(401).json({'error':'Autenticação não encontrada'});
+        return res.status(401).json({ 'error': 'Autenticação não encontrada' });
     },
 
 
-    async deleteauth(req, res){
+    async deleteauth(req, res) {
         const { token } = req.headers;
 
-            const auth = await Auth.deleteOne({
-                _id: token
-            });
+        const auth = await Auth.deleteOne({
+            _id: token
+        });
         return res.json(auth);
     },
 
-    async deleteallauth(req, res){
+    async deleteallauth(req, res) {
 
         try {
             await Auth.deleteOne();
-        await Auth.deleteOne();
-        await Auth.deleteOne();
-        await Auth.deleteOne();
-        await Auth.deleteOne();
-        await Auth.deleteOne();
-        await Auth.deleteOne();
-        await Auth.deleteOne();
-        await Auth.deleteOne();
-        await Auth.deleteOne();
-        await Auth.deleteOne();
-        await Auth.deleteOne();
-        await Auth.deleteOne();
-        
-        } catch (error) {
-            
-        }
-        
+            await Auth.deleteOne();
+            await Auth.deleteOne();
+            await Auth.deleteOne();
+            await Auth.deleteOne();
+            await Auth.deleteOne();
+            await Auth.deleteOne();
+            await Auth.deleteOne();
+            await Auth.deleteOne();
+            await Auth.deleteOne();
+            await Auth.deleteOne();
+            await Auth.deleteOne();
+            await Auth.deleteOne();
 
-        return res.json({message:'Deleted'});
+        } catch (error) {
+
+        }
+
+
+        return res.json({ message: 'Deleted' });
     }
 };
