@@ -52,6 +52,8 @@ module.exports = {
             try {
                 user = await User.findOne({user_id: user})
                 console.log("user => ",user)
+                user.lastName = lastName
+                await user.save()
                 return res.status(201).json(user);
 
             } catch (error) {
