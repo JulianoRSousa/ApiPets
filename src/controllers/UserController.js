@@ -44,7 +44,7 @@ module.exports = {
         if (user) {
             try {
                 user = await User.findOne({_id: user})
-                user.lastName = lastName
+                user.profilePicture = profilePicture
                 await user.save()
                 return res.status(201).json(user);
 
