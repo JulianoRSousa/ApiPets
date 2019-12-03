@@ -49,7 +49,7 @@ module.exports = {
         if (user) {
             console.log("Autenticou user")
             try {
-                user = await User.findOne({user_id: user})
+                user = await User.findOne({_id: user})
                 console.log("user => ",user)
                 user.lastName = lastName
                 await user.save()
