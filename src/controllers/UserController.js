@@ -45,8 +45,8 @@ module.exports = {
             try {
                 user = await User.findOne({_id: user})
                 user.profilePicture = profilePicture
-                await user.save()
-                return res.status(201).json(user);
+                const save = await user.save()
+                return res.status(201).json(save);
 
             } catch (error) {
                 console.log("Erro = ", error)
