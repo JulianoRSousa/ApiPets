@@ -42,10 +42,9 @@ module.exports = {
 
         const auth = await Auth.findOne({ _id: token }).then(Response => {
             console.log("response.user = ", Response.user),
-            await auth.populate('user').execPopulate();
-
             user = Response.user
         })
+        await auth.populate('user').execPopulate();
 
 
         if (user) {
