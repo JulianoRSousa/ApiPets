@@ -8,7 +8,7 @@ module.exports = {
     async confirmauth(req, res) {
         const { token } = req.headers;
         console.log("Token Lenght = ",token.lenght)
-        if (token == "000000000000000000000000" || token == null || token.lenght !== 24) {
+        if (token == "000000000000000000000000" || token == null || token == "") {
             return res.json({ 'error': 'Code 0s' });
         } else {
             try {
