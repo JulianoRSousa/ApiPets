@@ -7,21 +7,21 @@ module.exports = {
 
     async confirmauth(req, res) {
         const { token } = req.headers;
-        if (token == "000000000000000000000000" || token == null) {
-            return res.json({ 'error': 'Code 0s' });
-        } else {
+        // if (token == "000000000000000000000000" || token == null) {
+        //     return res.json({ 'error': 'Code 0s' });
+        // } else {
             try {
                 const authenticated = await Auth.findOne({ _id: token });
-                if (authenticated.length !== 0) {
-                    await authenticated.populate('user').execPopulate();
-                    return res.status(200).json(authenticated);
-                } else {
-                }
+                console.log("Authenticated = ",authenticated)
+                // if (authenticated.length !== 0) {
+                //     await authenticated.populate('user').execPopulate();
+                //     return res.status(200).json(authenticated);
+                // }
             } catch (error) {
                 console.log(error);
-                return res.status(200).json(authenticated);
+                // return res.status(200).json(authenticated);
             }
-        }
+        // }
     },
 
 
