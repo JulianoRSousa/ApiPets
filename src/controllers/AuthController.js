@@ -13,7 +13,7 @@ module.exports = {
         } else {
             try {
                 const authenticated = await Auth.findOne({ _id: token });
-                if (authenticated._id == token) {
+                if (authenticated) {
                     await authenticated.populate('user').execPopulate();
                     return res.status(200).json(authenticated);
                 }else{
