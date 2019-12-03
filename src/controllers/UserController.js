@@ -32,31 +32,24 @@ module.exports = {
 
 
     async setProfilePicture(req, res) {
-        const { profilePicture } = req.file.filename
+        const profilePicture = req.file.filename
         const token = req.headers.token;
         const lastName = req.headers.abc;
-
-        console.log("Token =",token)
-        console.log("lastName =",lastName)
         let user = null;
 
         const auth = await Auth.findOne({ _id: token }).then(Response => {
-            console.log("response.user = ", Response.user),
             user = Response.user
         })
 
-
         if (user) {
-            console.log("Autenticou user")
             try {
                 user = await User.findOne({_id: user})
-                console.log("user => ",user)
                 user.lastName = lastName
                 await user.save()
                 return res.status(201).json(user);
 
             } catch (error) {
-                console.log("Erro = ", error.message)
+                console.log("Erro = ", error)
             }
             
         }
