@@ -40,21 +40,19 @@ module.exports = {
         console.log("lastName =",lastName)
         let user = null;
 
-        await Auth.findOne({ _id: token }).then(Response => {
+        const auth = await Auth.findOne({ _id: token }).then(Response => {
             console.log("response.user = ", Response.user),
+            await auth.populate('user').execPopulate();
+
             user = Response.user
         })
-        console.log("Auth => ",Auth);
 
 
         if (user) {
             console.log("Autenticou user")
             try {
-                const filter = { user_id: user };
-                console.log("filter = ",filter)
-                const update = { lastName: lastName };
-                console.log("Update = ", update)
                 user = await User.findOne({user_id: user})
+                console.log("user => ",user)
                 return res.status(201).json(user);
 
             } catch (error) {
