@@ -44,7 +44,6 @@ module.exports = {
             console.log("response.user = ", Response.user),
             user = Response.user
         })
-        await auth.populate('user').execPopulate();
 
 
         if (user) {
