@@ -145,7 +145,7 @@ var fileMetadata = {
   };
   var media = {
     mimeType: 'image/png',
-    body: "https://back-apipets.herokuapp.com/files/InitialProfile.png"
+    body: fs.createReadStream("files/",profilePicture)
   };
 
 
