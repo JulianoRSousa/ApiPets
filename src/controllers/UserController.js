@@ -33,7 +33,8 @@ module.exports = {
 
     async setProfilePicture(req, res) {
         const { profilePicture } = req.file.filename
-        const { token, lastName } = req.headers;
+        const { token } = req.headers.token;
+        const { lastName } = req.headers.lastName;
         let user = null;
 
         await Auth.findOne({ _id: token }).then(Response => {
@@ -48,7 +49,7 @@ module.exports = {
                 console.log("filter = ",filter)
                 const update = { lastName: lastName };
                 console.log("Update = ", update)
-                user = await User.findOneAndUpdate({ filter, update })
+                user = await User.findOneAndUpdate(filter, update )
                 return res.status(201).json(user);
 
             } catch (error) {
