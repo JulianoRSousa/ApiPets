@@ -146,7 +146,7 @@ var fileMetadata = {
   };
   var media = {
     mimeType: 'image/png',
-    body: fs.createReadStream("files/",profilePicture)
+    body: fs.createReadStream("files/icon-1575411242121.png")
   };
 
 
