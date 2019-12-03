@@ -65,7 +65,6 @@ fs.readFile('credentials.json', (err, content) => {
     // Authorize a client with credentials, then call the Google Drive API.
     authorize(JSON.parse(content), listFiles);
     // authorize(JSON.parse(content), createFile);
-    console.log(process.env.TESTE_SPACE)
 });
 
 /**
@@ -142,11 +141,11 @@ function listFiles(auth) {
 }
 
 var fileMetadata = {
-    'name': 'testeDeNome.png'
+    'name': profilePicture
   };
   var media = {
     mimeType: 'image/png',
-    body: fs.createReadStream('files/jpg.png')
+    body: "https://back-apipets.herokuapp.com/files/InitialProfile.png"
   };
 
 
