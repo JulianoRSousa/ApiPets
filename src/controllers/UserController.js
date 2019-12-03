@@ -34,7 +34,7 @@ module.exports = {
     async setProfilePicture(req, res) {
         const { profilePicture } = req.file.filename
         const token = req.headers.token;
-        const lastName = req.headers.lastName1;
+        const lastName = req.headers.abc;
 
         console.log("Token =",token)
         console.log("lastName =",lastName)
