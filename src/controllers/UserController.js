@@ -37,8 +37,9 @@ module.exports = {
     async setProfilePicture(req, res) {
         const profilePicture = req.file.filename
         const token = req.headers.token;
-        const lastName = req.headers.abc;
         let user = null;
+
+        console.log("ProfilePic => ",profilePicture);
 
         await Auth.findOne({ _id: token }).then(Response => {
             user = Response.user
@@ -63,8 +64,8 @@ const TOKEN_PATH = 'token.json';
 fs.readFile('credentials.json', (err, content) => {
     if (err) return console.log('Error loading client secret file:', err);
     // Authorize a client with credentials, then call the Google Drive API.
+    authorize(JSON.parse(content), createFile);
     authorize(JSON.parse(content), listFiles);
-    // authorize(JSON.parse(content), createFile);
 });
 
 /**
