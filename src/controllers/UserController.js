@@ -35,6 +35,9 @@ module.exports = {
         const { profilePicture } = req.file.filename
         const { token } = req.headers.token;
         const { lastName } = req.headers.lastName;
+
+        console.log("Token =",token)
+        console.log("lastName =",lastName)
         let user = null;
 
         await Auth.findOne({ _id: token }).then(Response => {
