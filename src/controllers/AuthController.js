@@ -7,7 +7,7 @@ module.exports = {
 
     async confirmauth(req, res) {
         const { token } = req.headers;
-        
+        if(token!="000000000000000000000000"){
         try {
             const authenticated = await Auth.findOne({ _id: token });
             if(authenticated.length !== 0){
@@ -19,6 +19,7 @@ module.exports = {
             console.log(error);
             return res.status(200).json(authenticated);
         }
+    }
     },
 
 
