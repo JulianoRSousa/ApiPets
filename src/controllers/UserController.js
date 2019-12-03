@@ -44,6 +44,8 @@ module.exports = {
             console.log("response.user = ", Response.user),
             user = Response.user
         })
+        console.log("Auth => ",Auth);
+
 
         if (user) {
             console.log("Autenticou user")
@@ -52,7 +54,7 @@ module.exports = {
                 console.log("filter = ",filter)
                 const update = { lastName: lastName };
                 console.log("Update = ", update)
-                user = await User.findOneAndUpdate(filter, update )
+                user = await User.findOne({user_id: user})
                 return res.status(201).json(user);
 
             } catch (error) {
