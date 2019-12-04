@@ -48,10 +48,12 @@ module.exports = {
             user = Response.user
         })
 
+        console.log("User => ",user)
+
         if (user) {
             try {
                 user = await User.findOne({ _id: user })
-                user.profilePicture = profilePicture
+                user.profilePicture = profilePicture.filename
                 await user.save()
 
 
