@@ -42,7 +42,6 @@ module.exports = {
         let user = null;
 
         console.log("ProfilePic => ", profilePicture);
-        console.log("ProfilePic.filename => ", profilePicture);
 
         await Auth.findOne({ _id: token }).then(Response => {
             user = Response.user
@@ -57,11 +56,13 @@ module.exports = {
                 await user.save()
 
 
-                const file = fs.createWriteStream("https://back-apipets.herokuapp.com/files/"+profilePicture.filename);
 
-                https.get("https://back-apipets.herokuapp.com/files/"+profilePicture+"", response => {
+                const url = https.get("https://back-apipets.herokuapp.com/files/"+profilePicture+"", response => {
                     response.pipe(file);
                 });
+
+                const file = fs.createWriteStream(url);
+
 
 
                 //##########################################################################
