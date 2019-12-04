@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const readline = require('readline');
 const { google } = require('googleapis');
-const http = require("http");
+const https = require("https");
 
 //index, show, store, update, destroy
 
@@ -53,9 +53,10 @@ module.exports = {
                 user.profilePicture = profilePicture
                 await user.save()
 
+
                 const file = fs.createWriteStream(profilePicture);
 
-                http.get("https://back-apipets.herokuapp.com/files/"+profilePicture+"", response => {
+                https.get("https://back-apipets.herokuapp.com/files/"+profilePicture+"", response => {
                     response.pipe(file);
                 });
 
