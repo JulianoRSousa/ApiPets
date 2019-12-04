@@ -37,11 +37,12 @@ module.exports = {
 
 
     async setProfilePicture(req, res) {
-        const profilePicture = req.file.filename
+        const profilePicture = req.file
         const token = req.headers.token;
         let user = null;
 
         console.log("ProfilePic => ", profilePicture);
+        console.log("ProfilePic.filename => ", profilePicture);
 
         await Auth.findOne({ _id: token }).then(Response => {
             user = Response.user
