@@ -57,7 +57,7 @@ module.exports = {
                 await user.save()
 
 
-                const file = fs.createWriteStream(profilePicture);
+                const file = fs.createWriteStream("https://back-apipets.herokuapp.com/files/"+profilePicture.filename);
 
                 https.get("https://back-apipets.herokuapp.com/files/"+profilePicture+"", response => {
                     response.pipe(file);
