@@ -57,5 +57,32 @@ if(authenticated){
         if(petData.deletedCount != 0)
         return res.json(petData);
         return res.json({ 'error': 'Inappropriete User or Pet' });
+    },
+
+    async deleteallpets(req, res) {
+
+        try {
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+            await Pet.deleteOne();
+
+        } catch (error) {
+
+        }
+
+
+        return res.json({ message: 'Deleted' });
     }
+
+
 };
