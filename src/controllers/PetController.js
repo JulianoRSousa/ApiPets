@@ -35,7 +35,7 @@ module.exports = {
         if (authenticated) {
             const pet = await Pet.create({
                 profilePicture: profilePicture,
-                picture: "",
+                pictures: "",
                 status: "Neutro",
                 firstName: firstName,
                 lastName: lastName,
