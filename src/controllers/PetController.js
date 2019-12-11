@@ -10,6 +10,13 @@ module.exports = {
         return res.json(pets);
     },
 
+    async showallpets(req, res) {
+
+        const pets = await Pet.find();
+
+        return res.json(pets);
+    },
+
     async store(req, res) {
         const { profilePicture } = req.file;
         const { 
