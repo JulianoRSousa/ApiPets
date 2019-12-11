@@ -1,4 +1,5 @@
 const Pet = require('../models/Pet');
+const Auth = require('../models/Auth');
 
 module.exports = {
 
@@ -19,7 +20,7 @@ module.exports = {
 
     async store(req, res) {
         const { profilePicture } = req.file;
-        const { 
+        const {
             firstName,
             lastName,
             color,
@@ -29,7 +30,7 @@ module.exports = {
         } = req.body;
         const { user } = req.headers;
 
-        
+
         const pet = await Pet.create({
             profilePicture: profilePicture,
             picture: null,
@@ -45,11 +46,12 @@ module.exports = {
         return res.json(pet);
     },
 
-    async deletepet(req, res){
-        const { pet, user } = req.headers;
-
+    async deletepet(req, res) {
+        const { pet, user, token } = req.headers;
+        const authenticated = await Auth.findOne({ _id: token });
+        console.log(authenticated);
             const petData = await Pet.deleteOne({ _id: pet, user: user });
-           
-        return res.json(petData);
-    }
-};
+
+            return res.json(petData);
+        }
+    };
