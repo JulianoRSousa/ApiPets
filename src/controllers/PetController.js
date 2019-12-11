@@ -47,12 +47,11 @@ module.exports = {
     },
 
     async deletepet(req, res) {
-        const { pet, user, token } = req.headers;
+        const { pet, token } = req.headers;
         const authenticated = await Auth.findOne({ _id: token });
-        if(authenticated.user == user){
-            const petData = await Pet.deleteOne({ _id: pet, user: user });
-            return res.json(petData);
-        }
-        return res.json({'error':'User and Pet does not match'});
+        const petData = await Pet.deleteOne({ _id: pet, user: authenticated.user });
+        if(petData)
+        return res.json(petData);
+        return res.json({ 'error': 'Inappropriete User or Pet' });
     }
-    };
+};
