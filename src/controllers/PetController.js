@@ -28,9 +28,11 @@ module.exports = {
             birthdate,
             male,
         } = req.body;
-        const { user } = req.headers;
+        const { token } = req.headers;
+        const authenticated = await Auth.findOne({ _id: token });
 
 
+if(authenticated){
         const pet = await Pet.create({
             profilePicture: profilePicture,
             picture: null,
@@ -41,9 +43,10 @@ module.exports = {
             coatSize: coatSize,
             birthdate: birthdate,
             male: male,
-            user: user,
+            user: authenticated.user,
         })
         return res.json(pet);
+    }
     },
 
     async deletepet(req, res) {
