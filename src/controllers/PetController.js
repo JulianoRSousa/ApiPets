@@ -19,7 +19,7 @@ module.exports = {
     },
 
     async store(req, res) {
-        const { profilePicture } = req.file;
+        const { profilePicture } = req.file.filename;
         const {
             firstName,
             lastName,
@@ -47,7 +47,8 @@ if(authenticated){
         })
         return res.json(pet);
     }
-    },
+    return res.json({ 'error': 'Invalid Token'});
+},
 
     async deletepet(req, res) {
         const { pet, token } = req.headers;
