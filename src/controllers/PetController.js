@@ -32,30 +32,30 @@ module.exports = {
         const authenticated = await Auth.findOne({ _id: token });
 
 
-if(authenticated){
-        const pet = await Pet.create({
-            profilePicture: profilePicture,
-            picture: null,
-            status: "Neutro",
-            firstName: firstName,
-            lastName: lastName,
-            color: color,
-            coatSize: coatSize,
-            birthdate: birthdate,
-            male: male,
-            user: authenticated.user,
-        })
-        return res.json(pet);
-    }
-    return res.json({ 'error': 'Invalid Token'});
-},
+        if (authenticated) {
+            const pet = await Pet.create({
+                profilePicture: profilePicture,
+                picture: "",
+                status: "Neutro",
+                firstName: firstName,
+                lastName: lastName,
+                color: color,
+                coatSize: coatSize,
+                birthdate: birthdate,
+                male: male,
+                user: authenticated.user,
+            })
+            return res.json(pet);
+        }
+        return res.json({ 'error': 'Invalid Token' });
+    },
 
     async deletepet(req, res) {
         const { pet, token } = req.headers;
         const authenticated = await Auth.findOne({ _id: token });
         const petData = await Pet.deleteOne({ _id: pet, user: authenticated.user });
-        if(petData.deletedCount != 0)
-        return res.json(petData);
+        if (petData.deletedCount != 0)
+            return res.json(petData);
         return res.json({ 'error': 'Inappropriete User or Pet' });
     },
 
@@ -75,12 +75,8 @@ if(authenticated){
             await Pet.deleteOne();
             await Pet.deleteOne();
             await Pet.deleteOne();
-
         } catch (error) {
-
         }
-
-
         return res.json({ message: 'Deleted' });
     }
 
