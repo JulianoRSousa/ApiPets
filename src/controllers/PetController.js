@@ -53,7 +53,7 @@ module.exports = {
     async deletepet(req, res) {
         const { pet, token } = req.headers;
         const authenticated = await Auth.findOne({ _id: token });
-        if(authenticated.user==true){
+        if(authenticated==null){
         const petData = await Pet.deleteOne({ _id: pet, user: authenticated.user });
         if (petData.deletedCount != 0)
             return res.json(petData);
