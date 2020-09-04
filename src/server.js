@@ -12,7 +12,7 @@ try {
         'mongodb://'
         + process.env.USERMONGODB + ':'
         + process.env.PASSMONGODB
-        + process.env.MONGOCONNECTION, {
+        + process.env.MONGODBCONNECTION, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
@@ -20,8 +20,6 @@ try {
     console.log(error.message())
 }
 
-
-//GET, POST, PUT, DELETE
 
 app.use(cors())
 app.use(express.json());
