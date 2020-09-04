@@ -19,7 +19,7 @@ module.exports = {
         return res.json(post);
     },
 
-    async getAllPosts(req, res) {
+    async showAllPosts(req, res) {
         const posts = await Post.find({})
         return res.json(posts)
     },

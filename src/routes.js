@@ -35,7 +35,7 @@ routes.delete('/deletepet', PetController.deletepet); //ok
 routes.post('/createpost', upload.single('picture'), PostController.store);
 routes.get('/getpostbystate', PostController.getPostByState);
 routes.get('/getpostbyuser', PostController.getPostByUser);
-routes.get('/getallposts', PostController.getAllPosts);
+routes.get('/showallposts', PostController.showAllPosts); //ok
 
 //COMMENT routes
 routes.post('/createcomment', CommentController.store);

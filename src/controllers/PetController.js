@@ -4,9 +4,9 @@ const Auth = require('../models/Auth');
 module.exports = {
 
     async getPetByUserId(req, res) {
-        const { user } = req.headers;
+        const { user_id } = req.headers;
 
-        const pets = await Pet.find({ user: user });
+        const pets = await Pet.find({ user: user_id });
 
         return res.json(pets);
     },
