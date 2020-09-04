@@ -3,10 +3,10 @@ const Auth = require('../models/Auth');
 
 module.exports = {
 
-    async getPostByStatus(req, res) {
-        const { status } = req.query;
+    async getPostByState(req, res) {
+        const { state } = req.query;
 
-        const post = await Post.find({ status: status });
+        const post = await Post.find({ state: state });
 
         return res.json(post);
     },
@@ -26,7 +26,7 @@ module.exports = {
     
   async store(req, res) {
         const { filename } = req.file.filename;
-        const { status, description } = req.body;
+        const { state, description } = req.body;
         const { user_id, pet_id, token } = req.headers;
 
         const auth = await Auth.findOne({ _id: token })
@@ -39,7 +39,7 @@ module.exports = {
                         var date = new Date();
                         const post = await Post.create({
                             picture: filename,
-                            status,
+                            state,
                             description,
                             postDate: date.getDate() + '/' +
                                 (date.getMonth() + 1) + '/' +

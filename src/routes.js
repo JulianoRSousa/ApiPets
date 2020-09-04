@@ -31,9 +31,9 @@ routes.get('/showallpets', PetController.showallpets); //ok
 routes.delete('/deletepet', PetController.deletepet); //ok
 //routes.delete('/deleteallpets', PetController.deleteallpets);
 
-//POST routes
+//UserPOST routes
 routes.post('/createpost', upload.single('picture'), PostController.store);
-routes.get('/getpostbystate', PostController.getPostByStatus);
+routes.get('/getpostbystate', PostController.getPostByState);
 routes.get('/getpostbyuser', PostController.getPostByUser);
 routes.get('/getallposts', PostController.getAllPosts);
 
