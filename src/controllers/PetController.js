@@ -36,7 +36,7 @@ module.exports = {
             const pet = await Pet.create({
                 profilePicture: profilePicture,
                 pictures: "",
-                status: "Neutro",
+                status: "Neutral",
                 firstName: firstName,
                 lastName: lastName,
                 color: color,
@@ -53,9 +53,12 @@ module.exports = {
     async deletepet(req, res) {
         const { pet, token } = req.headers;
         const authenticated = await Auth.findOne({ _id: token });
+        if(authenticated.user==true){
         const petData = await Pet.deleteOne({ _id: pet, user: authenticated.user });
         if (petData.deletedCount != 0)
             return res.json(petData);
+            return res.json({ 'error': 'Pet not deleted!' });
+        }
         return res.json({ 'error': 'Inappropriete User or Pet' });
     },
 

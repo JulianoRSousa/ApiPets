@@ -16,18 +16,18 @@ const upload = multer(uploadConfig);
 
 
 //USER routes
-routes.put('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //***Untested route
+routes.put('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //Untested route
 routes.post('/createlogin', UserController.createLogin); //ok
 routes.get('/getuserbyemail', UserController.getUserByEmail); //ok
 routes.get('/showallusers', UserController.showallusers); //ok
-routes.get('/getuserbyid', UserController.getUserById); //ok - Need Change header var name to "user_id"
+routes.get('/getuserbyid', UserController.getUserById); //ok
 routes.delete('/deleteuserbyemail', UserController.deleteUserByEmail); //ok
 routes.delete('/deleteuserbyid', UserController.deleteUserById); //ok
 
 //PETS routes
-routes.post('/createpet', upload.single('profilePicture'), PetController.store);
-routes.get('/getpetbyuserid', PetController.getPetByUserId);
-routes.get('/showallpets', PetController.showallpets);
+routes.post('/createpet', upload.single('profilePicture'), PetController.store); //ok - Need fix the pet profile picture
+routes.get('/getpetbyuserid', PetController.getPetByUserId); //ok
+routes.get('/showallpets', PetController.showallpets); //ok
 routes.delete('/deletepet', PetController.deletepet);
 routes.delete('/deleteallpets', PetController.deleteallpets);
 
