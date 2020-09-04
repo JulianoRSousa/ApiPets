@@ -67,6 +67,7 @@ module.exports = {
 
     },
 
+    /*
     async deleteallpets(req, res) {
 
         try {
@@ -87,6 +88,6 @@ module.exports = {
         }
         return res.json({ message: 'Deleted' });
     }
-
+*/
 
 };

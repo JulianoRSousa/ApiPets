@@ -28,8 +28,8 @@ routes.delete('/deleteuserbyid', UserController.deleteUserById); //ok
 routes.post('/createpet', upload.single('profilePicture'), PetController.store); //ok - Need fix the pet profile picture
 routes.get('/getpetbyuserid', PetController.getPetByUserId); //ok
 routes.get('/showallpets', PetController.showallpets); //ok
-routes.delete('/deletepet', PetController.deletepet);
-routes.delete('/deleteallpets', PetController.deleteallpets);
+routes.delete('/deletepet', PetController.deletepet); //ok
+//routes.delete('/deleteallpets', PetController.deleteallpets);
 
 //POST routes
 routes.post('/createpost', upload.single('picture'), PostController.store);
