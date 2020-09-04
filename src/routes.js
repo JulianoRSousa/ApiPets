@@ -15,39 +15,44 @@ const routes = express.Router();
 const upload = multer(uploadConfig);
 
 
+//USER routes
+routes.put('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //***Untested route
+routes.post('/createlogin', UserController.createLogin); //ok
+routes.get('/getuserbyemail', UserController.getUserByEmail); //ok
+routes.get('/showallusers', UserController.showallusers); //ok
+routes.get('/getuserbyid', UserController.getUserById); //ok - Need Change header var name to "user_id"
+routes.delete('/deleteuserbyemail', UserController.deleteUserByEmail); //ok
+routes.delete('/deleteuserbyid', UserController.deleteUserById); //ok
 
-routes.put('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture);
-routes.post('/createlogin', UserController.createLogin);
-routes.get('/getuserbyemail', UserController.getUserByEmail);
-routes.get('/showallusers', UserController.showallusers);
-routes.get('/getuserbyid', UserController.getUserById);
-routes.delete('/deleteuserbyemail', UserController.deleteUserByEmail);
-routes.delete('/deleteuserbyid', UserController.deleteUserById);
-// routes.put('/updateBornByTokenAndUserId', UserController.editBorn);
-
+//PETS routes
 routes.post('/createpet', upload.single('profilePicture'), PetController.store);
 routes.get('/getpetbyuserid', PetController.getPetByUserId);
 routes.get('/showallpets', PetController.showallpets);
 routes.delete('/deletepet', PetController.deletepet);
 routes.delete('/deleteallpets', PetController.deleteallpets);
 
+//POST routes
 routes.post('/createpost', upload.single('picture'), PostController.store);
 routes.get('/getpostbystate', PostController.getPostByStatus);
 routes.get('/getpostbyuser', PostController.getPostByUser);
 routes.get('/getallposts', PostController.getAllPosts);
 
+//COMMENT routes
 routes.post('/createcomment', CommentController.store);
 routes.get('/getcommentbypost', CommentController.getCommentByPostId);
 routes.delete('/deletecomment', CommentController.deletecomment);
 
+//LIKE routes
 routes.post('/createlike', LikeController.store);
 routes.get('/getlikebypost', LikeController.getLikeByPostId);
 routes.get('/getlikecount', LikeController.getLikeCount);
 routes.delete('/deletelike', LikeController.deletelike);
 
+//COMPLAINT routes
 routes.post('/createcomplaint', ComplaintController.store);
 routes.get('/getcomplaintbypost', ComplaintController.getComplaintByPostId);
 
+//AUTH routes
 routes.post('/createauth', AuthController.createauth);
 routes.get('/confirmauth', AuthController.confirmauth);
 routes.get('/showsessions', AuthController.showSession);

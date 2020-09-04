@@ -209,7 +209,7 @@ module.exports = {
 
         const deleted = await User.findOneAndDelete({ _id: user_id })
         if (deleted == null)
-            return res.status(202).json({ 'Error': 'This email was not found!' })
+            return res.status(202).json({ 'Error': 'This UserId was not found!' })
         return res.status(200).json(deleted)
     },
 
