@@ -59,7 +59,6 @@ module.exports = {
         return res.json({ 'error': 'Inappropriete User or Pet' });
     },
 
-    /*
     async deleteallpets(req, res) {
 
         try {
@@ -79,7 +78,7 @@ module.exports = {
         } catch (error) {
         }
         return res.json({ message: 'Deleted' });
-    }*/
+    }
 
 
 };
