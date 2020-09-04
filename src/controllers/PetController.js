@@ -52,14 +52,19 @@ module.exports = {
 
     async deletepet(req, res) {
         const { pet, token } = req.headers;
-        const authenticated = await Auth.findOne({ _id: token });
-        if(authenticated!=null){
-        const petData = await Pet.deleteOne({ _id: pet, user: authenticated.user });
-        if (petData.deletedCount != 0)
-            return res.json(petData);
-            return res.json({ 'error': 'Pet not deleted!' });
+        try {
+            const authenticated = await Auth.findOne({ _id: token });
+            if (authenticated != null) {
+                const petData = await Pet.deleteOne({ _id: pet, user: authenticated.user });
+                if (petData.deletedCount != 0)
+                    return res.json(petData);
+                return res.json({ 'error': 'Inappropriete Pet' });
+            }
+            return res.json({ 'error': 'Inappropriete User or Pet' });
+        } catch (error) {
+            return res.json({ 'error': 'Invalid token parameters' });
         }
-        return res.json({ 'error': 'Inappropriete User or Pet' });
+
     },
 
     async deleteallpets(req, res) {
