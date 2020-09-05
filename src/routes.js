@@ -33,8 +33,8 @@ routes.delete('/deletepet', PetController.deletepet); //ok
 
 //UserPOST routes
 routes.post('/createpost', upload.single('picture'), PostController.store); //ok - Need fix the post profile picture
-routes.get('/getpostbystate', PostController.getPostByState);
-routes.get('/getpostbyuser', PostController.getPostByUser);
+routes.get('/getpostbystate', PostController.getPostByState); //ok
+routes.get('/getpostbyuserid', PostController.getPostByUserId); 
 routes.get('/showallposts', PostController.showAllPosts); //ok
 
 //COMMENT routes

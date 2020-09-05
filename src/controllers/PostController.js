@@ -11,10 +11,10 @@ module.exports = {
         return res.json(post);
     },
 
-    async getPostByUser(req, res) {
-        const { user } = req.query;
+    async getPostByUserId(req, res) {
+        const { user_id } = req.query;
 
-        const post = await Post.find({ user: user });
+        const post = await Post.find({ user_id: user_id });
 
         return res.json(post);
     },
