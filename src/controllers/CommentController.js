@@ -28,7 +28,7 @@ module.exports = {
             message: message,
             registerDate: registerDate,
         })
-        await comment.populate('user').execPopulate();
+        await comment.populate('message').execPopulate();
 
         return res.status(202).json(comment);
     },
