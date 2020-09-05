@@ -6,11 +6,11 @@ module.exports = {
     async getCommentByPostId(req, res) {
         const { post_id } = req.headers;
 
-        const comments = await Comment.find({ post_id: post_id});
+        const comments = await Comment.find({ post_id: post_id });
 
         return res.json(comments);
     },
-    
+
     async showAllComments(req, res) {
 
         const comments = await Comment.find();
@@ -20,26 +20,28 @@ module.exports = {
 
 
     async store(req, res) {
-        const { message, registerDate, commenter, post_id } = req.headers;
-        
+        const { message, commenter, post_id } = req.headers;
+        var date = new Date();
+
         const comment = await Comment.create({
             commenter: commenter,
             post_id: post_id,
             message: message,
-            registerDate: registerDate,
+            registerDate: date.getDate() + '/' +
+                (date.getMonth() + 1) + '/' +
+                date.getFullYear(),
         })
-        await comment.populate('post_id').execPopulate();
 
         return res.status(202).json(comment);
     },
 
 
-    async deletecomment(req, res){
+    async deletecomment(req, res) {
         const { comment_id } = req.headers;
 
-            const comment = await Comment.deleteOne({
-                _id: comment_id
-            });
+        const comment = await Comment.deleteOne({
+            _id: comment_id
+        });
         return res.json(comment);
     }
 };
