@@ -20,18 +20,13 @@ module.exports = {
 
 
     async store(req, res) {
-        const { 
-            message,
-            registerDate,
-        } = req.body;
-        const { commenter, post_id } = req.headers;
-
+        const { message, registerDate, commenter, post_id } = req.headers;
         
         const comment = await Comment.create({
+            commenter: commenter,
+            post_id: post_id,
             message: message,
             registerDate: registerDate,
-            post_id: post_id,
-            commenter: commenter,
         })
 
         return res.json(comment);
