@@ -28,7 +28,7 @@ module.exports = {
             post_id: post_id,
             message: message,
             registerDate:
-                date.getHours() + ':' + date.getMinutes() + "-" +
+                date.getHours() + ':' + date.getMinutes() + " - " +
                 date.getDate() + '/' +
                 (date.getMonth() + 1) + '/' +
                 date.getFullYear(),
@@ -38,12 +38,20 @@ module.exports = {
     },
 
 
-    async deletecomment(req, res) {
-        const { comment_id } = req.headers;
+    async deleteComment(req, res) {
+        const { comment_id, token } = req.headers;
+        try {
+            const authenticated = await Auth.findOne({ _id: token });
+            if (authenticated != null) {
+                const commentData = await Comment.deleteOne({ _id: comment_id, commenter: authenticated.user });
+                if (commentData.deletedCount != 0)
+                    return res.json(commentData);
+                return res.json({ 'error': 'Inappropriete Comment' });
+            }
+            return res.json({ 'error': 'Inappropriete User or Comment' });
+        } catch (error) {
+            return res.json({ 'error': 'Invalid token parameters' });
+        }
 
-        const comment = await Comment.deleteOne({
-            _id: comment_id
-        });
-        return res.json(comment);
-    }
+    },
 };

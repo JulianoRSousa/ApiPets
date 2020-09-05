@@ -58,6 +58,15 @@ module.exports = {
         } catch (error) {
             console.log("error.message = ", error.message,)
         }
+    },
+
+    async deletePost(req, res) {
+        const { post_id, user_id, token } = req.headers;
+
+        const post = await Post.deleteOne({
+            _id: post_id
+        });
+        return res.json(post);
     }
 
 };

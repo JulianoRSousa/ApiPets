@@ -36,12 +36,13 @@ routes.post('/createpost', upload.single('picture'), PostController.store); //ok
 routes.get('/getpostbystate', PostController.getPostByState); //ok
 routes.get('/getpostbyuserid', PostController.getPostByUserId); //ok
 routes.get('/showallposts', PostController.showAllPosts); //ok
+routes.delete('/deletepost', PostController.deletePost); //ok
 
 //COMMENT routes
-routes.post('/createcomment', CommentController.store);
-routes.get('/getcommentbypostid', CommentController.getCommentByPostId);
-routes.get('/showallcomments', CommentController.showAllComments);
-routes.delete('/deletecomment', CommentController.deletecomment);
+routes.post('/createcomment', CommentController.store); //ok
+routes.get('/getcommentbypostid', CommentController.getCommentByPostId); //ok
+routes.get('/showallcomments', CommentController.showAllComments); //ok
+routes.delete('/deletecomment', CommentController.deleteComment);
 
 //LIKE routes
 routes.post('/createlike', LikeController.store);
