@@ -10,6 +10,13 @@ module.exports = {
 
         return res.json(comments);
     },
+    
+    async showAllComments(req, res) {
+
+        const comments = await Comment.find();
+
+        return res.json(comments);
+    },
 
 
     async store(req, res) {

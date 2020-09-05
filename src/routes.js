@@ -34,12 +34,13 @@ routes.delete('/deletepet', PetController.deletepet); //ok
 //UserPOST routes
 routes.post('/createpost', upload.single('picture'), PostController.store); //ok - Need fix the post profile picture
 routes.get('/getpostbystate', PostController.getPostByState); //ok
-routes.get('/getpostbyuserid', PostController.getPostByUserId); 
+routes.get('/getpostbyuserid', PostController.getPostByUserId); //ok
 routes.get('/showallposts', PostController.showAllPosts); //ok
 
 //COMMENT routes
 routes.post('/createcomment', CommentController.store);
-routes.get('/getcommentbypost', CommentController.getCommentByPostId);
+routes.get('/getcommentbypostid', CommentController.getCommentByPostId);
+routes.get('/showallcomments', CommentController.showAllComments);
 routes.delete('/deletecomment', CommentController.deletecomment);
 
 //LIKE routes
