@@ -27,7 +27,9 @@ module.exports = {
             commenter: commenter,
             post_id: post_id,
             message: message,
-            registerDate: date.getDate() + '/' +
+            registerDate:
+                date.getHours() + ':' + date.getMinutes() + "-" +
+                date.getDate() + '/' +
                 (date.getMonth() + 1) + '/' +
                 date.getFullYear(),
         })
