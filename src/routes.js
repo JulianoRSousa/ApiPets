@@ -32,7 +32,7 @@ routes.delete('/deletepet', PetController.deletepet); //ok
 //routes.delete('/deleteallpets', PetController.deleteallpets);
 
 //UserPOST routes
-routes.post('/createpost', upload.single('picture'), PostController.store);
+routes.post('/createpost', upload.single('picture'), PostController.store); //ok - Need fix the post profile picture
 routes.get('/getpostbystate', PostController.getPostByState);
 routes.get('/getpostbyuser', PostController.getPostByUser);
 routes.get('/showallposts', PostController.showAllPosts); //ok
