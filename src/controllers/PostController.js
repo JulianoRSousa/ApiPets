@@ -14,7 +14,7 @@ module.exports = {
     async getPostByUserId(req, res) {
         const { user_id } = req.query;
 
-        const post = await Post.find({ user_id: user_id });
+        const post = await Post.find({ user: user_id });
 
         return res.json(post);
     },
