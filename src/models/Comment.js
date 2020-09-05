@@ -1,7 +1,6 @@
 const mongoose =  require('mongoose');
 
 const CommentSchema = new mongoose.Schema({
-    message: String,
     commenter: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -10,6 +9,7 @@ const CommentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
     },
+    message: String,
     registerDate: String,
 });
 
