@@ -1,4 +1,5 @@
 const Complaint = require('../models/Complaint');
+const { populate } = require('../models/Complaint');
 
 module.exports = {
 
@@ -8,6 +9,18 @@ module.exports = {
         const complaint = await Complaint.find({ post_id });
 
         return res.json(complaint);
+    },
+
+    async showAllComplaint(req, res) {
+        const { masterUser, masterPass } = req.headers;
+        if(masterUser == process.env.MASTERUSER && masterPass == process.env.MASTERPASS){
+            const complaint = await Complaint.find({ });
+            await complaint.populate('post_id').execPopulate();
+            
+            return  res.status(202).json(complaint);
+        }
+
+        return res.json({"error":"No system admin logged"});
     },
 
     async store(req, res) {

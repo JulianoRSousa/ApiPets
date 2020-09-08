@@ -15,9 +15,27 @@ const routes = express.Router();
 const upload = multer(uploadConfig);
 
 
+
+//FUNCTION NEED REMOVING
+
+//showallusers;
+//getuserbyid;
+//deleteuserbyemail;
+
+//showallpets
+//deleteallpets
+
+//showallposts;
+//showallcomments;
+
+//showsessions;
+//gettrue;
+//deleteallauth;
+
+
 //USER routes
 routes.put('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //Untested route
-routes.post('/createlogin', UserController.createLogin); //ok
+routes.post('/createlogin', UserController.createLogin); //ok - UserProfile picture not working 
 routes.get('/getuserbyemail', UserController.getUserByEmail); //ok
 routes.get('/showallusers', UserController.showallusers); //ok
 routes.get('/getuserbyid', UserController.getUserById); //ok
@@ -36,7 +54,7 @@ routes.post('/createpost', upload.single('picture'), PostController.store); //ok
 routes.get('/getpostbystate', PostController.getPostByState); //ok
 routes.get('/getpostbyuserid', PostController.getPostByUserId); //ok
 routes.get('/showallposts', PostController.showAllPosts); //ok
-routes.delete('/deletepost', PostController.deletePost); //ok
+routes.delete('/deletepost', PostController.deletePost);
 
 //COMMENT routes
 routes.post('/createcomment', CommentController.store); //ok
@@ -47,12 +65,13 @@ routes.delete('/deletecomment', CommentController.deleteComment);
 //LIKE routes
 routes.post('/createlike', LikeController.store);
 routes.get('/getlikebypost', LikeController.getLikeByPostId);
-routes.get('/getlikecount', LikeController.getLikeCount);
+routes.get('/getpostlikecount', LikeController.getLikeCount);
 routes.delete('/deletelike', LikeController.deletelike);
 
 //COMPLAINT routes
 routes.post('/createcomplaint', ComplaintController.store);
 routes.get('/getcomplaintbypost', ComplaintController.getComplaintByPostId);
+routes.get('/showallcomplaint', ComplaintController.showAllComplaint);
 
 //AUTH routes
 routes.post('/createauth', AuthController.createauth);
