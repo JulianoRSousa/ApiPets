@@ -1,6 +1,5 @@
 const express =  require('express');
 const multer = require('multer');
-const dotenv = require('dotenv').config();
 
 const uploadConfig = require('./config/upload')
 const UserController = require('./controllers/UserController');
@@ -38,7 +37,6 @@ const upload = multer(uploadConfig);
 routes.put('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //Untested route
 routes.post('/createlogin', UserController.createLogin); //ok - UserProfile picture not working 
 routes.get('/getuserbyemail', UserController.getUserByEmail); //OK//
-if(process.env.ENVIRONMENT!='dev')
 routes.get('/showallusers', UserController.showallusers); //OK//
 routes.get('/getuserbyid', UserController.getUserById); //OK//
 routes.delete('/deleteuserbyemail', UserController.deleteUserByEmail); //ok
