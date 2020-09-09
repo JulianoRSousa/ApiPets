@@ -57,15 +57,16 @@ routes.get('/showallposts', PostController.showAllPosts); //OK//
 routes.delete('/deletepost', PostController.deletePost); //OK//
 
 //COMMENT routes
-routes.post('/createcomment', CommentController.store); //ok
+routes.post('/createcomment', CommentController.store); //OK//
 routes.get('/getcommentbypostid', CommentController.getCommentByPostId); //OK//
 routes.get('/showallcomments', CommentController.showAllComments); //OK//
 routes.delete('/deletecomment', CommentController.deleteComment); //OK//
 
 //LIKE routes
-routes.post('/createlike', LikeController.store);
+routes.post('/createlike', LikeController.store); //OK//
 routes.get('/getlikebypost', LikeController.getLikeByPostId);
 routes.get('/getpostlikecount', LikeController.getLikeCount);
+routes.get('/showalllikes', LikeController.showAllLikes);
 routes.delete('/deletelike', LikeController.deletelike);
 
 //COMPLAINT routes

@@ -1,6 +1,5 @@
 const Comment = require('../models/Comment');
 const Auth = require('../models/Auth');
-const { auth } = require('googleapis/build/src/apis/abusiveexperiencereport');
 
 module.exports = {
 
@@ -22,28 +21,34 @@ module.exports = {
 
 
     async store(req, res) {
-        const { message, commenter, post_id } = req.headers;
-        var date = new Date();
+        const { message, post_id, token } = req.headers;
 
-        const comment = await Comment.create({
-            commenter: commenter,
-            post_id: post_id,
-            message: message,
-            registerDate:
-                date.getHours() + ':' + date.getMinutes() + " - " +
-                date.getDate() + '/' +
-                (date.getMonth() + 1) + '/' +
-                date.getFullYear(),
-        })
-
-        return res.status(202).json(comment);
+        try {
+            var date = new Date();
+            const authenticated = await Auth.findOne({ _id: token })
+            if (authenticated.auth) {
+                const comment = await Comment.create({
+                    commenter: authenticated.user,
+                    post_id: post_id,
+                    message: message,
+                    registerDate:
+                        date.getHours() + ':' + date.getMinutes() + " - " +
+                        date.getDate() + '/' +
+                        (date.getMonth() + 1) + '/' +
+                        date.getFullYear(),
+                })
+                return res.status(201).json(comment);
+            }
+        } catch (error) {
+            return res.status(401).json({'Error':'Invalid token'});
+        }
     },
 
 
     async deleteComment(req, res) {
         const { comment, token } = req.headers;
         try {
-           const authenticated = await Auth.findOne({ _id: token });
+            const authenticated = await Auth.findOne({ _id: token });
             if (authenticated.auth) {
                 const commentData = await Comment.deleteOne({ _id: comment, commenter: authenticated.user });
                 if (commentData.deletedCount != 0)
