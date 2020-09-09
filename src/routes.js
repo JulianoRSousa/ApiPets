@@ -16,7 +16,7 @@ const upload = multer(uploadConfig);
 
 
 
-//FUNCTION NEED REMOVING
+//FUNCTION NEED REMOVING {}
 
 //showallusers;
 //getuserbyid;
@@ -31,7 +31,7 @@ const upload = multer(uploadConfig);
 //showsessions;
 //gettrue;
 //deleteallauth;
-
+//  };
 
 //USER routes
 routes.put('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //Untested route
