@@ -1,6 +1,7 @@
 const Auth = require('../models/Auth');
 const User = require('../models/User');
 const path = require('path');
+const dotenv = require('dotenv').config();
 
 const fs = require('fs');
 const readline = require('readline');
@@ -22,9 +23,11 @@ module.exports = {
 
     async showallusers(req, res) {
 
-        const users = await User.find();
-
-        return res.json(users);
+        if (process.env.ENVIRONMENT == 'dev') {
+            const users = await User.find();
+            return res.json(users);
+        }
+        return res.json({ "Error": "Errorrror" });
     },
 
     async getUserById(req, res) {
@@ -47,7 +50,7 @@ module.exports = {
             user = Response.user
         })
 
-        console.log("User => ",user)
+        console.log("User => ", user)
 
         if (user) {
             try {
@@ -57,7 +60,7 @@ module.exports = {
 
 
 
-                const url = https.get("https://back-apipets.herokuapp.com/files/"+profilePicture+"", response => {
+                const url = https.get("https://back-apipets.herokuapp.com/files/" + profilePicture + "", response => {
                     response.pipe(file);
                 });
 
