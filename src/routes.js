@@ -44,23 +44,23 @@ routes.delete('/deleteuserbyid', UserController.deleteUserById); //ok
 
 //PETS routes
 routes.post('/createpet', upload.single('profilePicture'), PetController.store); //ok - Need fix the pet profile picture
-routes.get('/getpetbyuserid', PetController.getPetByUserId); //ok
-routes.get('/showallpets', PetController.showallpets); //ok
+routes.get('/getpetbyuserid', PetController.getPetByUserId); //OK//
+routes.get('/showallpets', PetController.showallpets); //OK//
 routes.delete('/deletepet', PetController.deletepet); //OK//
 //routes.delete('/deleteallpets', PetController.deleteallpets);
 
 //UserPOST routes
 routes.post('/createpost', upload.single('picture'), PostController.store); //ok - Need fix the post profile picture
-routes.get('/getpostbystate', PostController.getPostByState); //ok
-routes.get('/getpostbyuserid', PostController.getPostByUserId); //ok
-routes.get('/showallposts', PostController.showAllPosts); //ok
-routes.delete('/deletepost', PostController.deletePost);
+routes.get('/getpostbystate', PostController.getPostByState); //OK//
+routes.get('/getpostbyuserid', PostController.getPostByUserId); //OK//
+routes.get('/showallposts', PostController.showAllPosts); //OK//
+routes.delete('/deletepost', PostController.deletePost); //OK//
 
 //COMMENT routes
 routes.post('/createcomment', CommentController.store); //ok
-routes.get('/getcommentbypostid', CommentController.getCommentByPostId); //ok
-routes.get('/showallcomments', CommentController.showAllComments); //ok
-routes.delete('/deletecomment', CommentController.deleteComment);
+routes.get('/getcommentbypostid', CommentController.getCommentByPostId); //OK//
+routes.get('/showallcomments', CommentController.showAllComments); //OK//
+routes.delete('/deletecomment', CommentController.deleteComment); //OK//
 
 //LIKE routes
 routes.post('/createlike', LikeController.store);

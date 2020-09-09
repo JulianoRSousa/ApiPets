@@ -1,4 +1,6 @@
 const Comment = require('../models/Comment');
+const Auth = require('../models/Auth');
+const { auth } = require('googleapis/build/src/apis/abusiveexperiencereport');
 
 module.exports = {
 
@@ -39,19 +41,18 @@ module.exports = {
 
 
     async deleteComment(req, res) {
-        const { comment_id, token } = req.headers;
+        const { comment, token } = req.headers;
         try {
-            const authenticated = await Auth.findOne({ _id: token });
-            if (authenticated != null) {
-                const commentData = await Comment.deleteOne({ _id: comment_id, commenter: authenticated.user });
+           const authenticated = await Auth.findOne({ _id: token });
+            if (authenticated.auth) {
+                const commentData = await Comment.deleteOne({ _id: comment, commenter: authenticated.user });
                 if (commentData.deletedCount != 0)
-                    return res.json(commentData);
+                    return res.status(202).json(commentData);
                 return res.json({ 'error': 'Inappropriete Comment' });
             }
-            return res.json({ 'error': 'Inappropriete User or Comment' });
+            return res.json({ 'error': 'Inappropriete Comment or Commenter' });
         } catch (error) {
             return res.json({ 'error': 'Invalid token parameters' });
         }
-
     },
 };
