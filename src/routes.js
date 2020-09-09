@@ -46,7 +46,7 @@ routes.delete('/deleteuserbyid', UserController.deleteUserById); //ok
 routes.post('/createpet', upload.single('profilePicture'), PetController.store); //ok - Need fix the pet profile picture
 routes.get('/getpetbyuserid', PetController.getPetByUserId); //ok
 routes.get('/showallpets', PetController.showallpets); //ok
-routes.delete('/deletepet', PetController.deletepet); //ok
+routes.delete('/deletepet', PetController.deletepet); //OK//
 //routes.delete('/deleteallpets', PetController.deleteallpets);
 
 //UserPOST routes
