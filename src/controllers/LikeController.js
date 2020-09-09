@@ -1,22 +1,38 @@
 const Like = require('../models/Like');
 const Auth = require('../models/Auth');
+const Post = require('../models/Post');
 
 module.exports = {
 
     async getLikeByPostId(req, res) {
         const { post_id } = req.headers;
+        try {
+            const post = await Post.findOne({ _id: post_id })
+            if (post) {
+                const like = await Like.find({ post_id: post_id });
+                return res.status(200).json(like);
+            }
+            return res.status(404).json({ 'Error': 'Invalid Post' })
+        } catch (error) {
+            return res.status(500).json({'Error':'Invalid Token format'})
+        }
 
-        const like = await Like.find({ post_id: post_id });
-
-        return res.json(like);
     },
 
     async getLikeCount(req, res) {
         const { post_id } = req.headers;
 
-        const like = await Like.countDocuments({ post_id: post_id });
-
-        return res.json(like);
+        try {
+            const post = await Post.findOne({ _id: post_id })
+        if (post) {
+            const like = await Like.countDocuments({ post_id: post_id });
+            return res.status(200).json(like);
+        }
+        return res.status(404).json({ 'Error': 'Invalid Post' })
+        } catch (error) {
+            return res.status(500).json({'Error':'Invalid Token format'})
+        }
+        
     },
 
     async store(req, res) {
@@ -33,34 +49,19 @@ module.exports = {
                         });
                         return res.status(202).json(like);
                     } catch (error) {
-                        return res.status(401).json({'Error':'Invalid Like'})
+                        return res.status(401).json({ 'Error': 'Invalid Like' })
                     }
                 } else {
                     const like = await Like.create({
                         post_id: post_id,
                         liker: authenticated.user,
                     })
-                    return res.json(like);
+                    return res.status(200).json(like);
                 }
             }
         } catch (error) {
-            return res.status(401).json({'Error': 'Invalid token'})
+            return res.status(500).json({ 'Error': 'Invalid token format' })
         }
-    },
-
-    async deletelike(req, res) {
-        const { post_id, user } = req.headers;
-        console.log(post_id+"abcd")
-        console.log(user)
-        try {
-            const like = await Like.deleteOne({
-                post_id: post_id, liker: user
-            });
-            return res.json(like);
-        } catch (error) {
-            return res.status(401).json({'Error':'Invalid Like'})
-        }
-        
     },
 
     async showAllLikes(req, res) {

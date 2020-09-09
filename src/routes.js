@@ -64,10 +64,9 @@ routes.delete('/deletecomment', CommentController.deleteComment); //OK//
 
 //LIKE routes
 routes.post('/createlike', LikeController.store); //OK//
-routes.get('/getlikebypost', LikeController.getLikeByPostId);
-routes.get('/getpostlikecount', LikeController.getLikeCount);
-routes.get('/showalllikes', LikeController.showAllLikes);
-routes.delete('/deletelike', LikeController.deletelike);
+routes.get('/getlikebypost', LikeController.getLikeByPostId); //OK//
+routes.get('/getpostlikecount', LikeController.getLikeCount); //OK//
+routes.get('/showalllikes', LikeController.showAllLikes); //OK//
 
 //COMPLAINT routes
 routes.post('/createcomplaint', ComplaintController.store);
