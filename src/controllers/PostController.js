@@ -61,12 +61,19 @@ module.exports = {
     },
 
     async deletePost(req, res) {
-        const { post_id, user_id, token } = req.headers;
-
-        const post = await Post.deleteOne({
-            _id: post_id
-        });
-        return res.json(post);
-    }
+        const { post, token } = req.headers;
+        try {
+            const authenticated = await Auth.findOne({ _id: token });
+            if (authenticated.auth) {
+                const postData = await Post.deleteOne({ _id: post, user: authenticated.user });
+                if (postData.deletedCount != 0)
+                    return res.status(202).json(postData);
+                return res.json({ 'error': 'Inappropriete Pet' });
+            }
+            return res.json({ 'error': 'Inappropriete User or Pet' });
+        } catch (error) {
+            return res.json({ 'error': 'Invalid token parameters' });
+        }
+    },
 
 };

@@ -64,7 +64,6 @@ module.exports = {
         } catch (error) {
             return res.json({ 'error': 'Invalid token parameters' });
         }
-
     },
 
     /*
