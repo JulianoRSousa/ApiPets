@@ -56,7 +56,7 @@ module.exports = {
             const authenticated = await Auth.findOne({ _id: token });
             console.log(authenticated);
             
-            if (!authenticated) {
+            if (authenticated.auth) {
                 const petData = await Pet.deleteOne({ _id: pet, user: authenticated.user });
                 if (petData.deletedCount != 0)
                     return res.json(petData);
