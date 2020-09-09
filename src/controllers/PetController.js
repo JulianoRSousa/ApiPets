@@ -55,13 +55,13 @@ module.exports = {
         try {
             const authenticated = await Auth.findOne({ _id: token });
             console.log(authenticated);
-            /*
+            
             if (!authenticated) {
                 const petData = await Pet.deleteOne({ _id: pet, user: authenticated.user });
                 if (petData.deletedCount != 0)
                     return res.json(petData);
                 return res.json({ 'error': 'Inappropriete Pet' });
-            }*/
+            }
             return res.json({ 'error': 'Inappropriete User or Pet' });
         } catch (error) {
             return res.json({ 'error': 'Invalid token parameters' });
