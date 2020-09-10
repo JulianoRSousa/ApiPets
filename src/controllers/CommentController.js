@@ -52,12 +52,12 @@ module.exports = {
             if (authenticated.auth) {
                 const commentData = await Comment.deleteOne({ _id: comment, commenter: authenticated.user });
                 if (commentData.deletedCount != 0)
-                    return res.status(202).json(commentData);
-                return res.json({ 'error': 'Inappropriete Comment' });
+                    return res.status(201).json(commentData);
+                return res.status(200).json({ 'error': 'Inappropriete Comment' });
             }
-            return res.json({ 'error': 'Inappropriete Comment or Commenter' });
+            return res.status(403).json({ 'error': 'Inappropriete Comment or Commenter' });
         } catch (error) {
-            return res.json({ 'error': 'Invalid token parameters' });
+            return res.status(401).json({ 'error': 'Invalid token parameters' });
         }
     },
 };

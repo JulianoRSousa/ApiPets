@@ -150,8 +150,6 @@ module.exports = {
                     profilePicture: "InitialProfile.png"
                 });
 
-
-
                 const auth = await Auth.create({
                     user: user._id,
                     auth: true,
@@ -161,12 +159,9 @@ module.exports = {
 
                 return res.status(201).json(auth);
             }
-            return res.status(202).json({ 'Error': 'This email is already registered!' })
+            return res.status(202).json({ 'Error': 'This email is already in use!' })
         } catch (error) {
             console.log(error.message);
         }
-
-
-
     }
 };

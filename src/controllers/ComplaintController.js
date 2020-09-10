@@ -1,45 +1,57 @@
 const Complaint = require('../models/Complaint');
-const { populate } = require('../models/Complaint');
+const Auth = require('../models/Auth');
 
 module.exports = {
 
     async getComplaintByPostId(req, res) {
-        const { post_id } = req.query;
-
-        const complaint = await Complaint.find({ post_id });
-
-        return res.json(complaint);
+        const { post_id } = req.headers;
+        if (process.env.ENVIRONMENT == 'dev') {
+            try {
+                const complaint = await Complaint.find({ post_id });
+                if (complaint.length != 0) {
+                    return res.status(202).json(complaint);
+                }
+                return res.status(202).json(complaint);
+            } catch (error) {
+                return res.status(404).json({ 'Error': 'Invalid PostID' });
+            }
+        }
+        return res.status(403).json({ "error": "No system admin logged" });
     },
 
     async showAllComplaint(req, res) {
-        const { masterUser, masterPass } = req.headers;
-        if(masterUser == process.env.MASTERUSER && masterPass == process.env.MASTERPASS){
-            const complaint = await Complaint.find({ });
-            await complaint.populate('post_id').execPopulate();
-            
-            return  res.status(202).json(complaint);
+        if (process.env.ENVIRONMENT == 'dev') {
+            const complaint = await Complaint.find({}).populate('post_id').exec();
+            return res.status(202).json(complaint);
         }
-
-        return res.json({"error":"No system admin logged"});
+        return res.status(403).json({ "error": "No system admin logged" });
     },
 
     async store(req, res) {
-        const { 
+        const {
             message,
-            registerDate,
             reason,
-        } = req.body;
-        const { caller_id, post_id } = req.headers;
+            post_id, token } = req.headers;
 
-        
-        const complaint = await Complaint.create({
-            message: message,
-            registerDate: registerDate,
-            reason: reason,
-            post_id: post_id,
-            caller_id: caller_id,
-        })
-
-        return res.json(complaint);
+        try {
+            var date = new Date();
+            const authenticated = await Auth.findOne({ _id: token })
+            if (authenticated.auth) {
+                const complaint = await Complaint.create({
+                    message: message,
+                    registerDate: date.getHours() + ':' + date.getMinutes() + " - " +
+                        date.getDate() + '/' +
+                        (date.getMonth() + 1) + '/' +
+                        date.getFullYear(),
+                    reason: reason,
+                    post_id: post_id,
+                    caller_id: authenticated.user,
+                })
+                return res.status(201).json(complaint);
+            }
+            return res.status(401).json({ 'Error': 'Invalid Token' });
+        } catch (error) {
+            return res.status(401).json({ 'Error': 'Invalid Token Format' });
+        }
     }
 };

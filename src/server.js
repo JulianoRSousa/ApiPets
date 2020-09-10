@@ -26,17 +26,6 @@ app.use(express.json());
 app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')))
 app.use(routes);
 
-if (process.env.ENVIRONMENT == 'dev') {
-    console.log();
-    console.log();
-    console.log();
-    console.log();
-    console.log();
-    console.log();
-    console.log();
-    console.log();
-    console.log();
-    console.log();
-}
+
 app.listen(process.env.PORT || 3333);
 

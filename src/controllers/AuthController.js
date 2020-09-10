@@ -7,58 +7,60 @@ module.exports = {
 
     async confirmauth(req, res) {
         const { token } = req.headers;
-        if (token == "000000000000000000000000" || token == null || token == "") {
-            return res.json({ 'error': 'Code 0s' });
+        if (token == "000000000000000000000000" || token == null || token == '') {
+            return res.status(403).json({ 'Error': 'Initial Mode' });
         } else {
             try {
                 const authenticated = await Auth.findOne({ _id: token });
                 if (authenticated) {
                     await authenticated.populate('user').execPopulate();
                     return res.status(200).json(authenticated);
-                }else{
-
+                } else {
+                    return res.status(200).json({ 'Error': 'Invalid Token' });
                 }
             } catch (error) {
-                console.log(error);            
-                return res.json({ 'error': error });
+                return res.status(500).json({ 'Error': 'Invalid Token Format' });
             }
         }
     },
 
 
-    async gettrue(req, res) {
-        return res.json({ auth: true });
+    async isOn(req, res) {
+        return res.status(200).json({ 'ServerStatus': 'Online' });
     },
 
 
     async showSession(req, res) {
-        try {
-            const auth = await Auth.find({ auth: true });
-            return res.json(auth);
+        if (process.env.ENVIRONMENT == 'dev') {
+            try {
+                const auth = await Auth.find({ auth: true });
+                return res.json(auth);
 
-        } catch (error) {
-            console.log(error);
-            return error;
+            } catch (error) {
+                console.log(error);
+                return error;
+            }
         }
+        return res.status(403).json({ "error": "No system admin logged" });
     },
 
 
     async createauth(req, res) {
 
         const { email, pass } = req.headers;
-
-        let user = await User.findOne({ email, pass });
-
-        if (user != null) {
-
-            await Auth.deleteMany({ user: user._id });
-
-            const authenticated = await Auth.create({
-                user: user._id,
-                auth: true,
-            });
-            await authenticated.populate('user').execPopulate();
-            return res.status(201).json(authenticated);
+        const user = await User.findOne({ email, pass });
+        if (user) {
+            try {
+                await Auth.deleteMany({ user: user.id });
+                const authenticated = await Auth.create({
+                    user: user.id,
+                    auth: true,
+                });
+                await authenticated.populate('user').execPopulate();
+                return res.status(201).json(authenticated);
+            } catch (error) {
+                return res.status(500).json({ 'error': 'Unable to create new auth' });
+            }
         }
         return res.status(401).json({ 'error': 'Autenticação não encontrada' });
     },
@@ -66,35 +68,23 @@ module.exports = {
 
     async deleteauth(req, res) {
         const { token } = req.headers;
-
-        const auth = await Auth.deleteOne({
-            _id: token
-        });
-        return res.json(auth);
+        try {
+            const auth = await Auth.deleteOne({ _id: token });
+            if (auth.deletedCount)
+                return res.status(201).json(auth);
+            return res.status(401).json({ 'Error': 'No auth for this token' })
+        } catch (error) {
+            return res.status(500).json({ 'Error': 'Invalid Token Format' });
+        }
     },
 
     async deleteallauth(req, res) {
 
         try {
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-            await Auth.deleteOne();
-
+            await Auth.deleteMany();
         } catch (error) {
-
+            return res.status(500).json({ 'Error': 'Error on delete' });
         }
-
-
         return res.json({ message: 'Deleted' });
     }
 };

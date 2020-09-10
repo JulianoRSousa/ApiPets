@@ -16,7 +16,7 @@ const upload = multer(uploadConfig);
 
 
 
-//FUNCTION NEED REMOVING {}
+//FUNCTION NEED REMOVING {
 
 //showallusers;
 //getuserbyid;
@@ -31,7 +31,7 @@ const upload = multer(uploadConfig);
 //showsessions;
 //gettrue;
 //deleteallauth;
-//  };
+//  }
 
 //USER routes
 routes.put('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //Untested route
@@ -69,17 +69,17 @@ routes.get('/getpostlikecount', LikeController.getLikeCount); //OK//
 routes.get('/showalllikes', LikeController.showAllLikes); //OK//
 
 //COMPLAINT routes
-routes.post('/createcomplaint', ComplaintController.store);
-routes.get('/getcomplaintbypost', ComplaintController.getComplaintByPostId);
-routes.get('/showallcomplaint', ComplaintController.showAllComplaint);
+routes.post('/createcomplaint', ComplaintController.store); //OK//
+routes.get('/getcomplaintbypost', ComplaintController.getComplaintByPostId); //OK//
+routes.get('/showallcomplaint', ComplaintController.showAllComplaint); //OK//
 
 //AUTH routes
-routes.post('/createauth', AuthController.createauth);
-routes.get('/confirmauth', AuthController.confirmauth);
-routes.get('/showsessions', AuthController.showSession);
-routes.get('/gettrue', AuthController.gettrue);
-routes.delete('/deleteauth', AuthController.deleteauth);
-routes.delete('/deleteallauth', AuthController.deleteallauth);
+routes.post('/createauth', AuthController.createauth); //OK//
+routes.get('/confirmauth', AuthController.confirmauth); //OK//
+routes.get('/showsessions', AuthController.showSession); //OK//
+routes.get('/ison', AuthController.isOn); //OK//
+routes.delete('/deleteauth', AuthController.deleteauth); //OK//
+routes.delete('/deleteallauth', AuthController.deleteallauth); //OK//
 
 
 module.exports = routes;
