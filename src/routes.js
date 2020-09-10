@@ -33,6 +33,11 @@ const upload = multer(uploadConfig);
 //deleteallauth;
 //  }
 
+
+routes.get('/', UserController.commandList); //OK//
+
+
+
 //USER routes
 routes.put('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //Untested route
 routes.post('/createlogin', UserController.createLogin); //ok - UserProfile picture not working 

@@ -15,6 +15,22 @@ const { deleteauth } = require('./AuthController');
 
 module.exports = {
 
+    async commandList(req, res) {
+        return res.status(200).json({
+            "/": "This Page",
+            '/setprofile':'',
+            '/createLogin': '',
+            '/getuserbyemail':'',
+            'showallusers':'',
+            'getuserbyid':'',
+            'deleteuserbyid':''
+        });
+    },
+
+
+
+
+
     async getUserByEmail(req, res) {
         const email = req.headers.email.toLowerCase();
         try {
@@ -31,7 +47,7 @@ module.exports = {
                 const users = await User.find();
                 return res.status(200).json(users);
             } catch (error) {
-                return res.status(500).json({'Error':'Cant Find Users'});
+                return res.status(500).json({ 'Error': 'Cant Find Users' });
             }
         }
         return res.status(403).json({ "error": "No system admin logged" });
