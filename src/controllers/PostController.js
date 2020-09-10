@@ -4,24 +4,34 @@ const Auth = require('../models/Auth');
 module.exports = {
 
     async getPostByState(req, res) {
-        const { state } = req.query;
-
-        const post = await Post.find({ state: state });
-
-        return res.json(post);
+        const { state } = req.headers;
+        try {
+            const post = await Post.find({ state: state });
+            return res.status(200).json(post);
+        } catch (error) {
+            return res.status(500).json({'Error':'Cant Find PostState'});
+        }
     },
 
     async getPostByUserId(req, res) {
-        const { user_id } = req.query;
-
-        const post = await Post.find({ user: user_id });
-
-        return res.json(post);
+        const { user_id } = req.headers;
+        try {
+            const post = await Post.find({ user: user_id });
+            return res.status(200).json(post);
+        } catch (error) {
+            return res.status(500).json({ 'Error': 'Invalid User Format' });
+        }
     },
 
     async showAllPosts(req, res) {
-        const posts = await Post.find({})
-        return res.json(posts)
+        if (process.env.ENVIRONMENT == 'dev') {
+            try {
+                const posts = await Post.find({})
+            } catch (error) {
+                return res.status(500).json({ 'Error': 'Cant find posts' });
+            }
+        }
+        return res.status(403).json({ "error": "No system admin logged" });
     },
 
     async store(req, res) {
@@ -66,13 +76,13 @@ module.exports = {
             const authenticated = await Auth.findOne({ _id: token });
             if (authenticated.auth) {
                 const postData = await Post.deleteOne({ _id: post, user: authenticated.user });
-                if (postData.deletedCount != 0)
-                    return res.status(202).json(postData);
-                return res.json({ 'error': 'Inappropriete Pet' });
+                if (postData.deletedCount)
+                    return res.status(201).json(postData);
+                return res.status(401).json({ 'error': 'Inappropriete Pet' });
             }
-            return res.json({ 'error': 'Inappropriete User or Pet' });
+            return res.status(401).json({ 'error': 'Inappropriete User or Pet' });
         } catch (error) {
-            return res.json({ 'error': 'Invalid token parameters' });
+            return res.status(500).json({ 'error': 'Invalid token parameters' });
         }
     },
 
