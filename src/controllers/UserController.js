@@ -1,12 +1,14 @@
 const Auth = require('../models/Auth');
 const User = require('../models/User');
+const Post = require('../models/Post');
+const Pet = require('../models/Pet');
 const path = require('path');
-const dotenv = require('dotenv').config();
 
 const fs = require('fs');
 const readline = require('readline');
 const { google } = require('googleapis');
 const https = require("https");
+const { deleteauth } = require('./AuthController');
 
 //index, show, store, update, destroy
 
@@ -15,27 +17,34 @@ module.exports = {
 
     async getUserByEmail(req, res) {
         const email = req.headers.email.toLowerCase();
-
-        const user = await User.find({ email });
-
-        return res.json(user);
+        try {
+            const userData = await User.find({ email: email });
+            return res.status(200).json(userData);
+        } catch (error) {
+            return res.status(500).json({ 'Error': 'Cant Find User' });
+        }
     },
 
     async showallusers(req, res) {
-
         if (process.env.ENVIRONMENT == 'dev') {
-            const users = await User.find();
-            return res.json(users);
+            try {
+                const users = await User.find();
+                return res.status(200).json(users);
+            } catch (error) {
+                return res.status(500).json({'Error':'Cant Find Users'});
+            }
         }
-        return res.json({ "Error": "Error" });
+        return res.status(403).json({ "error": "No system admin logged" });
     },
 
     async getUserById(req, res) {
         const { user_id } = req.headers;
-
-        const userData = await User.find({ _id: user_id });
-
-        return res.json(userData);
+        try {
+            const userData = await User.find({ _id: user_id });
+            return res.status(200).json(userData);
+        } catch (error) {
+            return res.status(404).json({ 'Error': 'User Not Found' });
+        }
     },
 
 
@@ -77,22 +86,30 @@ module.exports = {
         return res.status(202).json({ 'Error': 'No changes done' })
     },
 
-    async deleteUserByEmail(req, res) {
-        const email = req.headers.email.toLowerCase();
-
-        const deleted = await User.findOneAndDelete({ email })
-        if (deleted == null)
-            return res.status(202).json({ 'Error': 'This email was not found!' })
-        return res.status(200).json(deleted)
-    },
-
     async deleteUserById(req, res) {
-        const { user_id } = req.headers;
-
-        const deleted = await User.findOneAndDelete({ _id: user_id })
-        if (deleted == null)
-            return res.status(202).json({ 'Error': 'This UserId was not found!' })
-        return res.status(200).json(deleted)
+        const { token } = req.headers;
+        try {
+            const authenticated = await Auth.findOne({ _id: token })
+            if (authenticated) {
+                const deletePet = await Pet.deleteMany({ user: authenticated.user });
+                if (deletePet.deletedCount) {
+                    const deletePost = await Post.deleteMany({ user: authenticated.user })
+                    if (deletePost.deletedCount) {
+                        const deleteAuth = await Auth.deleteOne({ _id: authenticated._id })
+                        if (deleteAuth.deletedCount) {
+                            const deleteUser = await User.deleteOne({ _id: authenticated.user });
+                            if (deleteUser.deletedCount) {
+                                return res.status(201).json(deleteUser)
+                            }
+                            return res.status(403).json({ 'Error': "Invalid Paramns to Delete all User Data" })
+                        }
+                    }
+                }
+            }
+            return res.status(401).json({ 'Error': "Invalid Token!" })
+        } catch (error) {
+            return res.status(500).json({ 'Error': "Invalid Token Format" })
+        }
     },
 
 

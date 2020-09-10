@@ -24,9 +24,10 @@ module.exports = {
     },
 
     async showAllPosts(req, res) {
-        if (process.env.ENVIRONMENT == 'dev') {
+        if (process.env.ENVIRONMENT == "dev") {
             try {
-                const posts = await Post.find({})
+                const posts = await Post.find()
+                return res.status(200).json(posts)
             } catch (error) {
                 return res.status(500).json({ 'Error': 'Cant find posts' });
             }

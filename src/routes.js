@@ -39,8 +39,7 @@ routes.post('/createlogin', UserController.createLogin); //ok - UserProfile pict
 routes.get('/getuserbyemail', UserController.getUserByEmail); //OK//
 routes.get('/showallusers', UserController.showallusers); //OK//
 routes.get('/getuserbyid', UserController.getUserById); //OK//
-routes.delete('/deleteuserbyemail', UserController.deleteUserByEmail); //ok
-routes.delete('/deleteuserbyid', UserController.deleteUserById); //ok
+routes.delete('/deleteuserbyid', UserController.deleteUserById); //OK//
 
 //PETS routes
 routes.post('/createpet', upload.single('profilePicture'), PetController.store); //ok - Need fix the pet profile picture
