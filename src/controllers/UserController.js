@@ -2,6 +2,7 @@ const Auth = require('../models/Auth');
 const User = require('../models/User');
 const Post = require('../models/Post');
 const Pet = require('../models/Pet');
+const Image = require('../models/Image');
 const path = require('path');
 
 const fs = require('fs');
@@ -65,6 +66,21 @@ module.exports = {
 
 
     async setProfilePicture(req, res) {
+
+        const { originalname: name, size, key, location: url = "" } = req.file;
+
+        const image = await Image.create({
+            name,
+            size,
+            key,
+            url
+          });
+        
+          return res.json(image);
+
+
+
+       /* 
         const profilePicture = req.file
         const token = req.headers.token;
         let user = null;
@@ -100,6 +116,7 @@ module.exports = {
         }
 
         return res.status(202).json({ 'Error': 'No changes done' })
+        */
     },
 
     async deleteUserById(req, res) {

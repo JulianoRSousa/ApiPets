@@ -1,5 +1,6 @@
 const express =  require('express');
 const multer = require('multer');
+const multerConfig = require('./config/upload');
 
 const uploadConfig = require('./config/upload')
 const UserController = require('./controllers/UserController');
@@ -33,13 +34,12 @@ const upload = multer(uploadConfig);
 //deleteallauth;
 //  }
 
-
 routes.get('/', UserController.commandList); //OK//
 
 
 
 //USER routes
-routes.put('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //Untested route
+routes.post('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //Untested route
 routes.post('/createlogin', UserController.createLogin); //ok - UserProfile picture not working 
 routes.get('/getuserbyemail', UserController.getUserByEmail); //OK//
 routes.get('/showallusers', UserController.showallusers); //OK//
@@ -54,7 +54,7 @@ routes.delete('/deletepet', PetController.deletepet); //OK//
 //routes.delete('/deleteallpets', PetController.deleteallpets);
 
 //UserPOST routes
-routes.post('/createpost', upload.single('picture'), PostController.store); //ok - Need fix the post profile picture
+routes.post('/createpost', upload.single('picture'), PostController.createPost); //ok - Need fix the post profile picture
 routes.get('/getpostbystate', PostController.getPostByState); //OK//
 routes.get('/getpostbyuserid', PostController.getPostByUserId); //OK//
 routes.get('/showallposts', PostController.showAllPosts); //OK//

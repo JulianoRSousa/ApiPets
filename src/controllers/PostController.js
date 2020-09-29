@@ -35,8 +35,8 @@ module.exports = {
         return res.status(403).json({ "error": "No system admin logged" });
     },
 
-    async store(req, res) {
-        const { picture } = req.file.filename;
+    async createPost(req, res) {
+        const { picture } = req.file;
         const { state, description } = req.body;
         const { user_id, pet_id, token } = req.headers;
 
@@ -48,7 +48,7 @@ module.exports = {
                     try {
                         var date = new Date();
                         const post = await Post.create({
-                            picture: picture,
+                            picture: '',
                             state,
                             description,
                             postDate: date.getDate() + '/' +
