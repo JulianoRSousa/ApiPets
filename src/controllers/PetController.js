@@ -71,7 +71,7 @@ module.exports = {
             } catch (error) {
                 return res.status(500).json({ 'Error': 'Invalid Token Format' });
             }
-        }else{
+        } else {
             try {
                 const {
                     firstName,
@@ -107,18 +107,29 @@ module.exports = {
     },
 
     async deletepet(req, res) {
-        const { pet, token } = req.headers;
         try {
-            const authenticated = await Auth.findOne({ _id: token });
-            if (authenticated) {
-                const petData = await Pet.deleteOne({ _id: pet, user: authenticated.user });
-                if (petData.deletedCount)
-                    return res.status(201).json(petData);
-                return res.status(404).json({ 'error': 'Inappropriete Pet' });
+            const { pet, token } = req.headers;
+            const auth = await Auth.findOne({ _id: token });
+            if (auth) {
+                const deletePet = await Pet.findOne({ _id: pet })
+                if (deletePet) {
+                    if (deletePet.user == auth.user) {
+                        if (deletePet.profilePicture != "InitialPetProfile.jpg") {
+                            const image = await Image.findOne({ key: deletePet.profilePicture })
+                            image.remove();
+                        }
+                        deletePet.remove();
+                    }else{
+                        return res.status(403).json({"error":"User and pet does not match"});
+                    }
+                }else{
+                    return res. status(404).json({"error":"Pet not found"})
+                }
+            }else{
+                return res.status(401).json({ 'error': 'Invalid Token' });
             }
-            return res.status(401).json({ 'error': 'Inappropriete User or Pet' });
         } catch (error) {
-            return res.status(500).json({ 'error': 'Invalid token parameters' });
+            return res.status(500).json({ 'Internal Server Error': error.message });
         }
     },
 
