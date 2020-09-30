@@ -5,8 +5,7 @@ const crypto = require("crypto");
 var aws = require('ibm-cos-sdk');
 const multerS3 = require("multer-s3");
 
-var ep = new aws.Endpoint(process.env.ENDPOINT);
-//const s3 = new aws.S3({ endpoint: ep, region: process.env.S3REGION });
+
 const IBM = {
     endpoint: process.env.ENDPOINT,
     accessKeyId: process.env.AWS_ACESS_KEY_ID,

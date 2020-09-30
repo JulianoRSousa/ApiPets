@@ -1,6 +1,9 @@
 const Post = require('../models/Post');
 const Auth = require('../models/Auth');
 const Image = require('../models/Image');
+var aws = require('ibm-cos-sdk');
+
+
 
 module.exports = {
 
@@ -115,20 +118,54 @@ module.exports = {
         }
     },
 
-    async deletePost(req, res) {
+
+    async deleteImage(req, res) {
         const { post, token } = req.headers;
-        try {
-            const authenticated = await Auth.findOne({ _id: token });
-            if (authenticated.auth) {
-                const postData = await Post.deleteOne({ _id: post, user: authenticated.user });
-                if (postData.deletedCount)
-                    return res.status(201).json(postData);
-                return res.status(401).json({ 'error': 'Inappropriete Pet' });
-            }
-            return res.status(401).json({ 'error': 'Inappropriete User or Pet' });
-        } catch (error) {
-            return res.status(500).json({ 'error': 'Invalid token parameters' });
-        }
+        console.log("post: ", post, "token: ", token);
+        const auth = await Auth.findOne({ _id: token });
+
+        const postData = await Post.findOne({ _id: post, user: auth.user });
+
+        const key1 = postData.picture_url.replace(process.env.PETS_URL, "");
+        const image = await Image.findOne({ key: key1 })
+        console.log(image)
+        await image.remove();
+        return res.send();
+
+
     },
 
+
+    async deletePost(req, res) {
+        try {
+            var { post, token } = req.header;
+            const auth = await Auth.findOne({ _id: token });
+            if (auth) {
+                const postData = await Post.findOne({ _id: post, user: auth.user });
+                if (postData) {
+                    const image = await Image.findOne({ key: (postData.picture_url.replace(process.env.PETS_URL, "")) })
+                    if (image) {
+                        try {
+                            await image.remove();
+                            await postData.remove();
+                        } catch (error) {
+                            return res.status(500).json({ "Internal Server Error": error.message });
+                        }
+                    } else {
+                        try {
+                            await postData.remove();
+                        } catch (error) {
+                            return res.status(500).json({ "Internal Server Error": error.message });
+                        }
+                    }
+                }else{
+                    return res.status(403).json({"error":"Invalid Post"})
+                }
+            } else {
+                return res.status(403).json({"error":"Invalid Token"})
+            }
+        } catch (error) {
+            return res.status(500).json({ 'Internal Server Error': error.message });
+        }
+    }
 };

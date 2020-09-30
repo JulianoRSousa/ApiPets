@@ -1,4 +1,4 @@
-const mongoose =  require('mongoose');
+const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema({
     picture: String,
@@ -20,8 +20,8 @@ const PostSchema = new mongoose.Schema({
     },
 });
 
-PostSchema.virtual('picture_url').get(function() {
-    return process.env.PETS_URL+this.picture;
-})
+PostSchema.virtual('picture_url').get(function () {
+    return process.env.PETS_URL + this.picture;
+});
 
 module.exports = mongoose.model('Post', PostSchema);

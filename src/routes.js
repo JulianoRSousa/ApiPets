@@ -36,6 +36,7 @@ const upload = multer(uploadConfig);
 
 routes.get('/', UserController.commandList); //OK//
 
+routes.delete('/deleteImage', PostController.deleteImage); //OK//
 
 
 //USER routes

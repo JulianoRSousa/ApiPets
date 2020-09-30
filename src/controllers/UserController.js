@@ -3,13 +3,6 @@ const User = require('../models/User');
 const Post = require('../models/Post');
 const Pet = require('../models/Pet');
 const Image = require('../models/Image');
-const path = require('path');
-
-const fs = require('fs');
-const readline = require('readline');
-const { google } = require('googleapis');
-const https = require("https");
-const { deleteauth } = require('./AuthController');
 
 //index, show, store, update, destroy
 
@@ -19,12 +12,12 @@ module.exports = {
     async commandList(req, res) {
         return res.status(200).json({
             "/": "This Page",
-            '/setprofile': '',
-            '/createLogin': '',
-            '/getuserbyemail': '',
-            'showallusers': '',
-            'getuserbyid': '',
-            'deleteuserbyid': ''
+            '           /setprofile': '',
+            '           /createLogin': '',
+            '           /getuserbyemail': '',
+            '           /showallusers': '',
+            '           /getuserbyid': '',
+            '           /deleteuserbyid': ''
         });
     },
 
@@ -33,12 +26,12 @@ module.exports = {
 
 
     async getUserByEmail(req, res) {
-        const email = req.headers.email.toLowerCase();
         try {
+            const email = req.headers.email.toLowerCase();
             const userData = await User.find({ email: email });
             return res.status(200).json(userData);
         } catch (error) {
-            return res.status(500).json({ 'Error': 'Cant Find User' });
+            return res.status(500).json({ 'Internal Server Error': error.message });
         }
     },
 
@@ -48,7 +41,7 @@ module.exports = {
                 const users = await User.find();
                 return res.status(200).json(users);
             } catch (error) {
-                return res.status(500).json({ 'Error': 'Cant Find Users' });
+                return res.status(500).json({ 'Internal Sever Error':error.message });
             }
         }
         return res.status(403).json({ "error": "No system admin logged" });
@@ -67,12 +60,11 @@ module.exports = {
 
     async setProfilePicture(req, res) {
 
-        const { originalname: name, size, key, location: url = "" } = req.file;
-        const { token } = req.headers;
-
-        const auth = await Auth.findOne({ _id: token })
-        try {
-            if (req.file) {
+        if (req.file) {
+            try {
+                const { originalname: name, size, key, location: url = "" } = req.file;
+                const { token } = req.headers;
+                const auth = await Auth.findOne({ _id: token })
                 if (auth) {
                     try {
                         const image = await Image.create({
@@ -82,91 +74,36 @@ module.exports = {
                             url
                         });
 
-                        var user = await User.findOne({_id: auth.user})
+                        const user = await User.findOne({ _id: auth.user })
                         user.profilePicture = image.key;
                         await user.save();
                         return res.json(user);
                     } catch (error) {
-                        return res.status(200).json({'Error': error.toString()})
+                        return res.status(500).json({ 'Internal Sever Error': error.message })
                     }
-                }else{
-                    return res.status(401).json({'Error': 'Invalid Token'})
                 }
-            }else{
-                return res.status(204).json({'Error': 'Invalid Picture'})
+                return res.status(401).json({ 'Error': 'Invalid Token' })
+            } catch (error) {
+                return res.status(500).json({ 'Internal Server Error': error.message })
             }
-
-        } catch (error) {
-            console.log("error.message = ", error.message,)
         }
-
-
-
-
-
-        /* 
-         const profilePicture = req.file
-         const token = req.headers.token;
-         let user = null;
- 
-         console.log("ProfilePic => ", profilePicture);
- 
-         await Auth.findOne({ _id: token }).then(Response => {
-             user = Response.user
-         })
- 
-         console.log("User => ", user)
- 
-         if (user) {
-             try {
-                 user = await User.findOne({ _id: user })
-                 user.profilePicture = profilePicture.filename
-                 await user.save()
- 
- 
- 
-                 const url = https.get("https://back-apipets.herokuapp.com/files/" + profilePicture + "", response => {
-                     response.pipe(file);
-                 });
- 
-                 const file = fs.createWriteStream(url);
- 
-                 return res.status(201).json(user);
- 
-             } catch (error) {
-                 console.log("Erro = ", error)
-             }
- 
-         }
- 
-         return res.status(202).json({ 'Error': 'No changes done' })
-         */
+        return res.status(415).json({ 'Error': 'Invalid Uploaded Picture' })
     },
 
     async deleteUserById(req, res) {
-        const { token } = req.headers;
         try {
-            const authenticated = await Auth.findOne({ _id: token })
-            if (authenticated) {
-                const deletePet = await Pet.deleteMany({ user: authenticated.user });
-                if (deletePet.deletedCount) {
-                    const deletePost = await Post.deleteMany({ user: authenticated.user })
-                    if (deletePost.deletedCount) {
-                        const deleteAuth = await Auth.deleteOne({ _id: authenticated._id })
-                        if (deleteAuth.deletedCount) {
-                            const deleteUser = await User.deleteOne({ _id: authenticated.user });
-                            if (deleteUser.deletedCount) {
-                                return res.status(201).json(deleteUser)
-                            }
-                            return res.status(403).json({ 'Error': "Invalid Paramns to Delete all User Data" })
-                        }
-                    }
-                }
+            const { token } = req.headers;
+            const auth = await Auth.findOne({ _id: token })
+            if (auth) {
+                const deletePet = await Pet.deleteMany({ user: auth.user });
+                const deletePost = await Post.deleteMany({ user: auth.user })
+                const deleteUser = await User.deleteOne({ _id: auth.user });
+                const deleteAuth = await Auth.deleteOne({ _id: auth._id })
             }
-            return res.status(401).json({ 'Error': "Invalid Token!" })
+            return res.status(401).json({ 'Error': 'Invalid Token' })
         } catch (error) {
-            return res.status(500).json({ 'Error': "Invalid Token Format" })
-        }
+            return res.status(500).json({ 'Internal Sever Error':error.message })
+        } 
     },
 
 
