@@ -107,7 +107,7 @@ module.exports = {
                         return res.json(post);
 
                     } catch (error) {
-                        return res.status(500).json({ "Error": "Server Internal Error" })
+                        return res.status(500).json({ "Error": "Internal Server Error" })
                     }
                 } else {
                     return res.status(403).json({ "Error": "Invalid Token" })
@@ -120,18 +120,18 @@ module.exports = {
 
 
     async deleteImage(req, res) {
-        const { post, token } = req.headers;
-        console.log("post: ", post, "token: ", token);
-        const auth = await Auth.findOne({ _id: token });
-
-        const postData = await Post.findOne({ _id: post, user: auth.user });
-
-        const key1 = postData.picture_url.replace(process.env.PETS_URL, "");
-        const image = await Image.findOne({ key: key1 })
-        console.log(image)
-        await image.remove();
-        return res.send();
-
+        try {
+            if (process.env.ENVIRONMENT == 'dev') {
+                const { key } = req.headers;
+                const image = await Image.findOne({ key: key })
+                await image.remove();
+                return res.status(201).json({ "Image Removed - Key": key });
+            } else {
+                return res.status(401).json({ "Error": "No system admin logged" })
+            }
+        } catch (error) {
+            return res.status(500).json({ "Internal Server Error": error.message })
+        }
 
     },
 
@@ -158,11 +158,11 @@ module.exports = {
                             return res.status(500).json({ "Internal Server Error": error.message });
                         }
                     }
-                }else{
-                    return res.status(403).json({"error":"Invalid Post"})
+                } else {
+                    return res.status(403).json({ "error": "Invalid Post" })
                 }
             } else {
-                return res.status(403).json({"error":"Invalid Token"})
+                return res.status(403).json({ "error": "Invalid Token" })
             }
         } catch (error) {
             return res.status(500).json({ 'Internal Server Error': error.message });
