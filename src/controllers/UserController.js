@@ -19,12 +19,12 @@ module.exports = {
     async commandList(req, res) {
         return res.status(200).json({
             "/": "This Page",
-            '/setprofile':'',
+            '/setprofile': '',
             '/createLogin': '',
-            '/getuserbyemail':'',
-            'showallusers':'',
-            'getuserbyid':'',
-            'deleteuserbyid':''
+            '/getuserbyemail': '',
+            'showallusers': '',
+            'getuserbyid': '',
+            'deleteuserbyid': ''
         });
     },
 
@@ -68,55 +68,79 @@ module.exports = {
     async setProfilePicture(req, res) {
 
         const { originalname: name, size, key, location: url = "" } = req.file;
+        const { token } = req.headers;
 
-        const image = await Image.create({
-            name,
-            size,
-            key,
-            url
-          });
-        
-          return res.json(image);
+        const auth = await Auth.findOne({ _id: token })
+        try {
+            if (req.file) {
+                if (auth) {
+                    try {
+                        const image = await Image.create({
+                            name,
+                            size,
+                            key,
+                            url
+                        });
 
-
-
-       /* 
-        const profilePicture = req.file
-        const token = req.headers.token;
-        let user = null;
-
-        console.log("ProfilePic => ", profilePicture);
-
-        await Auth.findOne({ _id: token }).then(Response => {
-            user = Response.user
-        })
-
-        console.log("User => ", user)
-
-        if (user) {
-            try {
-                user = await User.findOne({ _id: user })
-                user.profilePicture = profilePicture.filename
-                await user.save()
-
-
-
-                const url = https.get("https://back-apipets.herokuapp.com/files/" + profilePicture + "", response => {
-                    response.pipe(file);
-                });
-
-                const file = fs.createWriteStream(url);
-
-                return res.status(201).json(user);
-
-            } catch (error) {
-                console.log("Erro = ", error)
+                        var user = await User.findOne({_id: auth.user})
+                        user.profilePicture = image.key;
+                        await user.save();
+                        return res.json(user);
+                    } catch (error) {
+                        return res.status(200).json({'Error': error.toString()})
+                    }
+                }else{
+                    return res.status(401).json({'Error': 'Invalid Token'})
+                }
+            }else{
+                return res.status(204).json({'Error': 'Invalid Picture'})
             }
 
+        } catch (error) {
+            console.log("error.message = ", error.message,)
         }
 
-        return res.status(202).json({ 'Error': 'No changes done' })
-        */
+
+
+
+
+        /* 
+         const profilePicture = req.file
+         const token = req.headers.token;
+         let user = null;
+ 
+         console.log("ProfilePic => ", profilePicture);
+ 
+         await Auth.findOne({ _id: token }).then(Response => {
+             user = Response.user
+         })
+ 
+         console.log("User => ", user)
+ 
+         if (user) {
+             try {
+                 user = await User.findOne({ _id: user })
+                 user.profilePicture = profilePicture.filename
+                 await user.save()
+ 
+ 
+ 
+                 const url = https.get("https://back-apipets.herokuapp.com/files/" + profilePicture + "", response => {
+                     response.pipe(file);
+                 });
+ 
+                 const file = fs.createWriteStream(url);
+ 
+                 return res.status(201).json(user);
+ 
+             } catch (error) {
+                 console.log("Erro = ", error)
+             }
+ 
+         }
+ 
+         return res.status(202).json({ 'Error': 'No changes done' })
+         */
     },
 
     async deleteUserById(req, res) {
@@ -197,7 +221,7 @@ module.exports = {
                     firstName: fullname.split(" ")[0],
                     lastName: fullname.split(" ").slice(1).join(' '),
                     male,
-                    profilePicture: "InitialProfile.png"
+                    profilePicture: 'InitialProfile.png'
                 });
 
                 const auth = await Auth.create({

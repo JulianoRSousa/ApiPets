@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.virtual('picture_url').get(function() {
-    return `https://back-apipets.herokuapp.com/files/${this.profilePicture}`
+    return process.env.PETS_URL+this.profilePicture;
 })
 
 module.exports = mongoose.model('User', UserSchema);

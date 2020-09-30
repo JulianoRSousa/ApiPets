@@ -19,7 +19,7 @@ const ImageSchema = new mongoose.Schema({
 
 ImageSchema.pre("save", function() {
   if (!this.url) {
-    this.url = `${process.env.APP_URL}/files/${this.key}`;
+    this.url = process.env.PETS_URL+this.key;
   }
 });
 
