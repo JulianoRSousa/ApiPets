@@ -1,4 +1,4 @@
-const mongoose =  require('mongoose');
+const mongoose = require('mongoose');
 
 const PetSchema = new mongoose.Schema({
     profilePicture: String,
@@ -17,7 +17,15 @@ const PetSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    }
+}, {
+    toJSON: {
+        virtuals: true,
     },
 });
+
+PetSchema.virtual('picture_url').get(function () {
+    return process.env.PETS_URL + this.profilePicture;
+})
 
 module.exports = mongoose.model('Pet', PetSchema);

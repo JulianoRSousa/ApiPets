@@ -1,5 +1,6 @@
 const Pet = require('../models/Pet');
 const Auth = require('../models/Auth');
+const Image = require('../models/Image');
 
 module.exports = {
 
@@ -26,42 +27,83 @@ module.exports = {
         return res.status(403).json({ "Error": "No system admin logged" });
     },
 
-    async store(req, res) {
-        const { profilePicture } = req.file.filename;
-        const {
-            firstName,
-            lastName,
-            color,
-            coatSize,
-            birthdate,
-            male,
-        } = req.body;
-        const { token } = req.headers;
 
-        try {
-            const authenticated = await Auth.findOne({ _id: token });
-            if (authenticated) {
-                const pet = await Pet.create({
-                    profilePicture: profilePicture,
-                    pictures: "",
-                    status: "Neutral",
-                    firstName: firstName,
-                    lastName: lastName,
-                    color: color,
-                    coatSize: coatSize,
-                    birthdate: birthdate,
-                    male: male,
-                    user: authenticated.user,
-                })
-                return res.status(201).json(pet);
+
+
+    async createPet(req, res) {
+        if (req.file) {
+            const { originalname: name, size, key, location: url = "" } = req.file;
+            const {
+                firstName,
+                lastName,
+                color,
+                coatSize,
+                birthdate,
+                male,
+            } = req.body;
+            const { token } = req.headers;
+
+            try {
+                const auth = await Auth.findOne({ _id: token });
+                if (auth) {
+                    const image = await Image.create({
+                        name,
+                        size,
+                        key,
+                        url
+                    });
+                    const pet = await Pet.create({
+                        profilePicture: image.key,
+                        pictures: "",
+                        status: "Neutral",
+                        firstName: firstName,
+                        lastName: lastName,
+                        color: color,
+                        coatSize: coatSize,
+                        birthdate: birthdate,
+                        male: male,
+                        user: auth.user,
+                    })
+                    return res.status(201).json(pet);
+                } else {
+                    return res.status(401).json({ 'Error': 'Invalid Token' });
+                }
+            } catch (error) {
+                return res.status(500).json({ 'Error': 'Invalid Token Format' });
             }
-            return res.status(401).json({ 'Error': 'Invalid Token' });
-        } catch (error) {
-            return res.status(500).json({ 'Error': 'Invalid Token Format' });
+        }else{
+            try {
+                const {
+                    firstName,
+                    lastName,
+                    color,
+                    coatSize,
+                    birthdate,
+                    male,
+                } = req.body;
+                const { token } = req.headers;
+                const auth = await Auth.findOne({ _id: token });
+                if (auth) {
+                    const pet = await Pet.create({
+                        profilePicture: 'InitialPetProfile.jpg',
+                        pictures: "",
+                        status: "Neutral",
+                        firstName: firstName,
+                        lastName: lastName,
+                        color: color,
+                        coatSize: coatSize,
+                        birthdate: birthdate,
+                        male: male,
+                        user: auth.user,
+                    })
+                    return res.status(201).json(pet);
+                } else {
+                    return res.status(401).json({ 'Error': 'Invalid Token' });
+                }
+            } catch (error) {
+                return res.status(500).json({ 'Error': 'Invalid Token Format' });
+            }
         }
-
-
-
     },
 
     async deletepet(req, res) {

@@ -1,5 +1,6 @@
 const Post = require('../models/Post');
 const Auth = require('../models/Auth');
+const Image = require('../models/Image');
 
 module.exports = {
 
@@ -9,7 +10,7 @@ module.exports = {
             const post = await Post.find({ state: state });
             return res.status(200).json(post);
         } catch (error) {
-            return res.status(500).json({'Error':'Cant Find PostState'});
+            return res.status(500).json({ 'Error': 'Cant Find PostState' });
         }
     },
 
@@ -36,19 +37,27 @@ module.exports = {
     },
 
     async createPost(req, res) {
-        const { picture } = req.file;
-        const { state, description } = req.body;
-        const { user_id, pet_id, token } = req.headers;
+        if (req.file) {
+            const { originalname: name, size, key, location: url = "" } = req.file;
+            const { state, description } = req.body;
+            const { pet_id, token } = req.headers;
 
-        const auth = await Auth.findOne({ _id: token })
+            const auth = await Auth.findOne({ _id: token })
 
-        try {
-            if (req.file) {
+            try {
                 if (auth) {
                     try {
+                        const image = await Image.create({
+                            name,
+                            size,
+                            key,
+                            url
+                        });
+
                         var date = new Date();
+
                         const post = await Post.create({
-                            picture: '',
+                            picture: image.key,
                             state,
                             description,
                             postDate: date.getDate() + '/' +
@@ -56,18 +65,53 @@ module.exports = {
                                 date.getFullYear(),
                             postTime: date.getHours() + ':' +
                                 date.getMinutes(),
-                            user: user_id,
+                            user: auth.user,
                             pet: pet_id,
                         })
                         return res.json(post);
 
                     } catch (error) {
-                        console.log(error)
+                        return res.status(500).json({ "Error": "Server Internal Error" })
                     }
+                } else {
+                    return res.status(403).json({ "Error": "Invalid Token" })
                 }
+            } catch (error) {
+                console.log("error.message = ", error.message,)
             }
-        } catch (error) {
-            console.log("error.message = ", error.message,)
+        } else {
+            const { state, description } = req.body;
+            const { pet_id, token } = req.headers;
+
+            const auth = await Auth.findOne({ _id: token })
+
+            try {
+                if (auth) {
+                    try {
+                        var date = new Date();
+                        const post = await Post.create({
+                            picture: "NoPicturePost.jpg",
+                            state,
+                            description,
+                            postDate: date.getDate() + '/' +
+                                (date.getMonth() + 1) + '/' +
+                                date.getFullYear(),
+                            postTime: date.getHours() + ':' +
+                                date.getMinutes(),
+                            user: auth.user,
+                            pet: pet_id,
+                        })
+                        return res.json(post);
+
+                    } catch (error) {
+                        return res.status(500).json({ "Error": "Server Internal Error" })
+                    }
+                } else {
+                    return res.status(403).json({ "Error": "Invalid Token" })
+                }
+            } catch (error) {
+                console.log("error.message = ", error.message,)
+            }
         }
     },
 
