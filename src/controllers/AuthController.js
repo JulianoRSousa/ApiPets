@@ -26,7 +26,7 @@ module.exports = {
 
 
     async isOn(req, res) {
-        return res.status(200).json({ 'ServerStatus': 'Online' });
+        return res.status(200).json({ 'Server Status': 'Online' });
     },
 
 

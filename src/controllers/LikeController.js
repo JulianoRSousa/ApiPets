@@ -14,7 +14,7 @@ module.exports = {
             }
             return res.status(404).json({ 'Error': 'Invalid Post' })
         } catch (error) {
-            return res.status(500).json({'Error':'Invalid Token format'})
+            return res.status(500).json({ 'Error': 'Invalid Token format' })
         }
 
     },
@@ -24,21 +24,21 @@ module.exports = {
 
         try {
             const post = await Post.findOne({ _id: post_id })
-        if (post) {
-            const like = await Like.countDocuments({ post_id: post_id });
-            return res.status(200).json(like);
-        }
-        return res.status(404).json({ 'Error': 'Invalid Post' })
+            if (post) {
+                const like = await Like.countDocuments({ post_id: post_id });
+                return res.status(200).json(like);
+            }
+            return res.status(404).json({ 'Error': 'Invalid Post' })
         } catch (error) {
-            return res.status(500).json({'Error':'Invalid Token format'})
+            return res.status(500).json({ 'Error': 'Invalid Token format' })
         }
-        
+
     },
 
-    async store(req, res) {
-        const { post_id, token } = req.headers;
-
+    async createLike(req, res) {
         try {
+            const { post_id, token } = req.headers;
+
             const authenticated = await Auth.findOne({ _id: token });
             if (authenticated.auth) {
                 const liked = await Like.findOne({ post_id: post_id, liker: authenticated.user });

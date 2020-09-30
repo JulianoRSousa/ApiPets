@@ -27,13 +27,13 @@ module.exports = {
         return res.status(403).json({ "error": "No system admin logged" });
     },
 
-    async store(req, res) {
-        const {
-            message,
-            reason,
-            post_id, token } = req.headers;
-
+    async createComplaint(req, res) {
         try {
+            const {
+                message,
+                reason,
+                post_id, token } = req.headers;
+    
             var date = new Date();
             const authenticated = await Auth.findOne({ _id: token })
             if (authenticated.auth) {

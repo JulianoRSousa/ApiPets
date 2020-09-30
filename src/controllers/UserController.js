@@ -41,7 +41,7 @@ module.exports = {
                 const users = await User.find();
                 return res.status(200).json(users);
             } catch (error) {
-                return res.status(500).json({ 'Internal Sever Error':error.message });
+                return res.status(500).json({ 'Internal Sever Error': error.message });
             }
         }
         return res.status(403).json({ "error": "No system admin logged" });
@@ -102,8 +102,8 @@ module.exports = {
             }
             return res.status(401).json({ 'Error': 'Invalid Token' })
         } catch (error) {
-            return res.status(500).json({ 'Internal Sever Error':error.message })
-        } 
+            return res.status(500).json({ 'Internal Sever Error': error.message })
+        }
     },
 
 
@@ -146,13 +146,13 @@ module.exports = {
 
 
     async createLogin(req, res) {
-        const email = req.headers.email.toLowerCase();
-        const { pass, fullname, male } = req.headers;
-
-        const getuser = await User.findOne({ email });
         try {
+            const email = req.headers.email.toLowerCase();
+            const { pass, fullname, male } = req.headers;
+
+            const getuser = await User.findOne({ email });
             if (!getuser) {
-                let user = await User.create({
+                const user = await User.create({
                     email,
                     pass,
                     firstName: fullname.split(" ")[0],

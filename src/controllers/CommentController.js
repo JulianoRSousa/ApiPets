@@ -20,10 +20,11 @@ module.exports = {
     },
 
 
-    async store(req, res) {
-        const { message, post_id, token } = req.headers;
+    async createComment(req, res) {
 
         try {
+            const { message, post_id, token } = req.headers;
+
             var date = new Date();
             const authenticated = await Auth.findOne({ _id: token })
             if (authenticated.auth) {
@@ -40,7 +41,7 @@ module.exports = {
                 return res.status(201).json(comment);
             }
         } catch (error) {
-            return res.status(401).json({'Error':'Invalid token'});
+            return res.status(401).json({ 'Error': 'Invalid token' });
         }
     },
 
