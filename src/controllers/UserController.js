@@ -3,6 +3,8 @@ const User = require('../models/User');
 const Post = require('../models/Post');
 const Pet = require('../models/Pet');
 const Image = require('../models/Image');
+const PostController = require('../controllers/PostController');
+const PetController = require('../controllers/PetController');
 
 //index, show, store, update, destroy
 
@@ -95,12 +97,30 @@ module.exports = {
             const { token } = req.headers;
             const auth = await Auth.findOne({ _id: token })
             if (auth) {
-                const deleteUser = await Pet.deleteMany({ user: auth.user });
-                const deletePost = await Post.deleteMany({ user: auth.user })
+                try {
+                    do {
+                        var countPet = await Pet.find({ user: auth.user });
+                        await PetController.UserDeleteAccount(token);
+                    } while (countPet.length > 0);
+                } catch (error) {
+                    console.log(error.message);
+                }
+                try {
+                    do {
+                        var countPost = await Post.find({ user: auth.user });
+                        await PostController.UserDeleteAccount(token);
+                    } while (countPost.length > 0);
+                } catch (error) {
+                    console.log(error.message);
+                }
+
+
                 const deleteUser = await User.deleteOne({ _id: auth.user });
                 const deleteAuth = await Auth.deleteOne({ _id: auth._id })
+                return res.status(201).json({"UserDelete":deleteUser, "AuthDelete":deleteAuth})
+            } else {
+                return res.status(401).json({ 'Error': 'Invalid Token' })
             }
-            return res.status(401).json({ 'Error': 'Invalid Token' })
         } catch (error) {
             return res.status(500).json({ 'Internal Sever Error': error.message })
         }

@@ -1,7 +1,6 @@
 const Post = require('../models/Post');
 const Auth = require('../models/Auth');
 const Image = require('../models/Image');
-var aws = require('ibm-cos-sdk');
 
 
 
@@ -28,7 +27,9 @@ module.exports = {
     },
 
     async showAllPosts(req, res) {
-        if (process.env.ENVIRONMENT == "dev") {
+        if (process.env.ENVIRONMENT != "dev") {
+            return res.status(403).json({ "error": "No system admin logged" });
+        } else {
             try {
                 const posts = await Post.find()
                 return res.status(200).json(posts)
@@ -36,7 +37,6 @@ module.exports = {
                 return res.status(500).json({ 'Error': 'Cant find posts' });
             }
         }
-        return res.status(403).json({ "error": "No system admin logged" });
     },
 
     async createPost(req, res) {
@@ -75,7 +75,7 @@ module.exports = {
                         return res.json(post);
 
                     } catch (error) {
-                        return res.status(500).json({ "Server Internal Error": error.message  })
+                        return res.status(500).json({ "Server Internal Error": error.message })
                     }
                 } else {
                     return res.status(403).json({ "Error": "Invalid Token" })
@@ -120,25 +120,6 @@ module.exports = {
     },
 
 
-
-
-    async deleteImage(req, res) {
-        try {
-            if (process.env.ENVIRONMENT == 'dev') {
-                const { key } = req.headers;
-                const image = await Image.findOne({ key: key })
-                await image.remove();
-                return res.status(201).json({ "Image Removed - Key": key });
-            } else {
-                return res.status(401).json({ "Error": "No system admin logged" })
-            }
-        } catch (error) {
-            return res.status(500).json({ "Internal Server Error": error.message })
-        }
-
-    },
-
-
     async deletePost(req, res) {
         try {
             var { post, token } = req.header;
@@ -170,5 +151,40 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ 'Internal Server Error': error.message });
         }
+    },
+
+
+    async UserDeleteAccount(token) {
+        try {
+            const auth = await Auth.findOne({ _id: token });
+            if (auth) {
+                const postData = await Post.findOne({ user: auth.user });
+                if (postData) {
+                    const image = await Image.findOne({ key: (postData.picture_url.replace(process.env.PETS_URL, "")) })
+                    if (image) {
+                        try {
+                            await image.remove();
+                            await postData.remove();
+                        } catch (error) {
+                            return 0
+                        }
+                    } else {
+                        try {
+                            await postData.remove();
+                        } catch (error) {
+                            return res.status(500).json({ "Internal Server Error": error.message });
+                        }
+                    }
+                } else {
+                    return 0
+                }
+            } else {
+                return res.status(403).json({ "error": "Invalid Token" })
+            }
+        } catch (error) {
+            return res.status(500).json({ 'Internal Server Error': error.message });
+        }
     }
+
+    
 };

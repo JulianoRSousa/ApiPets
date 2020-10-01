@@ -43,7 +43,7 @@ module.exports = {
                     male,
                 } = req.body;
                 const { token } = req.headers;
-    
+
                 try {
                     const auth = await Auth.findOne({ _id: token });
                     if (auth) {
@@ -106,7 +106,7 @@ module.exports = {
                 }
             }
         } catch (error) {
-            return res.status(500).json({"Internal Server Error": error.message})
+            return res.status(500).json({ "Internal Server Error": error.message })
         }
     },
 
@@ -123,13 +123,13 @@ module.exports = {
                             image.remove();
                         }
                         deletePet.remove();
-                    }else{
-                        return res.status(403).json({"error":"User and pet does not match"});
+                    } else {
+                        return res.status(403).json({ "error": "User and pet does not match" });
                     }
-                }else{
-                    return res. status(404).json({"error":"Pet not found"})
+                } else {
+                    return res.status(404).json({ "error": "Pet not found" })
                 }
-            }else{
+            } else {
                 return res.status(401).json({ 'error': 'Invalid Token' });
             }
         } catch (error) {
@@ -137,6 +137,38 @@ module.exports = {
         }
     },
 
+
+    async UserDeleteAccount(token) {
+        try {
+            const auth = await Auth.findOne({ _id: token });
+            if (auth) {
+                const petsData = await Pet.findOne({ user: auth.user });
+                if (petsData) {
+                    const image = await Image.findOne({ key: petsData.profilePicture })
+                    if (image) {
+                        try {
+                            await image.remove();
+                            await petsData.remove();
+                        } catch (error) {
+                            return 0
+                        }
+                    } else {
+                        try {
+                            await petsData.remove();
+                        } catch (error) {
+                            return res.status(500).json({ "Internal Server Error": error.message });
+                        }
+                    }
+                } else {
+                    return 0
+                }
+            } else {
+                return res.status(403).json({ "error": "Invalid Token" })
+            }
+        } catch (error) {
+            return res.status(500).json({ 'Internal Server Error': error.message });
+        }
+    }
     /*
     async deleteallpets(req, res) {
 

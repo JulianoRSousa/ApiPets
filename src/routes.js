@@ -37,10 +37,9 @@ const upload = multer(uploadConfig);
 
 routes.get('/', UserController.commandList); //OK//
 
-routes.delete('/deleteImage', PostController.deleteImage); //OK//
 
 //IMAGE routes
-routes.post('/createimage', ImageController.createImage); //OK//
+routes.post('/createimage', upload.single('image'), ImageController.createImage); //OK//
 routes.get('/getimagebykey', ImageController.getImageByKey); //OK//
 routes.get('/showallimages', ImageController.showAllImages); //OK//
 routes.delete('/deleteimagebykey', ImageController.deleteImageByKey); //OK//

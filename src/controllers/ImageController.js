@@ -1,4 +1,5 @@
 const Image = require('../models/Image');
+require("dotenv").config();
 
 
 
@@ -8,7 +9,7 @@ module.exports = {
         const { key } = req.headers;
         try {
             const image = await Image.findOne({ key: key });
-            return res.status(200).json(Image);
+            return res.status(200).json(image);
         } catch (error) {
             return res.status(500).json({ 'Internas Server Error': error.message });
         }
@@ -17,10 +18,11 @@ module.exports = {
     async showAllImages(req, res) {
         if (process.env.ENVIRONMENT == "dev") {
             try {
-                const posts = await Post.find()
-                return res.status(200).json(posts)
+                const images = await Image.find()
+
+                return res.status(200).json(images)
             } catch (error) {
-                return res.status(500).json({ 'Error': 'Cant find posts' });
+                return res.status(500).json({ 'Error': 'Cant find Images' });
             }
         }
         return res.status(403).json({ "error": "No system admin logged" });
@@ -28,20 +30,20 @@ module.exports = {
 
     async createImage(req, res) {
         try {
-            if (process.env.ENVIRONMENT == 'dev') {
+            if (process.env.ENVIRONMENT == "dev") {
                 if (req.file) {
                     const { originalname: name, size, key, location: url = "" } = req.file;
-
+                    
                     const image = await Image.create({
                         name,
                         size,
                         key,
-                        url,
-                        user: auth.user
+                        url,  
                     });
                     return res.status(201).json(image)
+                }else{
+                    return res.status(415).json({ 'Internal Server Error': 'Invalid Media Type' })
                 }
-                return res.status(415).json({ 'Internal Server Error': 'Invalid Media Type' })
             }
             return res.status(401).json({ 'Error': 'No admin logged' })
         } catch (error) {
