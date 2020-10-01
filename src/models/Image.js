@@ -16,31 +16,6 @@ const ImageSchema = new mongoose.Schema({
   }
 });
 
-/*
-function removeImage(key) {
-  const IBM = {
-    endpoint: process.env.ENDPOINT,
-    accessKeyId: process.env.AWS_ACESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACESS_KEY,
-    region: process.env.S3REGION
-}
-const s3 = new aws.S3(IBM);
-
-console.log(`Deleting object: ${key}`);
-return s3
-    .deleteObject({
-        Bucket: process.env.BUCKET_NAME,
-        Key: key
-    })
-    .promise()
-    .then(() => {
-        console.log(`Item: ${itemName} deleted!`);
-    })
-    .catch((e) => {
-        console.error(`ERROR: ${e.code} - ${e.message}\n`);
-    })
-};
-*/
 
 ImageSchema.pre("save", function () {
   if (!this.url) {
@@ -59,18 +34,20 @@ ImageSchema.pre("remove", function () {
   const s3 = new aws.S3(IBM);
 
   if (process.env.STORAGE_TYPE === "s3") {
-    return s3
-      .deleteObject({
-        Bucket: process.env.BUCKET_NAME,
-        Key: this.key
-      })
-      .promise()
-      .then(response => {
-        console.log(response.status);
-      })
-      .catch(response => {
-        console.log(response.status);
-      })
+    if (this.key != "InitialPetProfile.jpg" || this.key != "InitialProfile.png" || this.key != "NoPicturePost.jpg") {
+      return s3
+        .deleteObject({
+          Bucket: process.env.BUCKET_NAME,
+          Key: this.key
+        })
+        .promise()
+        .then(response => {
+          console.log(response.status);
+        })
+        .catch(response => {
+          console.log(response.status);
+        })
+    }
   }
 });
 

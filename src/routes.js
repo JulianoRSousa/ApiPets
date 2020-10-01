@@ -10,6 +10,7 @@ const CommentController = require('./controllers/CommentController');
 const LikeController = require('./controllers/LikeController');
 const AuthController = require('./controllers/AuthController');
 const ComplaintController = require('./controllers/ComplaintController');
+const ImageController = require('./controllers/ImageController');
 
 
 const routes = express.Router();
@@ -38,11 +39,16 @@ routes.get('/', UserController.commandList); //OK//
 
 routes.delete('/deleteImage', PostController.deleteImage); //OK//
 
+//IMAGE routes
+routes.post('/createimage', ImageController.createImage); //OK//
+routes.get('/getimagebykey', ImageController.getImageByKey); //OK//
+routes.get('/showallimages', ImageController.showAllImages); //OK//
+routes.delete('/deleteimagebykey', ImageController.deleteImageByKey); //OK//
 
 //USER routes
 routes.post('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //OK//
 routes.post('/createlogin', UserController.createLogin); //OK//
-routes.get('/getuserbyemail', UserController.getUserByEmail); //OK//
+routes.get('/getuserbyemail', UserController.getUserByUsername); //OK//
 routes.get('/showallusers', UserController.showallusers); //OK//
 routes.get('/getuserbyid', UserController.getUserById); //OK//
 routes.delete('/deleteuserbyid', UserController.deleteUserById); //OK//

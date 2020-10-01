@@ -14,7 +14,7 @@ module.exports = {
             "/": "This Page",
             '           /setprofile': '',
             '           /createLogin': '',
-            '           /getuserbyemail': '',
+            '           /getuserbyusername': '',
             '           /showallusers': '',
             '           /getuserbyid': '',
             '           /deleteuserbyid': ''
@@ -25,11 +25,11 @@ module.exports = {
 
 
 
-    async getUserByEmail(req, res) {
+    async getUserByUsername(req, res) {
         try {
-            const email = req.headers.email.toLowerCase();
-            const userData = await User.find({ email: email });
-            return res.status(200).json(userData);
+            const username = req.headers.username.toLowerCase();
+            const user = await User.find({ username: username });
+            return res.status(200).json(user);
         } catch (error) {
             return res.status(500).json({ 'Internal Server Error': error.message });
         }
@@ -50,8 +50,8 @@ module.exports = {
     async getUserById(req, res) {
         const { user_id } = req.headers;
         try {
-            const userData = await User.find({ _id: user_id });
-            return res.status(200).json(userData);
+            const user = await User.find({ _id: user_id });
+            return res.status(200).json(user);
         } catch (error) {
             return res.status(404).json({ 'Error': 'User Not Found' });
         }
@@ -95,7 +95,7 @@ module.exports = {
             const { token } = req.headers;
             const auth = await Auth.findOne({ _id: token })
             if (auth) {
-                const deletePet = await Pet.deleteMany({ user: auth.user });
+                const deleteUser = await Pet.deleteMany({ user: auth.user });
                 const deletePost = await Post.deleteMany({ user: auth.user })
                 const deleteUser = await User.deleteOne({ _id: auth.user });
                 const deleteAuth = await Auth.deleteOne({ _id: auth._id })
@@ -147,13 +147,13 @@ module.exports = {
 
     async createLogin(req, res) {
         try {
-            const email = req.headers.email.toLowerCase();
+            const username = req.headers.username.toLowerCase();
             const { pass, fullname, male } = req.headers;
 
-            const getuser = await User.findOne({ email });
+            const getuser = await User.findOne({ username });
             if (!getuser) {
                 const user = await User.create({
-                    email,
+                    username,
                     pass,
                     firstName: fullname.split(" ")[0],
                     lastName: fullname.split(" ").slice(1).join(' '),
@@ -170,7 +170,7 @@ module.exports = {
 
                 return res.status(201).json(auth);
             }
-            return res.status(202).json({ 'Error': 'This email is already in use!' })
+            return res.status(202).json({ 'Error': 'This username is already in use!' })
         } catch (error) {
             console.log(error.message);
         }

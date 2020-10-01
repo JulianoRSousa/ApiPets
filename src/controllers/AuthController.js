@@ -47,8 +47,8 @@ module.exports = {
 
     async createauth(req, res) {
 
-        const { email, pass } = req.headers;
-        const user = await User.findOne({ email, pass });
+        const { username, pass } = req.headers;
+        const user = await User.findOne({ username, pass });
         if (user) {
             try {
                 await Auth.deleteMany({ user: user.id });
@@ -74,7 +74,7 @@ module.exports = {
                 return res.status(201).json(auth);
             return res.status(401).json({ 'Error': 'No auth for this token' })
         } catch (error) {
-            return res.status(500).json({ 'Error': 'Invalid Token Format' });
+            return res.status(500).json({ 'Internal Server Error': error.message });
         }
     },
 

@@ -54,7 +54,8 @@ module.exports = {
                             name,
                             size,
                             key,
-                            url
+                            url,
+                            user: auth.user
                         });
 
                         var date = new Date();
@@ -74,7 +75,7 @@ module.exports = {
                         return res.json(post);
 
                     } catch (error) {
-                        return res.status(500).json({ "Error": "Server Internal Error" })
+                        return res.status(500).json({ "Server Internal Error": error.message  })
                     }
                 } else {
                     return res.status(403).json({ "Error": "Invalid Token" })
@@ -107,7 +108,7 @@ module.exports = {
                         return res.json(post);
 
                     } catch (error) {
-                        return res.status(500).json({ "Error": "Internal Server Error" })
+                        return res.status(500).json({ "Server Internal Error": error.message })
                     }
                 } else {
                     return res.status(403).json({ "Error": "Invalid Token" })
@@ -117,6 +118,8 @@ module.exports = {
             }
         }
     },
+
+
 
 
     async deleteImage(req, res) {
