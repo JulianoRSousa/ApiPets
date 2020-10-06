@@ -64,6 +64,7 @@ routes.post('/createpost', upload.single('picture'), PostController.createPost);
 routes.get('/getpostbystate', PostController.getPostByState); //OK//
 routes.get('/getpostbyuserid', PostController.getPostByUserId); //OK//
 routes.get('/showallposts', PostController.showAllPosts); //OK//
+routes.get('/getfeed', PostController.getFeed); //OK//
 routes.delete('/deletepost', PostController.deletePost); //OK//
 
 //COMMENT routes

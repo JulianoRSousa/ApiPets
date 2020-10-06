@@ -62,7 +62,7 @@ module.exports = {
                 return res.status(500).json({ 'error': 'Unable to create new auth' });
             }
         }
-        return res.status(401).json({ 'error': 'Autenticação não encontrada' });
+        return res.status(401).json({ 'error': 'User or pass does not match' });
     },
 
 
@@ -79,7 +79,7 @@ module.exports = {
     },
 
     async deleteallauth(req, res) {
-
+        if (process.env.ENVIRONMENT == 'dev') {
         try {
             await Auth.deleteMany();
         } catch (error) {
@@ -87,4 +87,6 @@ module.exports = {
         }
         return res.json({ message: 'Deleted' });
     }
+    return res.status(403).json({ "error": "No system admin logged" });
+}
 };

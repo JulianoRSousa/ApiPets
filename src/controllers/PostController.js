@@ -7,22 +7,22 @@ const Image = require('../models/Image');
 module.exports = {
 
     async getPostByState(req, res) {
-        const { state } = req.headers;
         try {
+            const { state } = req.headers;
             const post = await Post.find({ state: state });
             return res.status(200).json(post);
         } catch (error) {
-            return res.status(500).json({ 'Error': 'Cant Find PostState' });
+            return res.status(500).json({ 'error': error.message });
         }
     },
 
     async getPostByUserId(req, res) {
-        const { user_id } = req.headers;
         try {
+            const { user_id } = req.headers;
             const post = await Post.find({ user: user_id });
             return res.status(200).json(post);
         } catch (error) {
-            return res.status(500).json({ 'Error': 'Invalid User Format' });
+            return res.status(500).json({ 'error': error.message });
         }
     },
 
@@ -34,8 +34,22 @@ module.exports = {
                 const posts = await Post.find()
                 return res.status(200).json(posts)
             } catch (error) {
-                return res.status(500).json({ 'Error': 'Cant find posts' });
+                return res.status(500).json({ 'error': error.message });
             }
+        }
+    },
+
+    async getFeed(req, res) {
+        try {
+            const { token } = req.headers;
+            const auth = Auth.findOne({ _id: token })
+            if (auth) {
+                const posts = await Post.find();
+                return res.status(200).json(posts)
+            }
+            return status(403).json({ 'error': 'Invalid Token' })
+        } catch (error) {
+            return res.status(500).json({ 'error': error.message });
         }
     },
 
@@ -186,5 +200,5 @@ module.exports = {
         }
     }
 
-    
+
 };
