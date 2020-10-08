@@ -42,8 +42,8 @@ module.exports = {
       const auth = Auth.findOne({ _id: token });
       if (auth) {
         const posts = await Post.find()
-        .populate({ath: "user"})
-        .populate({path: "pet",})
+        .populate({path: "user"})
+        .populate({path: "pet"})
         return res.status(200).json(posts);
       }
       return status(403).json({ error: "Invalid Token" });
