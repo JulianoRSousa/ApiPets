@@ -30,10 +30,11 @@ module.exports = {
     },
 
 
-    async showSession(req, res) {
+    async showAllSessions(req, res) {
         if (process.env.ENVIRONMENT == 'dev') {
             try {
-                const auth = await Auth.find({ auth: true });
+                const auth = await Auth.find({ auth: true })
+                .populate({ path: "user" })
                 return res.json(auth);
 
             } catch (error) {

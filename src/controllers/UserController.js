@@ -40,7 +40,7 @@ module.exports = {
     async showallusers(req, res) {
         if (process.env.ENVIRONMENT == 'dev') {
             try {
-                const users = await User.find();
+                const users = await User.find()
                 return res.status(200).json(users);
             } catch (error) {
                 return res.status(500).json({ 'Internal Sever Error': error.message });

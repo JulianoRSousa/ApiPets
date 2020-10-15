@@ -47,8 +47,6 @@ module.exports = {
           .populate({ path: "user" })
           .populate({ path: "pet" });
 
-          console.log(posts)
-
         var postList = [];
         for (var i = 0; i < posts.length; i++) {
           postList[i] = {
@@ -67,7 +65,7 @@ module.exports = {
           };
         }
         var duracao = Date.now() - antes;
-        console.log(duracao + "ms | to load Feed");
+        console.log(duracao + "ms to load Feed");
         return res.status(200).json(postList);
       }
       return status(403).json({ error: "Invalid Token" });

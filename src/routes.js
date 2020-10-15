@@ -87,7 +87,7 @@ routes.get('/showallcomplaint', ComplaintController.showAllComplaint); //OK//
 //AUTH routes
 routes.post('/createauth', AuthController.createauth); //OK//
 routes.get('/confirmauth', AuthController.confirmauth); //OK//
-routes.get('/showsessions', AuthController.showSession); //OK//
+routes.get('/showsessions', AuthController.showAllSessions); //OK//
 routes.get('/ison', AuthController.isOn); //OK//
 routes.delete('/deleteauth', AuthController.deleteauth); //OK//
 routes.delete('/deleteallauth', AuthController.deleteallauth); //OK//
