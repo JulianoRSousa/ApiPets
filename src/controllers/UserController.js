@@ -59,7 +59,7 @@ module.exports = {
 
       const auth = await Auth.findOne({ _id: token });
       if(auth){
-        const user = await User.find({ _id: auth.user });
+        const user = await User.findOne({ _id: auth.user });
         return res.status(200).json(user);
       }
       
