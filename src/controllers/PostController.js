@@ -1,7 +1,6 @@
 const Post = require("../models/Post");
 const Auth = require("../models/Auth");
 const Image = require("../models/Image");
-const { json } = require("body-parser");
 
 module.exports = {
   async getPostByState(req, res) {
@@ -48,21 +47,23 @@ module.exports = {
           .populate({ path: "user" })
           .populate({ path: "pet" });
 
+          console.log(posts)
+
         var postList = [];
         for (var i = 0; i < posts.length; i++) {
           postList[i] = {
             post_id: posts[i]._id,
-            post_picture: posts[i].picture,
+            post_picture: posts[i].picture_url,
             post_status: posts[i].state,
             post_description: posts[i].description,
             post_Date: posts[i].postDate,
             post_time: posts[i].postTime,
             pet_Name: posts[i].pet.firstName,
-            pet_Picture: posts[i].pet.profilePicture,
+            pet_Picture: posts[i].pet.picture_url,
             pet_id: posts[i].pet._id,
             user_id: posts[i].user._id,
             user_Name: posts[i].user.username,
-            user_Picture: posts[i].user.profilePicture,
+            user_Picture: posts[i].user.picture_url,
           };
         }
         var duracao = Date.now() - antes;
