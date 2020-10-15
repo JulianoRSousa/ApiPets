@@ -56,14 +56,14 @@ module.exports = {
             post_picture: posts[i].picture_url,
             post_status: posts[i].state,
             post_description: posts[i].description,
-            post_Date: posts[i].postDate,
+            post_date: posts[i].postDate,
             post_time: posts[i].postTime,
-            pet_Name: posts[i].pet.firstName,
-            pet_Picture: posts[i].pet.picture_url,
+            pet_name: posts[i].pet.firstName,
+            pet_picture: posts[i].pet.picture_url,
             pet_id: posts[i].pet._id,
             user_id: posts[i].user._id,
-            user_Name: posts[i].user.username,
-            user_Picture: posts[i].user.picture_url,
+            user_name: posts[i].user.username,
+            user_picture: posts[i].user.picture_url,
           };
         }
         var duracao = Date.now() - antes;
