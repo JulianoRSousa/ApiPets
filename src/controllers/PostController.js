@@ -39,6 +39,7 @@ module.exports = {
 
   async getFeed(req, res) {
     var antes = Date.now();
+
     try {
       const { token } = req.headers;
       const auth = Auth.findOne({ _id: token });
@@ -46,7 +47,7 @@ module.exports = {
         const posts = await Post.find()
           .populate({ path: "user" })
           .populate({ path: "pet" });
-        console.log("POST >>>>>>", posts);
+
         var postList = [];
         for (var i = 0; i < posts.length; i++) {
           postList[i] = {
@@ -59,12 +60,13 @@ module.exports = {
             pet_Name: posts[i].pet.firstName,
             pet_Picture: posts[i].pet.profilePicture,
             pet_id: posts[i].pet._id,
+            user_id: posts[i].user._id,
             user_Name: posts[i].user.username,
             user_Picture: posts[i].user.profilePicture,
           };
         }
         var duracao = Date.now() - antes;
-        console.log("levou " + duracao + "ms")
+        console.log(duracao + "ms | to load Feed");
         return res.status(200).json(postList);
       }
       return status(403).json({ error: "Invalid Token" });
