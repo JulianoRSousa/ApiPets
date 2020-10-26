@@ -60,6 +60,7 @@ module.exports = {
 
       if (auth) {
         const user = await User.findOne({ _id: auth.user });
+        user.pass = null
         return res.status(200).json(user);
       } else {
         return res.status(401).json({ error: "Invalid Token" });
