@@ -11,6 +11,7 @@ const LikeController = require('./controllers/LikeController');
 const AuthController = require('./controllers/AuthController');
 const ComplaintController = require('./controllers/ComplaintController');
 const ImageController = require('./controllers/ImageController');
+const FollowController = require('./controllers/FollowController');
 
 
 const routes = express.Router();
@@ -92,6 +93,14 @@ routes.get('/showsessions', AuthController.showAllSessions); //OK//
 routes.get('/ison', AuthController.isOn); //OK//
 routes.delete('/deleteauth', AuthController.deleteauth); //OK//
 routes.delete('/deleteallauth', AuthController.deleteallauth); //OK//
+
+//FOLLOW routes
+routes.post('/followfunction', FollowController.followFunction);
+routes.get('/getfollowerbytoken', FollowController.getFollowerByToken);
+routes.get('/getfollowerbyuserid', FollowController.getFollowerByUserId);
+routes.get('/getfollowingbytoken', FollowController.getFollowingByToken);
+routes.get('/getfollowingbyuserid', FollowController.getFollowingByUserId);
+
 
 
 module.exports = routes;

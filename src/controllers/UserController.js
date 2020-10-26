@@ -40,16 +40,16 @@ module.exports = {
         return res.status(500).json({ "Internal Sever Error": error.message });
       }
     }
-    return res.status(403).json({ error: "No system admin logged" });
+    return res.status(401).json({ error: "No system admin logged" });
   },
 
   async getUserById(req, res) {
-    const { user_id } = req.headers;
     try {
+      const { user_id } = req.headers;
       const user = await User.find({ _id: user_id });
       return res.status(200).json(user);
     } catch (error) {
-      return res.status(404).json({ 'error': "User Not Found" });
+      return res.status(401).json({ error: error.message });
     }
   },
 
@@ -61,8 +61,8 @@ module.exports = {
       if (auth) {
         const user = await User.findOne({ _id: auth.user });
         return res.status(200).json(user);
-      }else{
-        return res.status(403).json({'error':'Invalid Token'})
+      } else {
+        return res.status(401).json({ error: "Invalid Token" });
       }
     } catch (error) {
       return res.status(500).json({ Error: error.message });
@@ -99,7 +99,7 @@ module.exports = {
         return res.status(500).json({ "Internal Server Error": error.message });
       }
     }
-    return res.status(415).json({ Error: "Invalid Uploaded Picture" });
+    return res.status(415).json({ Error: "Invalid Picture" });
   },
 
   async deleteUserById(req, res) {
@@ -130,7 +130,7 @@ module.exports = {
           .status(201)
           .json({ UserDelete: deleteUser, AuthDelete: deleteAuth });
       } else {
-        return res.status(401).json({ Error: "Invalid Token" });
+        return res.status(401).json({ error: "Invalid Token" });
       }
     } catch (error) {
       return res.status(500).json({ "Internal Sever Error": error.message });
@@ -167,6 +167,7 @@ module.exports = {
         .json({ Error: "This username is already in use!" });
     } catch (error) {
       console.log(error.message);
+      return res.status(500).json({ "Internal Server Error": error.message });
     }
   },
 };
