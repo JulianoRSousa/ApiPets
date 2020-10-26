@@ -3,10 +3,9 @@ const User = require("../models/User");
 const Post = require("../models/Post");
 const Pet = require("../models/Pet");
 const Image = require("../models/Image");
+const Follow = require("../models/Follow");
 const PostController = require("./PostController");
 const PetController = require("./PetController");
-const Follow = require("../models/follow");
-const { auth } = require("googleapis/build/src/apis/abusiveexperiencereport");
 
 //index, show, store, update, destroy
 
@@ -91,5 +90,5 @@ module.exports = {
       return res.status(500).json({ "Internal Sever Error": error.message });
     }
   },
-  
+
 };
