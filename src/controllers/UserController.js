@@ -49,22 +49,23 @@ module.exports = {
       const user = await User.find({ _id: user_id });
       return res.status(200).json(user);
     } catch (error) {
-      return res.status(404).json({ Error: "User Not Found" });
+      return res.status(404).json({ 'error': "User Not Found" });
     }
   },
 
   async loadUser(req, res) {
     try {
       const { token } = req.headers;
-
       const auth = await Auth.findOne({ _id: token });
-      if(auth){
+
+      if (auth) {
         const user = await User.findOne({ _id: auth.user });
         return res.status(200).json(user);
+      }else{
+        return res.status(403).json({'error':'Invalid Token'})
       }
-      
     } catch (error) {
-      return res.status(404).json({ Error: "User Not Found" });
+      return res.status(500).json({ Error: error.message });
     }
   },
 
@@ -135,43 +136,6 @@ module.exports = {
       return res.status(500).json({ "Internal Sever Error": error.message });
     }
   },
-
-  // async editBorn(req, res){
-  //     let data = [];
-  //    data[0] = token = req.headers;
-  //    data[1]  = born = req.headers.born;
-
-  //     //  console.log("tosource",valueOf(data[0]))
-  //      if(valueOf(data[1])){
-  //          console.log("nao veio")
-  //      }else{
-  //          console.log("veio")
-  //      }
-
-  //  console.log(valueOf(data[1]))
-  //  console.log(valueOf(data[2]))
-  //  function filterByID(obj) {
-  //     if (Object.values(obj) == Object.values(error) ) {
-  //         console.log("false")
-  //       return false;
-  //     } else {
-  //       return true;
-  //     }
-  //   }
-  //   var safeData = data.filter(filterByID)
-
-  // console.log("safedata::>",safeData)
-
-  // let edit = await Auth.findOne({ _id: token })
-
-  //     if(edit.user == user){
-  //         let result1 = await User.findOne({_id: user})
-  //         let abc = await User.updateOne({_id: user},{ born: born})
-  //         result1.save()
-  //         return res.json(abc)
-  //     }
-  //     return res.json({'Error': 'Data do not match!'})
-  // },
 
   async createLogin(req, res) {
     try {

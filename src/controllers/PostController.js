@@ -37,8 +37,6 @@ module.exports = {
   },
 
   async getFeed(req, res) {
-    var antes = Date.now();
-
     try {
       const { token } = req.headers;
       const auth = Auth.findOne({ _id: token });
@@ -64,8 +62,6 @@ module.exports = {
             user_picture: posts[i].user.picture_url,
           };
         }
-        var duracao = Date.now() - antes;
-        console.log(duracao + "ms to load Feed");
         return res.status(200).json(postList);
       }
       return status(403).json({ error: "Invalid Token" });
