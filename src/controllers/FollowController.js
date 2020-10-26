@@ -78,10 +78,10 @@ module.exports = {
 
         if(follow){
           const noFollow = await Follow.remove({follower: auth.user, following: userId})
-          return res.status(400).json(noFollow)
+          return res.status(200).json(noFollow)
         }else{
-          const following = await Follow.create({follower: auth.user, following: userId})
-          return res.status(400).json(following)
+          const following = await Follow.create({follower: auth.user, following: userId,})
+          return res.status(201).json(following)
         }
       } else {
         return res.status(401).json({ error: "Invalid Authentication" });
