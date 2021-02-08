@@ -188,6 +188,7 @@ module.exports = {
           return res.status(403).json({ error: "Invalid Post" });
         }
       } else {
+        console.log("token" + token);
         return res.status(403).json({ error: "Invalid Token" });
       }
     } catch (error) {
@@ -230,8 +231,6 @@ module.exports = {
       return res.status(500).json({ "Internal Server Error": error.message });
     }
   },
-  
-  
 
   async UserDeletePosts(req, res) {
     try {
@@ -262,6 +261,8 @@ module.exports = {
             }
           }
         } else {
+          console.log("auth: " + auth);
+          console.log("token: " + token);
           return res.status(403).json({ error: "Invalid Post" });
         }
       } else {
