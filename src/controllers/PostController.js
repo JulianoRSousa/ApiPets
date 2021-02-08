@@ -234,7 +234,7 @@ module.exports = {
 
   async UserDeletePosts(req, res) {
     try {
-      var token = req.header;
+      var { post, token } = req.header;
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
         const postData = await Post.findOne({ user: auth.user });
