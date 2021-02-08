@@ -7,7 +7,7 @@ module.exports = {
 
     async confirmauth(req, res) {
         const { token } = req.headers;
-        if (token == "000000000000000000000000" || token == null || token == '') {
+        if (token == null || token == '') {
             return res.status(403).json({ 'Error': 'Initial Mode' });
         } else {
             try {
