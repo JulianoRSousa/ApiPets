@@ -68,7 +68,7 @@ routes.get('/getpostbyuserid', PostController.getPostByUserId); //OK//
 routes.get('/showallposts', PostController.showAllPosts); //OK//
 routes.get('/getfeed', PostController.getFeed); //OK//
 routes.delete('/deletepost', PostController.deletePost); //OK//
-routes.delete('/UserDeleteAccount', PostController.UserDeleteAccount); //OK//
+routes.delete('/UserDeletePosts', PostController.UserDeletePosts); //OK//
 
 //COMMENT routes
 routes.post('/createcomment', CommentController.createComment); //OK//
