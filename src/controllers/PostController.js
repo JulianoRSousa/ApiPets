@@ -158,7 +158,7 @@ module.exports = {
 
   async deletePost(req, res) {
     try {
-      var { post, token } = req.header;
+      var { post, token } = req.headers;
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
         const postData = await Post.findOne({ _id: post, user: auth.user });
@@ -234,7 +234,7 @@ module.exports = {
 
   async UserDeletePosts(req, res) {
     try {
-      var { post, token } = req.header;
+      var { token } = req.headers;
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
         const postData = await Post.findOne({ user: auth.user });
