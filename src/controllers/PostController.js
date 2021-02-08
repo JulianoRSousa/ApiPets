@@ -260,7 +260,7 @@ module.exports = {
                 .json({ "Internal Server Error": error.message });
             }
           }
-        } else {
+        } else { 
           return res.status(403).json({ error: "Invalid Post" });
         }
       } else {
