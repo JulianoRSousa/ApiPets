@@ -1,7 +1,7 @@
 const mongoose =  require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-    profilePicture: String,
+    picture: String,
     pictures: String,
     username: String,
     pass: String,
@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.virtual('picture_url').get(function() {
-    return process.env.PETS_URL+this.profilePicture;
+    return process.env.PETS_URL+this.picture;
 })
 
 module.exports = mongoose.model('User', UserSchema);

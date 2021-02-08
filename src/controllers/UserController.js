@@ -86,7 +86,7 @@ module.exports = {
             });
 
             const user = await User.findOne({ _id: auth.user });
-            user.profilePicture = image.key;
+            user.picture = image.key;
             await user.save();
             return res.json(user);
           } catch (error) {
@@ -151,7 +151,7 @@ module.exports = {
           firstName: fullname.split(" ")[0],
           lastName: fullname.split(" ").slice(1).join(" "),
           male,
-          profilePicture: "InitialProfile.png",
+          picture: "InitialProfile.png",
         });
 
         const auth = await Auth.create({

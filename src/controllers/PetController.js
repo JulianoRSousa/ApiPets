@@ -54,7 +54,7 @@ module.exports = {
                             url
                         });
                         const pet = await Pet.create({
-                            profilePicture: image.key,
+                            picture: image.key,
                             pictures: "",
                             status: "Neutral",
                             firstName: firstName,
@@ -86,7 +86,7 @@ module.exports = {
                     const auth = await Auth.findOne({ _id: token });
                     if (auth) {
                         const pet = await Pet.create({
-                            profilePicture: 'InitialPetProfile.jpg',
+                            picture: 'InitialPetProfile.jpg',
                             pictures: "",
                             status: "Neutral",
                             firstName: firstName,
@@ -118,8 +118,8 @@ module.exports = {
                 const deletePet = await Pet.findOne({ _id: pet })
                 if (deletePet) {
                     if (deletePet.user == auth.user) {
-                        if (deletePet.profilePicture != "InitialPetProfile.jpg") {
-                            const image = await Image.findOne({ key: deletePet.profilePicture })
+                        if (deletePet.picture != "InitialPetProfile.jpg") {
+                            const image = await Image.findOne({ key: deletePet.picture })
                             image.remove();
                         }
                         deletePet.remove();
@@ -144,7 +144,7 @@ module.exports = {
             if (auth) {
                 const petsData = await Pet.findOne({ user: auth.user });
                 if (petsData) {
-                    const image = await Image.findOne({ key: petsData.profilePicture })
+                    const image = await Image.findOne({ key: petsData.picture })
                     if (image) {
                         try {
                             await image.remove();
