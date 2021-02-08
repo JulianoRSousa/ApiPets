@@ -231,6 +231,8 @@ module.exports = {
     }
   },
   
+  
+
   async UserDeletePosts(req, res) {
     try {
       var { token } = req.header;
@@ -246,7 +248,9 @@ module.exports = {
               await image.remove();
               await postData.remove();
             } catch (error) {
-              return 0;
+              return res
+                .status(500)
+                .json({ "Internal Server Error": error.message });
             }
           } else {
             try {
@@ -258,7 +262,7 @@ module.exports = {
             }
           }
         } else {
-          return 0;
+          return res.status(403).json({ error: "Invalid Post" });
         }
       } else {
         return res.status(403).json({ error: "Invalid Token" });
