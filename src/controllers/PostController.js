@@ -196,42 +196,7 @@ module.exports = {
     }
   },
 
-  async UserDeleteAccount(token) {
-    try {
-      const auth = await Auth.findOne({ _id: token });
-      if (auth) {
-        const postData = await Post.findOne({ user: auth.user });
-        if (postData) {
-          const image = await Image.findOne({
-            key: postData.picture_url.replace(process.env.PETS_URL, ""),
-          });
-          if (image) {
-            try {
-              await image.remove();
-              await postData.remove();
-            } catch (error) {
-              return 0;
-            }
-          } else {
-            try {
-              await postData.remove();
-            } catch (error) {
-              return res
-                .status(500)
-                .json({ "Internal Server Error": error.message });
-            }
-          }
-        } else {
-          return 0;
-        }
-      } else {
-        return res.status(403).json({ error: "Invalid Token" });
-      }
-    } catch (error) {
-      return res.status(500).json({ "Internal Server Error": error.message });
-    }
-  },
-
+  
   async UserDeletePosts(req, res) {
     try {
       var { token } = req.headers;
@@ -270,4 +235,41 @@ module.exports = {
       return res.status(500).json({ "Internal Server Error": error.message });
     }
   },
+
+  async UserDeleteAccount(token) {
+    try {
+      const auth = await Auth.findOne({ _id: token });
+      if (auth) {
+        const postData = await Post.findOne({ user: auth.user });
+        if (postData) {
+          const image = await Image.findOne({
+            key: postData.picture_url.replace(process.env.PETS_URL, ""),
+          });
+          if (image) {
+            try {
+              await image.remove();
+              await postData.remove();
+            } catch (error) {
+              return 0;
+            }
+          } else {
+            try {
+              await postData.remove();
+            } catch (error) {
+              return res
+                .status(500)
+                .json({ "Internal Server Error": error.message });
+            }
+          }
+        } else {
+          return 0;
+        }
+      } else {
+        return res.status(403).json({ error: "Invalid Token" });
+      }
+    } catch (error) {
+      return res.status(500).json({ "Internal Server Error": error.message });
+    }
+  },
+
 };
