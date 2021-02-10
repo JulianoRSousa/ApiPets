@@ -51,8 +51,10 @@ module.exports = {
                             name,
                             size,
                             key,
-                            url
+                            url,
+                            user: auth.user
                         });
+                        
                         const pet = await Pet.create({
                             picture: image.key,
                             pictures: "",
