@@ -47,7 +47,7 @@ module.exports = {
 
         var postList = [];
         for (var i = posts.length; i > 0; i--) {
-          postList[i] = {
+          postList[post.length-i] = {
             post_id: posts[i]._id,
             post_picture: posts[i].picture_url,
             post_status: posts[i].state,
