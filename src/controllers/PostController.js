@@ -41,17 +41,13 @@ module.exports = {
       const { token } = req.headers;
       const auth = Auth.findOne({ _id: token });
       if (auth) {
-        const posts = await Post.find().sort({_id: 'desc'})
+        const posts = await Post.find()
           .populate({ path: "user" })
           .populate({ path: "pet" });
 
-          
-
         var postList = [];
-        var x = 0;
-        for (var i = posts.length; i > 0; i--) {
-          x = x + 1;
-          postList[x] = {
+        for (var i = 0; i > posts.length; i++) {
+          postList[i] = {
             post_id: posts[i]._id,
             post_picture: posts[i].picture_url,
             post_status: posts[i].state,
@@ -200,7 +196,6 @@ module.exports = {
     }
   },
 
-  
   async UserDeletePosts(req, res) {
     try {
       var { token } = req.headers;
@@ -230,7 +225,7 @@ module.exports = {
             }
           }
           return res.status(201).json({ "Internal Server Message": postData });
-        } else { 
+        } else {
           return res.status(403).json({ error: "Invalid Post" });
         }
       } else {
@@ -276,5 +271,4 @@ module.exports = {
       return res.status(500).json({ "Internal Server Error": error.message });
     }
   },
-
 };
