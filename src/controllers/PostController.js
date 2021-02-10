@@ -46,8 +46,10 @@ module.exports = {
           .populate({ path: "pet" });
 
         var postList = [];
+        var x;
         for (var i = posts.length; i > 0; i--) {
-          postList[post.length-i] = {
+          x = x + 1;
+          postList[x] = {
             post_id: posts[i]._id,
             post_picture: posts[i].picture_url,
             post_status: posts[i].state,
