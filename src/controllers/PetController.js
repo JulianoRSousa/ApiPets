@@ -70,7 +70,7 @@ module.exports = {
                         return res.status(401).json({ 'Error': 'Invalid Token' });
                     }
                 } catch (error) {
-                    return res.status(500).json({ 'Error': 'Invalid Token Format' });
+                    return res.status(500).json({ 'Error': error });
                 }
             } else {
                 try {
