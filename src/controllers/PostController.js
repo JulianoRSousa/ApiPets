@@ -41,12 +41,14 @@ module.exports = {
       const { token } = req.headers;
       const auth = Auth.findOne({ _id: token });
       if (auth) {
-        const posts = await Post.find()
+        const posts = await Post.find().sort({_id: 'desc'})
           .populate({ path: "user" })
           .populate({ path: "pet" });
 
+          
+
         var postList = [];
-        var x;
+        var x = 0;
         for (var i = posts.length; i > 0; i--) {
           x = x + 1;
           postList[x] = {
