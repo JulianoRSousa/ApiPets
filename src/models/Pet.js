@@ -25,7 +25,7 @@ const PetSchema = new mongoose.Schema({
 });
 
 PetSchema.virtual('picture_url').get(function () {
-    return process.env.PETS_URL + this.profilePicture;
+    return process.env.PETS_URL + this.picture;
 })
 
 module.exports = mongoose.model('Pet', PetSchema);
