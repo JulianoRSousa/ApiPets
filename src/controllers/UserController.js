@@ -5,6 +5,7 @@ const Pet = require("../models/Pet");
 const Image = require("../models/Image");
 const PostController = require("../controllers/PostController");
 const PetController = require("../controllers/PetController");
+const { json } = require("body-parser");
 
 //index, show, store, update, destroy
 
@@ -62,8 +63,7 @@ module.exports = {
         const user = await User.findOne({ _id: auth.user });
         user.pass = null
         const pets = await Pet.find({ user: user._id });
-        return res.status(200).json(pets)
-        return res.status(200).json(user);
+        return res.status(200).json(user+pets);
       } else {
         return res.status(401).json({ error: "Invalid Token" });
       }
