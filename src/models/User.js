@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
     pictures: String,
     username: String,
     pass: String,
+    petsCount: String,
     firstName: String,
     lastName: String,
     born: String,

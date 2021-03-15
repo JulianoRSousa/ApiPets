@@ -62,7 +62,8 @@ module.exports = {
       if (auth) {
         const user = await User.findOne({ _id: auth.user });
         const pets = await Pet.find({ user: user._id });
-        user.pass = pets.length
+        user.pass = null
+        user.petsCount = pets.length
         return res.status(200).json(user);
       } else {
         return res.status(401).json({ error: "Invalid Token" });
