@@ -1,6 +1,7 @@
 const Post = require("../models/Post");
 const Auth = require("../models/Auth");
 const Image = require("../models/Image");
+const User = require("../models/User");
 
 module.exports = {
   async getPostByState(req, res) {
@@ -18,7 +19,8 @@ module.exports = {
       const { token } = req.headers;
       const auth = Auth.findOne({ _id: token });
       if (auth) {
-        const posts = await Post.find({user: auth.user.id})
+        const user = await User.findOne({ _id: auth.user });
+        const posts = await Post.find({user: user})
           .populate({ path: "user" })
           .populate({ path: "pet" });
 
