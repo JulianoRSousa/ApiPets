@@ -62,7 +62,9 @@ module.exports = {
       if (auth) {
         const user = await User.findOne({ _id: auth.user });
         const pets = await Pet.find({ user: user._id });
+        const posts = await Post.find({ user: user._id });
         user.pass = null
+        user.postsCount = posts.length
         user.petsCount = pets.length
         return res.status(200).json(user);
       } else {
