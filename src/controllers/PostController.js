@@ -20,7 +20,7 @@ module.exports = {
       const auth = Auth.findOne({ _id: token });
       if (auth) {
         const user = await User.findOne({ _id: auth.user });
-        const posts = await Post.find({user: user})
+        const posts = await Post.find({ user: user._id })
           .populate({ path: "user" })
           .populate({ path: "pet" });
 
@@ -43,7 +43,7 @@ module.exports = {
         }
         return res.status(200).json(postList);
       }
-      return status(403).json({ error: "Invalid User" });
+      return status(403).json({ error: "Invalid Token" });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
