@@ -17,8 +17,10 @@ module.exports = {
   async getPostByUserId(req, res) {
     try {
       const { token } = req.headers;
-      const auth = Auth.findOne({ _id: token });
+      const auth = await Auth.findOne({ _id: token });
+
       if (auth) {
+        return res.status(200).json(auth);
         const user = await User.findOne({ _id: auth.user });
         const posts = await Post.find({ user: user._id })
           .populate({ path: "user" })
