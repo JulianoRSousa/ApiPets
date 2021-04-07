@@ -20,9 +20,7 @@ module.exports = {
       const auth = await Auth.findOne({ _id: token });
 
       if (auth) {
-        return res.status(200).json(auth);
-        const user = await User.findOne({ _id: auth.user });
-        const posts = await Post.find({ user: user._id })
+        const posts = await Post.find({ user: auth.user })
           .populate({ path: "user" })
           .populate({ path: "pet" });
 
