@@ -71,23 +71,6 @@ module.exports = {
           .populate({ path: "user" })
           .populate({ path: "pet" })
 
-        var postList = [];
-        for (var i = 0; i < posts.length; i++) {
-          postList[i] = {
-            post_id: posts[i]._id,
-            post_picture: posts[i].picture_url,
-            post_status: posts[i].state,
-            post_description: posts[i].description,
-            post_date: posts[i].postDate,
-            post_time: posts[i].postTime,
-            pet_name: posts[i].pet.firstName,
-            pet_picture: posts[i].pet.picture_url,
-            pet_id: posts[i].pet._id,
-            user_id: posts[i].user._id,
-            user_name: posts[i].user.username,
-            user_picture: posts[i].user.picture_url,
-          };
-        }
         return res.status(200).json(posts);
       }
       return status(403).json({ error: "Invalid Token" });
@@ -104,29 +87,12 @@ module.exports = {
       var viewdItems = page * limitPerPage;
       if (auth) {
         const posts = await Post.find()
+        sort({ id: -1 })
           .populate({ path: "user" })
           .populate({ path: "pet" })
           .skip(viewdItems)
           .limit(5);
 
-
-        // var postList = [];
-        // for (var i = 0; i < posts.length; i++) {
-        //   postList[i] = {
-        //     post_id: posts[i]._id,
-        //     post_picture: posts[i].picture_url,
-        //     post_status: posts[i].state,
-        //     post_description: posts[i].description,
-        //     post_date: posts[i].postDate,
-        //     post_time: posts[i].postTime,
-        //     pet_name: posts[i].pet.firstName,
-        //     pet_picture: posts[i].pet.picture_url,
-        //     pet_id: posts[i].pet._id,
-        //     user_id: posts[i].user._id,
-        //     user_name: posts[i].user.username,
-        //     user_picture: posts[i].user.picture_url,
-        //   };
-        // }
         return res.status(200).json(posts);
       }
       return status(403).json({ error: "Invalid Token" });
