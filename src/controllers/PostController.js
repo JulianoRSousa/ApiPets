@@ -70,6 +70,10 @@ module.exports = {
       const limitPerPage = 5;
       var viewdItems = page * limitPerPage;
       if (auth) {
+        if(page==0){
+          const pages = Math.ceil(await Post.find().estimatedDocumentCount()/limitPerPage)
+          res.header('pages', [pages])
+        }
         const posts = await Post.find()
           .sort({ _id: -1 })
           .skip(viewdItems)
