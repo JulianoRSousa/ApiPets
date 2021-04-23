@@ -57,6 +57,7 @@ routes.delete('/deleteuserbyid', UserController.deleteUserById); //OK//
 routes.post('/createpet', upload.single('profilePicture'), PetController.createPet); //OK//
 routes.get('/getpetbyuserid', PetController.getPetByUserId); //OK//
 routes.get('/showallpets', PetController.showallpets); //OK//
+routes.get('/getpetbytoken', PetController.getPetByToken); //OK//
 routes.delete('/deletepet', PetController.deletepet); //OK//
 //routes.delete('/deleteallpets', PetController.deleteallpets);
 
