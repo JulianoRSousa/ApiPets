@@ -97,7 +97,7 @@ module.exports = {
           } catch (error) {
             return res
               .status(500)
-              .json({ "Internal Sever Error": error.message });
+              .json({ "Internal Server Error": error.message });
           }
         }
         return res.status(401).json({ Error: "Invalid Token" });
