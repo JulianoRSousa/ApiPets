@@ -64,7 +64,7 @@ routes.delete('/deletepet', PetController.deletepet); //OK//
 //UserPOST routes
 routes.post('/createpost', upload.single('picture'), PostController.createPost); //OK//
 routes.get('/getpostbystate', PostController.getPostByState); //OK//
-routes.get('/getpostbyuserid', PostController.getPostByUserId); //OK//
+routes.get('/getpostbytoken', PostController.getPostByToken); //OK//
 routes.get('/showallposts', PostController.showAllPosts); //OK//
 routes.get('/getfeed', PostController.getFeed); //OK//
 routes.get('/getpage', PostController.getPage); //OK//

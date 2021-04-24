@@ -14,7 +14,7 @@ module.exports = {
     }
   },
 
-  async getPostByUserId(req, res) {
+  async getPostByToken(req, res) {
     try {
       const { token } = req.headers;
       const auth = await Auth.findOne({ _id: token });
