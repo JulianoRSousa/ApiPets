@@ -154,7 +154,7 @@ module.exports = {
       
       if (!validEmail) {
         if (validUsername){
-          for(i = 1; !validUsername; i++){
+          for(i = 1; validUsername; i++){
             let newUser = username + i;
             validUsername = await User.findOne({ username: newUser });
             if(!validUsername){
@@ -168,6 +168,7 @@ module.exports = {
           pass,
           firstName: fullname.split(" ")[0],
           lastName: fullname.split(" ").slice(1).join(" "),
+          birthDate,
           picture: "InitialProfile.png",
         });
 
