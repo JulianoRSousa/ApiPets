@@ -146,10 +146,10 @@ module.exports = {
   async createLogin(req, res) {
     try {
       const email = req.headers.email.toLowerCase();
-      const { pass, fullname, birthDate } = req.headers;
+      const { pass, fullname, birthdate, } = req.headers;
       let username = email.split("@")[0];
       try{
-        console.log('birthDate: ',birthDate)
+        console.log('birthdate: ',birthdate)
       }catch(error){
         console.log("error:",error)
       }
@@ -173,7 +173,7 @@ module.exports = {
           pass,
           firstName: fullname.split(" ")[0],
           lastName: fullname.split(" ").slice(1).join(" "),
-          birthDate: birthDate,
+          birthDate: birthdate,
           picture: "InitialProfile.png",
         });
 
