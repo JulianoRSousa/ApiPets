@@ -3,16 +3,16 @@ const mongoose =  require('mongoose');
 const UserSchema = new mongoose.Schema({
     picture: String,
     pictures: String,
+    email: String,
     username: String,
     pass: String,
     postsCount: String,
     petsCount: String,
     firstName: String,
     lastName: String,
-    born: String,
+    birthDare: String,
     location: String,
     foneNumber: String,
-    male: Boolean,
 }, {
     toJSON: {
         virtuals: true,

@@ -145,22 +145,35 @@ module.exports = {
 
   async createLogin(req, res) {
     try {
-      const username = req.headers.username.toLowerCase();
-      const { pass, fullname, male } = req.headers;
+      const email = req.headers.email.toLowerCase();
+      const { pass, fullname, birthDate } = req.headers;
+      const username = email.split("@")[0];
 
-      const getuser = await User.findOne({ username });
-      if (!getuser) {
+      const validUsername = await User.findOne({ username })
+      const validEmail = await User.findOne({ email });
+      
+      if (!validEmail) {
+        if (validUsername){
+          for(i = 1; !validUsername; i++){
+            let newUser = username + i;
+            validUsername = await User.findOne({ username: newUser });
+            if(!validUsername){
+              username = newUser;
+            }
+          }
+         }
         const user = await User.create({
+          email,
           username,
           pass,
           firstName: fullname.split(" ")[0],
           lastName: fullname.split(" ").slice(1).join(" "),
-          male,
           picture: "InitialProfile.png",
         });
 
         const auth = await Auth.create({
           user: user._id,
+          createdAt: Date.now(),
           auth: true,
         });
 
@@ -170,7 +183,7 @@ module.exports = {
       }
       return res
         .status(202)
-        .json({ Error: "This username is already in use!" });
+        .json({ Error: "This email is already in use!" });
     } catch (error) {
       console.log(error.message);
       return res.status(500).json({ "Internal Server Error": error.message });

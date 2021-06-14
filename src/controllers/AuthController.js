@@ -55,6 +55,7 @@ module.exports = {
                 await Auth.deleteMany({ user: user.id });
                 const authenticated = await Auth.create({
                     user: user.id,
+                    createdAt: Date.now(),
                     auth: true,
                 });
                 await authenticated.populate('user').execPopulate();
