@@ -48,8 +48,8 @@ module.exports = {
 
     async createauth(req, res) {
 
-        const { username, pass } = req.headers;
-        const user = await User.findOne({ username, pass });
+        const { email, pass } = req.headers;
+        const user = await User.findOne({ email, pass });
         if (user) {
             try {
                 await Auth.deleteMany({ user: user.id });
