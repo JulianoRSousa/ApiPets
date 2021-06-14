@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
     petsCount: String,
     firstName: String,
     lastName: String,
-    birthDare: String,
+    birthDate: String,
     location: String,
     foneNumber: String,
 }, {
