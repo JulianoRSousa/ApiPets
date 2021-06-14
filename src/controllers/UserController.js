@@ -146,7 +146,8 @@ module.exports = {
   async createLogin(req, res) {
     try {
       const email = req.headers.email.toLowerCase();
-      const { pass, fullname, birthDate } = req.headers;
+      const { pass, fullname } = req.headers;
+      let birthDate = '22/08/1995'
       let username = email.split("@")[0];
       try{
         console.log('birthDate: ',birthDate)

@@ -1,6 +1,7 @@
-const mongoose =  require('mongoose');
+const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema(
+  {
     picture: String,
     pictures: String,
     email: String,
@@ -13,14 +14,16 @@ const UserSchema = new mongoose.Schema({
     birthDate: String,
     location: String,
     foneNumber: String,
-}, {
+  },
+  {
     toJSON: {
-        virtuals: true,
+      virtuals: true,
     },
+  }
+);
+
+UserSchema.virtual("picture_url").get(function () {
+  return process.env.PETS_URL + this.picture;
 });
 
-UserSchema.virtual('picture_url').get(function() {
-    return process.env.PETS_URL+this.picture;
-})
-
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);
