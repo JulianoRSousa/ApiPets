@@ -150,6 +150,8 @@ module.exports = {
       let username = email.split("@")[0];
       try{
         console.log('BirthDate: ',birthDate)
+      }catch(error){
+        console.log("error:",error)
       }
 
       let validUsername = await User.findOne({ username })
