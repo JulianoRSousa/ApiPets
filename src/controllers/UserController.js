@@ -146,13 +146,8 @@ module.exports = {
   async createLogin(req, res) {
     try {
       const email = req.headers.email.toLowerCase();
-      const { pass, fullname, birthdate, } = req.headers;
+      const { pass, fullname, birthDate, } = req.headers;
       let username = email.split("@")[0];
-      try{
-        console.log('birthdate: ',birthdate)
-      }catch(error){
-        console.log("error:",error)
-      }
 
       let validUsername = await User.findOne({ username })
       let validEmail = await User.findOne({ email });
@@ -173,7 +168,7 @@ module.exports = {
           pass,
           firstName: fullname.split(" ")[0],
           lastName: fullname.split(" ").slice(1).join(" "),
-          birthDate: birthdate,
+          birthDate,
           picture: "InitialProfile.png",
         });
 
