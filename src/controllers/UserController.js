@@ -149,7 +149,7 @@ module.exports = {
       const { pass, fullname, birthDate } = req.headers;
       let username = email.split("@")[0];
       try{
-        console.log('BirthDate: ',birthDate)
+        console.log('birthDate: ',birthDate)
       }catch(error){
         console.log("error:",error)
       }
@@ -177,15 +177,15 @@ module.exports = {
           picture: "InitialProfile.png",
         });
 
-        const auth = await Auth.create({
-          user: user._id,
-          createdAt: Date.now(),
-          auth: true,
-        });
+        // const auth = await Auth.create({
+        //   user: user._id,
+        //   createdAt: Date.now(),
+        //   auth: true,
+        // });
 
-        await auth.populate("user").execPopulate();
+        // await auth.populate("user").execPopulate();
 
-        return res.status(201).json(auth);
+        return res.status(201).json(user);
       }
       return res
         .status(202)
