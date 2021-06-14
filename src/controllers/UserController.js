@@ -172,13 +172,13 @@ module.exports = {
           picture: "InitialProfile.png",
         });
 
-        // const auth = await Auth.create({
-        //   user: user._id,
-        //   createdAt: Date.now(),
-        //   auth: true,
-        // });
+        const auth = await Auth.create({
+          user: user._id,
+          createdAt: Date.now(),
+          auth: true,
+        });
 
-        // await auth.populate("user").execPopulate();
+        await auth.populate("user").execPopulate();
 
         return res.status(201).json(user);
       }
