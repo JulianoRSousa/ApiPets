@@ -147,10 +147,10 @@ module.exports = {
     try {
       const email = req.headers.email.toLowerCase();
       const { pass, fullname, birthDate } = req.headers;
-      const username = email.split("@")[0];
+      let username = email.split("@")[0];
 
-      const validUsername = await User.findOne({ username })
-      const validEmail = await User.findOne({ email });
+      let validUsername = await User.findOne({ username })
+      let validEmail = await User.findOne({ email });
       
       if (!validEmail) {
         if (validUsername){
