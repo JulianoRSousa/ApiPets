@@ -165,7 +165,7 @@ module.exports = {
         }
 
         const taggable = (fullname.split(" ").slice(1).join("."))+username
-        const tags = taggable.split(" ").slice(1)
+        const tags = taggable.split(".").slice(1)
 
         const user = await User.create({
           email,
