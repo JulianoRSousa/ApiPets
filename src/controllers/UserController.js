@@ -3,6 +3,7 @@ const User = require("../models/User");
 const Post = require("../models/Post");
 const Pet = require("../models/Pet");
 const Image = require("../models/Image");
+const Follow = require("../models/Follow");
 const PostController = require("../controllers/PostController");
 const PetController = require("../controllers/PetController");
 const { json } = require("body-parser");
@@ -51,9 +52,13 @@ module.exports = {
       if (user) {
         const pets = await Pet.find({ user: user._id });
         const posts = await Post.find({ user: user._id });
+        const following = await Follow.find({ following: user._id });
+        const follower = await Follow.find({ follower: user._id });
         user.pass = null;
-        // user.postList = posts;
-        // user.petList = pets;
+        user.postList = posts;
+        user.petList = pets;
+        user.followingList = following;
+        user.followerList = follower;
         return res.status(200).json(user);
       } else {
         return res.status(401).json({ error: "Invalid user" });

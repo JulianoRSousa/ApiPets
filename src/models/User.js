@@ -13,6 +13,18 @@ const UserSchema = new mongoose.Schema(
     location: String,
     foneNumber: String,
     tags: [String],
+    followingList: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Follow",
+      }
+    ],
+    followerList: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Follow",
+      }
+    ],
     postList: [
       {
         type: mongoose.Schema.Types.ObjectId,
