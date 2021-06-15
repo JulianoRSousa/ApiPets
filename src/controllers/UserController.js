@@ -164,7 +164,8 @@ module.exports = {
          }
         }
 
-        const tags = (username+'.'+fullname).toLocaleUpperCase().split(" ",".");
+        const taggable = (fullname.split(" ").slice(1).join("."))+username
+        const tags = taggable.split(" ").slice(1)
 
         const user = await User.create({
           email,
@@ -176,7 +177,7 @@ module.exports = {
           birthDate: birthdate,
           picture: "InitialProfile.png",
         });
-        
+
         return res.status(201).json(user);
       } catch (error) {
       console.log(error.message);
