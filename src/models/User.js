@@ -7,6 +7,18 @@ const UserSchema = new mongoose.Schema(
     email: String,
     username: String,
     tags: [String],
+    postList: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
+    petList: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Pet",
+      },
+    ],
     pass: String,
     postsCount: String,
     petsCount: String,

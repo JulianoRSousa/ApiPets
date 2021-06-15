@@ -48,13 +48,12 @@ module.exports = {
     try {
       const { user_id } = req.headers;
       const user = await User.findOne({ _id: user_id });
-
       if (user) {
         const pets = await Pet.find({ user: user._id });
         const posts = await Post.find({ user: user._id });
-        user.pass = null
-        user.posts = posts
-        user.pets = pets
+        user.pass = null;
+        user.postList = posts;
+        user.petList = pets;
         return res.status(200).json(user);
       } else {
         return res.status(401).json({ error: "Invalid user" });
@@ -73,9 +72,9 @@ module.exports = {
         const user = await User.findOne({ _id: auth.user });
         const pets = await Pet.find({ user: user._id });
         const posts = await Post.find({ user: user._id });
-        user.pass = null
-        user.postsCount = posts.length
-        user.petsCount = pets.length
+        user.pass = null;
+        user.postsCount = posts.length;
+        user.petsCount = pets.length;
         return res.status(200).json(user);
       } else {
         return res.status(401).json({ error: "Invalid Token" });
@@ -156,42 +155,42 @@ module.exports = {
   async createLogin(req, res) {
     try {
       const email = req.headers.email.toLowerCase();
-      const { pass, fullname, birthdate, } = req.headers;
+      const { pass, fullname, birthdate } = req.headers;
       let username = email.split("@")[0];
 
-      let validUsername = await User.findOne({ username })
+      let validUsername = await User.findOne({ username });
       let validEmail = await User.findOne({ email });
-      
+
       if (!validEmail) {
-        if (validUsername){
-          for(i = 1; validUsername; i++){
+        if (validUsername) {
+          for (i = 1; validUsername; i++) {
             let newUser = username + i;
             validUsername = await User.findOne({ username: newUser });
-            if(!validUsername){
+            if (!validUsername) {
               username = newUser;
             }
           }
-         }
         }
+      }
 
-        const taggable = ((username+" "+fullname).split(" ").join("."))
-        const tags = taggable.toUpperCase().split(".")
-        console.log('Taggable: ',taggable)
-        console.log('Tags: ',tags)
+      const taggable = (username + " " + fullname).split(" ").join(".");
+      const tags = taggable.toUpperCase().split(".");
+      console.log("Taggable: ", taggable);
+      console.log("Tags: ", tags);
 
-        const user = await User.create({
-          email,
-          username,
-          tags,
-          pass,
-          firstName: fullname.split(" ")[0],
-          lastName: fullname.split(" ").slice(1).join(" "),
-          birthDate: birthdate,
-          picture: "InitialProfile.png",
-        });
+      const user = await User.create({
+        email,
+        username,
+        tags,
+        pass,
+        firstName: fullname.split(" ")[0],
+        lastName: fullname.split(" ").slice(1).join(" "),
+        birthDate: birthdate,
+        picture: "InitialProfile.png",
+      });
 
-        return res.status(201).json(user);
-      } catch (error) {
+      return res.status(201).json(user);
+    } catch (error) {
       console.log(error.message);
       return res.status(500).json({ "Internal Server Error": error.message });
     }
