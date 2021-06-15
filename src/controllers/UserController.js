@@ -162,30 +162,23 @@ module.exports = {
             }
           }
          }
+        }
+
+        const tags = (username+'.'+fullname).toLocaleUpperCase().split(" ",".");
+
         const user = await User.create({
           email,
           username,
+          tags,
           pass,
           firstName: fullname.split(" ")[0],
           lastName: fullname.split(" ").slice(1).join(" "),
           birthDate: birthdate,
           picture: "InitialProfile.png",
         });
-
-        // const auth = await Auth.create({
-        //   user: user._id,
-        //   createdAt: Date.now(),
-        //   auth: true,
-        // });
-
-        // await auth.populate("user").execPopulate();
-
+        
         return res.status(201).json(user);
-      }
-      return res
-        .status(202)
-        .json({ Error: "This email is already in use!" });
-    } catch (error) {
+      } catch (error) {
       console.log(error.message);
       return res.status(500).json({ "Internal Server Error": error.message });
     }
