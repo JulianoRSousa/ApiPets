@@ -7,9 +7,10 @@ module.exports = {
 
     async searchFriends(req, res, next) {
         const { tags } = req.headers;
+        const search = String(tags).toUpperCase().split(' ');
             try {
                 // const resultSearch1 = await User.find({"tags": { $all: tags[0],tags[1] }}).pretty()
-                const resultSearch2 = await User.find({"tags": { $in: tags }})
+                const resultSearch2 = await User.find({"tags": { $in: search }})
                     // await resultSearch2.populate('user').execPopulate();
                     return res.status(200).json(resultSearch2);
             } catch (error) {
