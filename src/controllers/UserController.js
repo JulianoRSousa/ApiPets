@@ -164,15 +164,15 @@ module.exports = {
          }
         }
 
-        const taggable = (fullname.split(" ").slice(1).join("."))+username
-        const tags = taggable.toUpperCase().split(".").slice(1)
+        const taggable = ((fullname+" "+username).split(" ").join("."))
+        const tags = taggable.toUpperCase().split(".")
         console.log('Taggable: ',taggable)
         console.log('Tags: ',tags)
 
         const user = await User.create({
           email,
           username,
-          tags:['UM', 'DOIS', 'TRES'],
+          tags,
           pass,
           firstName: fullname.split(" ")[0],
           lastName: fullname.split(" ").slice(1).join(" "),
