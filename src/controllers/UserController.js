@@ -164,7 +164,7 @@ module.exports = {
          }
         }
 
-        const taggable = ((fullname+" "+username).split(" ").join("."))
+        const taggable = ((username+" "+fullname).split(" ").join("."))
         const tags = taggable.toUpperCase().split(".")
         console.log('Taggable: ',taggable)
         console.log('Tags: ',tags)

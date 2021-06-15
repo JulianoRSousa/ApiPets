@@ -11,6 +11,7 @@ const AuthController = require('./controllers/AuthController');
 const ComplaintController = require('./controllers/ComplaintController');
 const ImageController = require('./controllers/ImageController');
 const FollowController = require('./controllers/FollowController');
+const SearchController = require('./controllers/SearchController');
 
 
 const routes = express.Router();
@@ -43,6 +44,11 @@ routes.post('/createimage', upload.single('image'), ImageController.createImage)
 routes.get('/getimagebykey', ImageController.getImageByKey); //OK//
 routes.get('/showallimages', ImageController.showAllImages); //OK//
 routes.delete('/deleteimagebykey', ImageController.deleteImageByKey); //OK//
+
+
+//SEARCH routes
+routes.get('/searchFriends', SearchController.searchFriends); //OK//
+
 
 //USER routes
 routes.post('/setprofile', upload.single('profilePicture'), UserController.setProfilePicture); //OK//
