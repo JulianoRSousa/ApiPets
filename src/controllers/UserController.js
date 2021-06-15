@@ -52,8 +52,8 @@ module.exports = {
         const pets = await Pet.find({ user: user._id });
         const posts = await Post.find({ user: user._id });
         user.pass = null;
-        user.postList = posts;
-        user.petList = pets;
+        // user.postList = posts;
+        // user.petList = pets;
         return res.status(200).json(user);
       } else {
         return res.status(401).json({ error: "Invalid user" });

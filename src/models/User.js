@@ -6,6 +6,12 @@ const UserSchema = new mongoose.Schema(
     pictures: String,
     email: String,
     username: String,
+    pass: String,
+    firstName: String,
+    lastName: String,
+    birthDate: String,
+    location: String,
+    foneNumber: String,
     tags: [String],
     postList: [
       {
@@ -19,14 +25,6 @@ const UserSchema = new mongoose.Schema(
         ref: "Pet",
       },
     ],
-    pass: String,
-    postsCount: String,
-    petsCount: String,
-    firstName: String,
-    lastName: String,
-    birthDate: String,
-    location: String,
-    foneNumber: String,
   },
   {
     toJSON: {
