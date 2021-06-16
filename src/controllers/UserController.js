@@ -181,7 +181,7 @@ module.exports = {
       }
 
       const taggable = (username + " " + fullname).split(" ").join(";");
-      const tags = taggable.toUpperCase().split(";");
+      const tags = (taggable.toUpperCase().split(";")).split(".")
       const upperName = username.toUpperCase();
       tags.push(upperName);
 
