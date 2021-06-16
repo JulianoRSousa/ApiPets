@@ -1,22 +1,23 @@
-const Auth = require('../models/Auth');
-const User = require('../models/User');
+const Auth = require("../models/Auth");
+const User = require("../models/User");
 
 //index, show, store, update, destroy
 
 module.exports = {
-
-    async searchFriends(req, res, next) {
-        const { tags } = req.headers;
-        const search = String(tags).toUpperCase().split(' ');
-            try {
-                // const resultSearch1 = await User.find({"tags": { $all: tags[0],tags[1] }}).pretty()
-                const resultSearch2 = await User.find({"tags": { $in: search }})
-                    return res.status(200).json(resultSearch2);
-            } catch (error) {
-                console.log(error)
-                return res.status(500).json({ 'Error': 'Internal Server Error' });
-            }
-        
+  async searchFriends(req, res, next) {
+    const { tags } = req.headers;
+    const search = String(tags).toUpperCase().split(" ");
+    try {
+      if (search.indexOf("@") == 0) {
+        const resultSearch = await User.find({ tags: { $all: search } });
+        return res.status(200).json(resultSearch);
+      } else {
+        const resultSearch = await User.find({ tags: { $in: search } });
+        return res.status(200).json(resultSearch);
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ Error: "Internal Server Error" });
     }
-    
+  },
 };
