@@ -9,6 +9,7 @@ module.exports = {
     const search = String(tags).toUpperCase().split(" ");
     try {
       if (search.indexOf("@") == 0) {
+          search[0].replace('@','')
         const resultSearch = await User.find({ tags: { $all: search } });
         return res.status(200).json(resultSearch);
       } else {
