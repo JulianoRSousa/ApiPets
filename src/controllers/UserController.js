@@ -180,13 +180,10 @@ module.exports = {
         return res.status(401).json({ Email: "Invalid Email" });
       }
 
-      const taggable = (username + " " + fullname).split(" ").join(";");
-      const tags = (taggable.toUpperCase().split(";")).split(".")
+      const taggable = (username + " " + fullname).split(" ").join(".");
+      const tags = taggable.toUpperCase().split(".")
       const upperName = username.toUpperCase();
       tags.push(upperName);
-
-      console.log("taggable: ", taggable);
-      console.log("tags: ", tags);
 
       const user = await User.create({
         email,
