@@ -176,15 +176,17 @@ module.exports = {
             }
           }
         }
+      } else {
+        return res.status(401).json({ Email: "Invalid Email" });
       }
 
       const taggable = (username + " " + fullname).split(" ").join(";");
-      const tags = taggable.toUpperCase().split(";")
-      tags.push(String(username).toUpperCase)
-      
+      const tags = taggable.toUpperCase().split(";");
+      const upperName = username.toUpperCase();
+      tags.push(upperName);
 
-      console.log('taggable: ',taggable)
-      console.log('tags: ',tags)
+      console.log("taggable: ", taggable);
+      console.log("tags: ", tags);
 
       const user = await User.create({
         email,
@@ -196,7 +198,6 @@ module.exports = {
         birthDate: birthdate,
         picture: "InitialProfile.png",
       });
-
       return res.status(201).json(user);
     } catch (error) {
       console.log(error.message);
