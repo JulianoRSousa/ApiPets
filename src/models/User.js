@@ -12,6 +12,8 @@ const UserSchema = new mongoose.Schema(
     birthDate: String,
     location: String,
     foneNumber: String,
+    latitude: String,
+    longitude:String,
     tags: [String],
     followingList: [
       {
