@@ -160,7 +160,7 @@ module.exports = {
   async createLogin(req, res) {
     try {
       const email = req.headers.email.toLowerCase();
-      const { pass, fullname, birthdate } = req.headers;
+      const { pass, fullname, birthdate, latitude, longitude } = req.headers;
       let username = email.split("@")[0];
 
       let validUsername = await User.findOne({ username });
@@ -193,6 +193,8 @@ module.exports = {
         firstName: fullname.split(" ")[0],
         lastName: fullname.split(" ").slice(1).join(" "),
         birthDate: birthdate,
+        latitude,
+        longitude,
         picture: "InitialProfile.png",
       });
       return res.status(201).json(user);
