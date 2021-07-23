@@ -45,36 +45,63 @@ module.exports = {
 
   async createauth(req, res) {
     const { email, pass } = req.headers;
-    const user = await User.findOne({ email, pass });
     try {
-        if (user) {
-            const pets = await Pet.find({ user: user._id });
-            const posts = await Post.find({ user: user._id });
-            const following = await Follow.find({ following: user._id });
-            const follower = await Follow.find({ follower: user._id });
-            user.pass = null;
-            user.postList = posts;
-            user.petList = pets;
-            user.followingList = following;
-            user.followerList = follower;
-          try {
-            await Auth.deleteMany({ user: user.id });
-            const authenticated = await Auth.create({
-              user: user.id,
-              createdAt: Date.now(),
-              auth: true,
-            });
-            await authenticated.populate("user").execPopulate();
-            return res.status(201).json(authenticated);
-          } catch (error) {
-            return res.status(500).json({ error: "Unable to create new auth" });
-          }
-        }
-    return res.status(401).json({ error: "User or pass does not match" });
+      const user = await User.findOne({ email, pass });
+      if (user) {
+        const pets = await Pet.find({ user: user._id });
+        const posts = await Post.find({ user: user._id });
+        const following = await Follow.find({ following: user._id });
+        const follower = await Follow.find({ follower: user._id });
+        user.pass = null;
+        user.postList = posts;
+        user.petList = pets;
+        user.followingList = following;
+        user.followerList = follower;
+        await Auth.deleteMany({ user: user.id });
+        const authenticated = await Auth.create({
+          user: user,
+          createdAt: Date.now(),
+          auth: true,
+        });
+        await authenticated.populate("user").execPopulate();
+
+        return res.status(201).json(authenticated);
+      } else {
+        return res.status(401).json({ error: "User not found for this token" });
+      }
     } catch (error) {
-        console.log(String(error));
-        return res.status(500).json({ error: String(error) });
+      return res.status(500).json({ Error: error.message });
     }
+
+    // try {
+    //   if (user) {
+    //     const pets = await Pet.find({ user: user._id });
+    //     const posts = await Post.find({ user: user._id });
+    //     const following = await Follow.find({ following: user._id });
+    //     const follower = await Follow.find({ follower: user._id });
+    //     user.pass = null;
+    //     user.postList = posts;
+    //     user.petList = pets;
+    //     user.followingList = following;
+    //     user.followerList = follower;
+    //     try {
+    //       await Auth.deleteMany({ user: user.id });
+    //       const authenticated = await Auth.create({
+    //         user: user.id,
+    //         createdAt: Date.now(),
+    //         auth: true,
+    //       });
+    //       await authenticated.populate("user").execPopulate();
+    //       return res.status(201).json(authenticated);
+    //     } catch (error) {
+    //       return res.status(500).json({ error: "Unable to create new auth" });
+    //     }
+    //   }
+    //   return res.status(401).json({ error: "User or pass does not match" });
+    // } catch (error) {
+    //   console.log(String(error));
+    //   return res.status(500).json({ error: String(error) });
+    // }
   },
 
   async deleteauth(req, res) {
