@@ -56,11 +56,11 @@ module.exports = {
         const posts = await Post.find({ user: user._id });
         const following = await Follow.find({ following: user._id });
         const follower = await Follow.find({ follower: user._id });
-        user.pass = null;
-        user.postList = posts;
-        user.petList = pets;
-        user.followingList = following;
-        user.followerList = follower;
+        authenticated.user.pass = null;
+        authenticated.user.postList = posts;
+        authenticated.user.petList = pets;
+        authenticated.user.followingList = following;
+        authenticated.user.followerList = follower;
         return res.status(201).json(authenticated);
       } catch (error) {
         return res.status(500).json({ error: "Unable to create new auth" });
