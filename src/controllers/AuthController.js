@@ -1,5 +1,8 @@
 const Auth = require("../models/Auth");
 const User = require("../models/User");
+const Pet = require("../models/Pet");
+const Post = require("../models/Post");
+const Follow = require("../models/Follow");
 
 //index, show, store, update, destroy
 
