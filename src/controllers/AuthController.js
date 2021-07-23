@@ -44,6 +44,15 @@ module.exports = {
     const { email, pass } = req.headers;
     const user = await User.findOne({ email, pass });
     if (user) {
+        const pets = await Pet.find({ user: user._id });
+        const posts = await Post.find({ user: user._id });
+        const following = await Follow.find({ following: user._id });
+        const follower = await Follow.find({ follower: user._id });
+        user.pass = null;
+        user.postList = posts;
+        user.petList = pets;
+        user.followingList = following;
+        user.followerList = follower;
       try {
         await Auth.deleteMany({ user: user.id });
         const authenticated = await Auth.create({
@@ -52,15 +61,6 @@ module.exports = {
           auth: true,
         });
         await authenticated.populate("user").execPopulate();
-        const pets = await Pet.find({ user: user._id });
-        const posts = await Post.find({ user: user._id });
-        const following = await Follow.find({ following: user._id });
-        const follower = await Follow.find({ follower: user._id });
-        authenticated.user.pass = null;
-        authenticated.user.postList = posts;
-        authenticated.user.petList = pets;
-        authenticated.user.followingList = following;
-        authenticated.user.followerList = follower;
         return res.status(201).json(authenticated);
       } catch (error) {
         return res.status(500).json({ error: "Unable to create new auth" });
