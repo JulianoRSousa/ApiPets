@@ -47,7 +47,6 @@ module.exports = {
     const { email, pass } = req.headers;
     try {
       const user = await User.findOne({ email, pass });
-      console.log("user: ",user)
       if (user) {
         const pets = await Pet.find({ user: user._id });
         const posts = await Post.find({ user: user._id });
@@ -59,13 +58,11 @@ module.exports = {
         user.followingList = following;
         user.followerList = follower;
         await Auth.deleteMany({ user: user.id });
-      console.log("userNew: ",user)
       const authenticated = await Auth.create({
           user: user,
           createdAt: Date.now(),
           auth: true,
         });
-        console.log("Authen: ",authenticated)
 
         return res.status(201).json(authenticated);
       } else {
