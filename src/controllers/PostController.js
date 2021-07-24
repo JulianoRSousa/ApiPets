@@ -18,7 +18,6 @@ module.exports = {
     try {
       const { token } = req.headers;
       const auth = await Auth.findOne({ _id: token });
-
       if (auth) {
         const posts = await Post.find({ user: auth.user })
           .sort({ _id: -1 })
@@ -26,7 +25,7 @@ module.exports = {
           .populate({ path: "pet" });
         return res.status(200).json(posts);
       }
-      return status(403).json({ error: "Invalid Token" });
+      return res.status(403).json({ error: "Invalid Token" });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
