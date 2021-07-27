@@ -17,8 +17,8 @@ module.exports = {
   async getPostByToken(req, res) {
     try {
       const { token } = req.headers;
-      if(token) const auth = await Auth.findOne({ _id: token })
-      
+      const auth = null;
+      if (token) auth = await Auth.findOne({ _id: token });
       if (auth) {
         const posts = await Post.find({ user: auth.user })
           .sort({ _id: -1 })
@@ -70,9 +70,11 @@ module.exports = {
       const limitPerPage = 5;
       var viewdItems = page * limitPerPage;
       if (auth) {
-        if(page==0){
-          const pages = Math.ceil(await Post.find().estimatedDocumentCount()/limitPerPage)
-          res.header('pages', [pages])
+        if (page == 0) {
+          const pages = Math.ceil(
+            (await Post.find().estimatedDocumentCount()) / limitPerPage
+          );
+          res.header("pages", [pages]);
         }
         const posts = await Post.find()
           .sort({ _id: -1 })
