@@ -19,16 +19,11 @@ module.exports = {
       const { token } = req.headers;
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
-        try {
           const posts = await Post.find({ user: auth.user })
           .sort({ _id: -1 })
           .populate({ path: "user" })
           .populate({ path: "pet" });
         return res.status(200).json(posts);
-        } catch (error) {
-          console.log(error)
-        }
-       
       }
       return res.status(403).json({ error: "Invalid Token" });
     } catch (error) {
