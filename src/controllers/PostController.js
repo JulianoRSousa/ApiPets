@@ -17,7 +17,8 @@ module.exports = {
   async getPostByToken(req, res) {
     try {
       const { token } = req.headers;
-      const auth = await Auth.findOne({ _id: token });
+      if(token) const auth = await Auth.findOne({ _id: token })
+      
       if (auth) {
         const posts = await Post.find({ user: auth.user })
           .sort({ _id: -1 })
