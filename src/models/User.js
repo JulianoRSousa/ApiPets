@@ -15,6 +15,12 @@ const UserSchema = new mongoose.Schema(
     latitude: String,
     longitude:String,
     tags: [String],
+    lastToken: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Auth"
+      }
+    ],
     followingList: [
       {
         type: mongoose.Schema.Types.ObjectId,
