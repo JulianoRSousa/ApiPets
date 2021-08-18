@@ -50,8 +50,11 @@ module.exports = {
           lastName,
           color,
           coatSize,
+          type,
           birthdate,
           male,
+          state,
+          pictures
         } = req.body;
         const { token } = req.headers;
 
@@ -69,13 +72,14 @@ module.exports = {
             const pet = await Pet.create({
               picture: image.key,
               pictures: "",
-              status: "Neutral",
+              state,
+              type,
               firstName: firstName,
               lastName: lastName,
-              color: color,
-              coatSize: coatSize,
-              birthdate: birthdate,
-              male: male,
+              color,
+              coatSize,
+              birthdate,
+              male,
               user: auth.user,
             });
             return res.status(201).json(pet);
