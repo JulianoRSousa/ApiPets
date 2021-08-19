@@ -16,11 +16,11 @@ module.exports = {
           const posts = await Post.find({ user: user._id });
           const following = await Follow.find({ following: user._id });
           const follower = await Follow.find({ follower: user._id });
-          user.remove(pass);
           user.postList = posts;
           user.petList = pets;
           user.followingList = following;
           user.followerList = follower;
+          user.remove(pass);
         }
         return res.status(201).json(user);
       } else {
