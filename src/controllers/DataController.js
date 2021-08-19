@@ -20,7 +20,6 @@ module.exports = {
           user.petList = pets;
           user.followingList = following;
           user.followerList = follower;
-          user.remove(pass);
         }
         return res.status(201).json(user);
       } else {
@@ -29,7 +28,7 @@ module.exports = {
     } catch (error) {
       return res
         .status(500)
-        .json({ Error: "Probably Invalid Token" + error.message });
+        .json({ Error: "Probably Invalid Token OR > " + error.message });
     }
   },
 
