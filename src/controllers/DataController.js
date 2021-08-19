@@ -20,7 +20,7 @@ module.exports = {
           user.petList = pets;
           user.followingList = following;
           user.followerList = follower;
-          user.pass.remove();
+          user.pass = null;
         }
         return res.status(201).json(user);
       } else {
