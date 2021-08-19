@@ -47,29 +47,28 @@ module.exports = {
     const { token } = req.headers;
     try {
       const authenticated = await Auth.findOne({ _id: token });
-      const user = await User.findOne({ _id: authenticated.user });
       if (authenticated) {
-        const pets = await Pet.find({ user: user._id });
-        const posts = await Post.find({ user: user._id });
-        const following = await Follow.find({ following: user._id });
-        const follower = await Follow.find({ follower: user._id });
-        user.pass = null;
-        user.postList = posts;
-        user.petList = pets;
-        user.followingList = following;
-        user.followerList = follower;
-        const data = {};
-        data.user = user;
-        data.dataVersion = user.dataVersion;
-        data.notification = user.notification;
-        console.log("this is DATA: ", data);
-
-        return res.status(201).json(data);
+        const user = await User.findOne({ _id: authenticated.user });
+        if (user) {
+          const pets = await Pet.find({ user: user._id });
+          const posts = await Post.find({ user: user._id });
+          const following = await Follow.find({ following: user._id });
+          const follower = await Follow.find({ follower: user._id });
+          user.pass = null;
+          user.postList = posts;
+          user.petList = pets;
+          user.followingList = following;
+          user.followerList = follower;
+          console.log("this is DATA: ", user);
+        }
+        return res.status(201).json(user);
       } else {
-        return res.status(401).json({ error: "Invalid Token" });
+        return res.status(401).json({ error: "Invalid Token for this user" });
       }
     } catch (error) {
-      return res.status(500).json({ Error: error.message });
+      return res
+        .status(500)
+        .json({ Error: "Probably Invalid Token" + error.message });
     }
   },
 
