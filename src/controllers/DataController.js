@@ -7,7 +7,6 @@ const Follow = require("../models/Follow");
 //index, show, store, update, destroy
 
 module.exports = {
-
   // async confirmauth(req, res) {
   //   const { token } = req.headers;
   //   if (token == null || token == "") {
@@ -48,27 +47,26 @@ module.exports = {
     const { token } = req.headers;
     try {
       const authenticated = await Auth.findOne({ _id: token });
-      // const user = await User.findOne({ _id: authenticated.user._id });
+      const user = await User.findOne({ _id: authenticated.user._id });
       if (authenticated) {
-      //   const pets = await Pet.find({ user: user._id });
-      //   const posts = await Post.find({ user: user._id });
-      //   const following = await Follow.find({ following: user._id });
-      //   const follower = await Follow.find({ follower: user._id });
-      //   user.pass = null;
-      //   user.postList = posts;
-      //   user.petList = pets;
-      //   user.followingList = following;
-      //   user.followerList = follower;
-      //   await Auth.deleteMany({ user: user.id });
-      // const authenticated = await Auth.create({
-      //     user: user,
-      //     createdAt: Date.now(),
-      //     auth: true,
-      //   });
+        const pets = await Pet.find({ user: user._id });
+        const posts = await Post.find({ user: user._id });
+        const following = await Follow.find({ following: user._id });
+        const follower = await Follow.find({ follower: user._id });
+        user.pass = null;
+        user.postList = posts;
+        user.petList = pets;
+        user.followingList = following;
+        user.followerList = follower;
+        const data = {};
+        data.user = user;
+        data.dataVersion = user.dataVersion;
+        data.notification = user.notification;
+        console.log("this is DATA: ", data);
 
-        return res.status(201).json(authenticated);
+        return res.status(201).json(data);
       } else {
-        return res.status(401).json({ error: "User not found for this token" });
+        return res.status(401).json({ error: "Invalid Token" });
       }
     } catch (error) {
       return res.status(500).json({ Error: error.message });

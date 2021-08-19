@@ -181,7 +181,7 @@ module.exports = {
       }
 
       const taggable = (username + " " + fullname).split(" ").join(".");
-      const tags = taggable.toUpperCase().split(".")
+      const tags = taggable.toUpperCase().split(".");
       const upperName = username.toUpperCase();
       tags.push(upperName);
 
@@ -190,6 +190,8 @@ module.exports = {
         username,
         tags,
         pass,
+        notification: [],
+        dataVersion: 0,
         firstName: fullname.split(" ")[0],
         lastName: fullname.split(" ").slice(1).join(" "),
         birthDate: birthdate,

@@ -13,25 +13,21 @@ const UserSchema = new mongoose.Schema(
     location: String,
     foneNumber: String,
     latitude: String,
-    longitude:String,
+    longitude: String,
+    dataVersion: Number,
+    notification: [String],
     tags: [String],
-    lastToken: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Auth"
-      }
-    ],
     followingList: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Follow",
-      }
+      },
     ],
     followerList: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Follow",
-      }
+      },
     ],
     postList: [
       {
