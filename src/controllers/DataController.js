@@ -47,7 +47,7 @@ module.exports = {
     const { token } = req.headers;
     try {
       const authenticated = await Auth.findOne({ _id: token });
-      const user = await User.findOne({ _id: authenticated.user._id });
+      const user = await User.findOne({ _id: authenticated.user });
       if (authenticated) {
         const pets = await Pet.find({ user: user._id });
         const posts = await Post.find({ user: user._id });
