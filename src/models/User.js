@@ -14,7 +14,6 @@ const UserSchema = new mongoose.Schema(
     foneNumber: String,
     latitude: String,
     longitude: String,
-    dataVersion: Number,
     notification: [String],
     tags: [String],
     followingList: [

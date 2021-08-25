@@ -62,7 +62,6 @@ routes.post("/createlogin", UserController.createLogin); //OK//
 routes.get("/getuserbyemail", UserController.getUserByUsername); //OK//
 routes.get("/showallusers", UserController.showallusers); //OK//
 routes.get("/getuserbyid", UserController.getUserById); //OK//
-routes.get("/loaduser", UserController.loadUser); //OK//
 routes.delete("/deleteuserbyid", UserController.deleteUserById); //OK//
 
 //PETS routes
@@ -106,6 +105,7 @@ routes.get("/showallcomplaint", ComplaintController.showAllComplaint); //OK//
 
 //AUTH routes
 routes.post("/createauth", AuthController.createauth); //OK//
+routes.get("/loaduser", AuthController.loadUser); //OK//
 routes.get("/confirmauth", AuthController.confirmauth); //OK//
 routes.get("/showsessions", AuthController.showAllSessions); //OK//
 routes.get("/ison", AuthController.isOn); //OK//
