@@ -79,30 +79,30 @@ module.exports = {
       const auth = await Auth.findOne({ _id: token });
       console.log("This isAUTH: ", auth);
       if (auth) {
-        // if (user) {
-        //   const pets = await Pet.find({ user: user._id });
-        //   const posts = await Post.find({ user: user._id });
-        //   const following = await Follow.find({ following: user._id });
-        //   const follower = await Follow.find({ follower: user._id });
-        //   user.pass = null;
-        //   user.postList = posts;
-        //   user.petList = pets;
-        //   user.followingList = following;
-        //   user.followerList = follower;
-        //   await Auth.deleteMany({ user: user.id });
-        //   const authenticated = await Auth.create({
-        //     user: user,
-        //     createdAt: Date.now(),
-        //     auth: true,
-        //   });
+        const user = await User.findOne({ _id: auth.user });
+        if (user) {
+          const pets = await Pet.find({ user: user._id });
+          const posts = await Post.find({ user: user._id });
+          const following = await Follow.find({ following: user._id });
+          const follower = await Follow.find({ follower: user._id });
+          user.pass = null;
+          user.postList = posts;
+          user.petList = pets;
+          user.followingList = following;
+          user.followerList = follower;
+          await Auth.deleteMany({ user: user.id });
+          const authenticated = await Auth.create({
+            user: user,
+            createdAt: Date.now(),
+            auth: true,
+          });
 
-        //   return res.status(201).json(authenticated);
-        // } else {
-        //   return res
-        //     .status(401)
-        //     .json({ error: "User not found for this token" });
-        // }
-        console.log("entrouAUTH");
+          return res.status(201).json(authenticated);
+        } else {
+          return res
+            .status(401)
+            .json({ error: "User not found for this token" });
+        }
       }
       return res.status(401).json({ error: "Token not found" });
     } catch (error) {
