@@ -90,14 +90,9 @@ module.exports = {
           user.petList = pets;
           user.followingList = following;
           user.followerList = follower;
-          await Auth.deleteMany({ user: user.id });
-          const authenticated = await Auth.create({
-            user: user,
-            createdAt: Date.now(),
-            auth: true,
-          });
-
-          return res.status(201).json(authenticated);
+          auth.user = user;
+          console.log("Now this is auth: ", auth);
+          return res.status(201).json(auth);
         } else {
           return res
             .status(401)
