@@ -43,6 +43,18 @@ module.exports = {
       }
     }
   },
+  async getMainFeed(req, res) {
+    try {
+        const posts = await Post.find()
+          .sort({ _id: -1 })
+          .populate({ path: "user" })
+          .populate({ path: "pet" });
+
+        return res.status(200).json(posts);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
 
   async getFeed(req, res) {
     try {

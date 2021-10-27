@@ -82,6 +82,7 @@ routes.get("/getpostbystate", PostController.getPostByState); //OK//
 routes.get("/getpostbytoken", PostController.getPostByToken); //OK//
 routes.get("/showallposts", PostController.showAllPosts); //OK//
 routes.get("/getfeed", PostController.getFeed); //OK//
+routes.get("/getmainfeed", PostController.getMainFeed); //OK//
 routes.get("/getpage", PostController.getPage); //OK//
 routes.delete("/deletepost", PostController.deletePost); //OK//
 routes.delete("/UserDeletePosts", PostController.UserDeletePosts); //OK//
