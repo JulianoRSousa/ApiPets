@@ -85,7 +85,7 @@ routes.get("/getfeed", PostController.getFeed); //OK//
 routes.get("/getmainfeed", PostController.getMainFeed); //OK//
 routes.get("/getpage", PostController.getPage); //OK//
 routes.delete("/deletepost", PostController.deletePost); //OK//
-routes.delete("/UserDeletePosts", PostController.UserDeletePosts); //OK//
+routes.delete("/UserDeletePosts", PostController.UserDeletePosts);
 
 //COMMENT routes
 routes.post("/createcomment", CommentController.createComment); //OK//
