@@ -4,7 +4,7 @@ const PostSchema = new mongoose.Schema({
     picture: String,
     state: String,
     description: String,
-    createdAt: Date,
+    postedAt: Date,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

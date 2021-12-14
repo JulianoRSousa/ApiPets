@@ -126,7 +126,7 @@ module.exports = {
               picture: image.key,
               state,
               description,
-              createdAt: Date.now(),
+              postedAt: Date.now(),
               user: auth.user,
               pet: pet_id,
             });
@@ -151,18 +151,11 @@ module.exports = {
       try {
         if (auth) {
           try {
-            var date = new Date();
             const post = await Post.create({
               picture: "NoPicturePost.jpg",
               state,
               description,
-              postDate:
-                date.getDate() +
-                "/" +
-                (date.getMonth() + 1) +
-                "/" +
-                date.getFullYear(),
-              postTime: date.getHours() + ":" + date.getMinutes(),
+              postedAt: Date.now(),
               user: auth.user,
               pet: pet_id,
             });
