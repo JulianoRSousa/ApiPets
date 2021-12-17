@@ -14,6 +14,10 @@ const FollowController = require("./controllers/FollowController");
 const SearchController = require("./controllers/SearchController");
 const DataController = require("./controllers/DataController");
 
+
+
+const TestController = require("./controllers/TestController");
+
 const routes = express.Router();
 const upload = multer(uploadConfig);
 
@@ -119,5 +123,7 @@ routes.get("/getfollowerbytoken", FollowController.getFollowerByToken);
 routes.get("/getfollowerbyuserid", FollowController.getFollowerByUserId);
 routes.get("/getfollowingbytoken", FollowController.getFollowingByToken);
 routes.get("/getfollowingbyuserid", FollowController.getFollowingByUserId);
+
+routes.post("/test", TestController.TestConsole)
 
 module.exports = routes;

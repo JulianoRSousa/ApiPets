@@ -13,7 +13,7 @@ const PetSchema = new mongoose.Schema({
     state: String,
     breed: String,
     type: String,
-    registerDate: String,
+    createAt: Date,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

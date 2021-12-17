@@ -120,8 +120,6 @@ module.exports = {
               user: auth.user,
             });
 
-            var date = new Date();
-
             const post = await Post.create({
               picture: image.key,
               state,
