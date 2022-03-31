@@ -2,39 +2,34 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema(
   {
-    picture: String,
-    pictures: String,
-    email: String,
-    username: String,
-    pass: String,
-    firstName: String,
-    lastName: String,
-    birthDate: String,
-    location: String,
-    foneNumber: String,
-    latitude: String,
-    longitude: String,
-    notification: [String],
-    tags: [String],
-    followingList: [
+    userId: String,
+    userEmail: String,
+    userUsername: String,
+    userFullName: String,
+    userBirthdate: String,
+    userPicture: String,
+    userPictureUrl: String,
+    userPass: String,
+    userTagsList: [String],
+    userFollowingsList: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Follow",
       },
     ],
-    followerList: [
+    userFollowersList: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Follow",
       },
     ],
-    postList: [
+    userPostsList: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
       },
     ],
-    petList: [
+    userPetsList: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Pet",
@@ -49,7 +44,7 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.virtual("picture_url").get(function () {
-  return process.env.PETS_URL + this.picture;
+  return process.env.PETS_URL + this.userPicture;
 });
 
 module.exports = mongoose.model("User", UserSchema);

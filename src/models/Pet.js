@@ -1,20 +1,22 @@
 const mongoose = require('mongoose');
 
 const PetSchema = new mongoose.Schema({
-    picture: String,
-    pictures: String,
-    firstName: String,
-    lastName: String,
-    color: String,
-    coatSize: String,
-    size: String,
-    birthdate: String,
-    male: Boolean,
-    state: String,
-    breed: String,
-    type: String,
+    petPicture: String,
+    petType: String,
+    petFullName: String,
+    petColor: String,
+    petCoat: String,
+    petBirthdate: String,
+    petIsMale: String,
+    petPictureUrl: String,
+    petSize: String,
+    petState: String,
+    petBreed: String,
     createAt: Date,
-    user: {
+    petPictures: [
+        String
+    ],
+    petUserTutor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
@@ -25,7 +27,7 @@ const PetSchema = new mongoose.Schema({
 });
 
 PetSchema.virtual('picture_url').get(function () {
-    return process.env.PETS_URL + this.picture;
+    return process.env.PETS_URL + this.petPicture;
 })
 
 module.exports = mongoose.model('Pet', PetSchema);
