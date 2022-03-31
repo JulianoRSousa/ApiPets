@@ -19,7 +19,7 @@ module.exports = {
     try {
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
-        const pets = await Pet.find({ user: auth.user});
+        const pets = await Pet.find({ user: auth.user });
         return res.status(200).json(pets);
       } else {
         return res.status(403).json({ Error: "Invalid Token" });
@@ -159,9 +159,9 @@ module.exports = {
     try {
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
-        const petsData = await Pet.findOne({ user: auth.user });
+        const petsData = await Pet.findOne({ petUserTutor: auth.user._id });
         if (petsData) {
-          const image = await Image.findOne({ key: petsData.picture });
+          const image = await Image.findOne({ key: petsData.petPicture });
           if (image) {
             try {
               await image.remove();

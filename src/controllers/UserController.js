@@ -11,22 +11,20 @@ const { json } = require("body-parser");
 //index, show, store, update, destroy
 
 module.exports = {
-  async commandList(req, res) {
-    return res.status(200).json({
-      "/": "This Page",
-      "           /setprofile": "",
-      "           /createLogin": "",
-      "           /getuserbyusername": "",
-      "           /showallusers": "",
-      "           /getuserbyid": "",
-      "           /deleteuserbyid": "",
-    });
-  },
 
   async getUserByUsername(req, res) {
     try {
       const username = req.headers.username.toLowerCase();
-      const user = await User.find({ username: username });
+      const user = await User.findOne({ userUsername: username });
+      return res.status(200).json(user);
+    } catch (error) {
+      return res.status(500).json({ "Internal Server Error": error.message });
+    }
+  },
+  async getUserByEmail(req, res) {
+    try {
+      const email = req.headers.email.toLowerCase();
+      const user = await User.findOne({ userEmail: email });
       return res.status(200).json(user);
     } catch (error) {
       return res.status(500).json({ "Internal Server Error": error.message });
@@ -50,15 +48,14 @@ module.exports = {
       const { user_id } = req.headers;
       const user = await User.findOne({ _id: user_id });
       if (user) {
-        const pets = await Pet.find({ user: user._id });
-        const posts = await Post.find({ user: user._id });
+        const pets = await Pet.find({ petUserTutor: user._id });
+        const posts = await Post.find({ postUser: user._id });
         const following = await Follow.find({ following: user._id });
         const follower = await Follow.find({ follower: user._id });
-        user.pass = null;
-        user.postList = posts;
-        user.petList = pets;
-        user.followingList = following;
-        user.followerList = follower;
+        user.userPostsList = posts;
+        user.userPetsList = pets;
+        user.userFollowingsList = following;
+        user.userFollowersList = follower;
         return res.status(200).json(user);
       } else {
         return res.status(401).json({ error: "Invalid user" });
@@ -77,7 +74,6 @@ module.exports = {
         const user = await User.findOne({ _id: auth.user });
         const pets = await Pet.find({ user: user._id });
         const posts = await Post.find({ user: user._id });
-        user.pass = null;
         user.postsCount = posts.length;
         user.petsCount = pets.length;
         return res.status(200).json(user);
@@ -122,14 +118,36 @@ module.exports = {
     return res.status(415).json({ Error: "Invalid Picture" });
   },
 
-  async deleteUserById(req, res) {
+  async deleteUserByUserId(req, res) {
+    if (process.env.ENVIRONMENT == "dev") {
+      try {
+        const { user_id } = req.headers;
+        const userToDelete = await User.deleteOne({ _id: user_id })
+        if (userToDelete.deletedCount > 0) {
+          return res
+            .status(201)
+            .json({ User: user_id, Deleted: true, userToDelete })
+        }
+        else {
+          return res.status(401).json({ error: "User not Found" })
+        }
+      } catch (error) {
+        return res.status(500).json({ "Internal Sever Error": error.message });
+      }
+    } else {
+      return res.status(401).json("You need an admin to do that");
+    }
+  },
+
+
+  async deleteUserByToken(req, res) {
     try {
       const { token } = req.headers;
-      const auth = await Auth.findOne({ _id: token });
+      const auth = await Auth.findOne({ _id: token })
       if (auth) {
         try {
           do {
-            var countPet = await Pet.find({ user: auth.user });
+            var countPet = await Pet.find({ petUserTutor: auth.user._id });
             await PetController.UserDeleteAccount(token);
           } while (countPet.length > 0);
         } catch (error) {
@@ -137,18 +155,18 @@ module.exports = {
         }
         try {
           do {
-            var countPost = await Post.find({ user: auth.user });
+            var countPost = await Post.find({ postUser: auth.user._id });
             await PostController.UserDeleteAccount(token);
           } while (countPost.length > 0);
         } catch (error) {
           console.log(error.message);
         }
 
-        const deleteUser = await User.deleteOne({ _id: auth.user });
-        const deleteAuth = await Auth.deleteOne({ _id: auth._id });
+        const deleteUser = await User.deleteOne({ _id: auth.user._id });
+        const deleteAuth = await Auth.deleteOne({ _id: token });
         return res
           .status(201)
-          .json({ UserDelete: deleteUser, AuthDelete: deleteAuth });
+          .json({ deleteUser, deleteAuth });
       } else {
         return res.status(401).json({ error: "Invalid Token" });
       }
@@ -157,47 +175,48 @@ module.exports = {
     }
   },
 
-  async createLogin(req, res) {
+  async createUser(req, res) {
     try {
       const email = req.headers.email.toLowerCase();
-      const { pass, fullname, birthdate, latitude, longitude } = req.headers;
+      const { password, fullname, birthdate, latitude, longitude, cityCode, gender } = req.headers;
       let username = email.split("@")[0];
-
-      let validUsername = await User.findOne({ username });
-      let validEmail = await User.findOne({ email });
+      let validUsername = await User.findOne({ userUsername: username });
+      let validEmail = await User.findOne({ userEmail: email });
 
       if (!validEmail) {
         if (validUsername) {
           for (i = 1; validUsername; i++) {
             let newUser = username + i;
-            validUsername = await User.findOne({ username: newUser });
+            validUsername = await User.findOne({ userUsername: newUser });
             if (!validUsername) {
               username = newUser;
             }
           }
         }
       } else {
-        return res.status(401).json({ Email: "Invalid Email" });
+        return res.status(401).json("The email: " + email.toUpperCase() + " is already being used");
       }
 
       const taggable = (username + " " + fullname).split(" ").join(".");
-      const tags = taggable.toUpperCase().split(".");
+      const userTagsList = taggable.toUpperCase().split(".");
       const upperName = username.toUpperCase();
-      tags.push(upperName);
+      userTagsList.push(upperName);
 
       const user = await User.create({
-        email,
-        username,
-        tags,
-        pass,
-        notification: [],
-        dataVersion: 0,
-        firstName: fullname.split(" ")[0],
-        lastName: fullname.split(" ").slice(1).join(" "),
-        birthDate: birthdate,
-        latitude,
-        longitude,
-        picture: "InitialProfile.png",
+        userEmail: email,
+        userUsername: username,
+        userTagsList,
+        userPassword: password,
+        userNotificationsList: [],
+        userFullname: fullname,
+        userBirthdate: birthdate ?? '',
+        userGender: gender ?? '',
+        userLocation: {
+          latitude: latitude ?? '',
+          longitude: longitude ?? '',
+          cityCode: cityCode ?? ''
+        },
+        userPicture: "InitialProfile.png",
       });
       return res.status(201).json(user);
     } catch (error) {

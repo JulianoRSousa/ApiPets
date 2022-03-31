@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const PetSchema = new mongoose.Schema({
+    petId: String,
     petPicture: String,
     petType: String,
     petFullName: String,
@@ -12,7 +13,11 @@ const PetSchema = new mongoose.Schema({
     petSize: String,
     petState: String,
     petBreed: String,
-    createAt: Date,
+    petCreatedAt: {
+        type: Date,
+        default: Date.now
+    },
+    petDataVersion: Number,
     petPictures: [
         String
     ],
@@ -22,7 +27,13 @@ const PetSchema = new mongoose.Schema({
     }
 }, {
     toJSON: {
-        virtuals: true,
+        virtuals: false,
+        versionKey: true,
+        useProjection: true,
+        transform: function (doc, ret) {
+            ret.petId = ret._id, delete ret._id,
+                ret.petDataVersion = ret.__v, delete ret.__v
+        }
     },
 });
 

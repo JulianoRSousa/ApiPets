@@ -44,29 +44,26 @@ module.exports = {
   },
 
   async createauth(req, res) {
-    const { email, pass } = req.headers;
+    const { email, password } = req.headers;
     try {
-      const user = await User.findOne({ email, pass });
+      const user = await User.findOne({ userEmail: email, userPassword: password });
       if (user) {
-        const pets = await Pet.find({ user: user._id });
-        const posts = await Post.find({ user: user._id });
-        const following = await Follow.find({ following: user._id });
-        const follower = await Follow.find({ follower: user._id });
-        user.pass = null;
+        const pets = await Pet.find({ petUserTutor: user.userId });
+        const posts = await Post.find({ postUser: user.userId });
+        const following = await Follow.find({ following: user.userId });
+        const follower = await Follow.find({ follower: user.userId });
         user.postList = posts;
         user.petList = pets;
         user.followingList = following;
         user.followerList = follower;
-        await Auth.deleteMany({ user: user.id });
+        await Auth.deleteMany({ user: user._id });
         const authenticated = await Auth.create({
-          user: user,
-          createdAt: Date.now(),
-          auth: true,
+          user,
         });
-
         return res.status(201).json(authenticated);
       } else {
-        return res.status(401).json({ error: "User not found for this token" });
+        console.log(user)
+        return res.status(401).json({ error: "User not found" });
       }
     } catch (error) {
       return res.status(500).json({ Error: error.message });

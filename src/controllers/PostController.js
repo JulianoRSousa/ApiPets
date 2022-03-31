@@ -19,7 +19,7 @@ module.exports = {
       const { token } = req.headers;
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
-          const posts = await Post.find({ user: auth.user })
+        const posts = await Post.find({ user: auth.user })
           .sort({ _id: -1 })
           .populate({ path: "user" })
           .populate({ path: "pet" });
@@ -45,12 +45,12 @@ module.exports = {
   },
   async getMainFeed(req, res) {
     try {
-        const posts = await Post.find()
-          .sort({ _id: -1 })
-          .populate({ path: "user" })
-          .populate({ path: "pet" });
+      const posts = await Post.find()
+        .sort({ _id: -1 })
+        .populate({ path: "user" })
+        .populate({ path: "pet" });
 
-        return res.status(200).json(posts);
+      return res.status(200).json(posts);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
@@ -256,7 +256,7 @@ module.exports = {
     try {
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
-        const postData = await Post.findOne({ user: auth.user });
+        const postData = await Post.findOne({ postUser: auth.user._id });
         if (postData) {
           const image = await Image.findOne({
             key: postData.picture_url.replace(process.env.PETS_URL, ""),

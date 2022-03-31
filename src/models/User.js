@@ -2,14 +2,21 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema(
   {
-    userId: String,
     userEmail: String,
     userUsername: String,
-    userFullName: String,
+    userFullname: String,
     userBirthdate: String,
     userPicture: String,
-    userPictureUrl: String,
-    userPass: String,
+    userCreatedAt: {
+      type: Date,
+      default: Date.now
+    },
+    userPassword: {
+      type: String,
+      select: false
+    },
+    userGender: String,
+    userDataVersion: Number,
     userTagsList: [String],
     userFollowingsList: [
       {
@@ -23,28 +30,36 @@ const UserSchema = new mongoose.Schema(
         ref: "Follow",
       },
     ],
-    userPostsList: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Post",
-      },
-    ],
     userPetsList: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Pet",
       },
     ],
+    userPostsList: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post"
+      }
+    ]
+
   },
   {
+    id: false,
     toJSON: {
       virtuals: true,
+      useProjection: true,
+      transform: function (doc, ret) {
+        ret.userDataVersion = ret.__v, delete ret.__v
+      }
     },
   }
 );
 
-UserSchema.virtual("picture_url").get(function () {
+
+UserSchema.virtual("userPictureUrl").get(function () {
   return process.env.PETS_URL + this.userPicture;
-});
+})
+
 
 module.exports = mongoose.model("User", UserSchema);

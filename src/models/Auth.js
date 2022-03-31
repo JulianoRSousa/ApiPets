@@ -5,8 +5,15 @@ const AuthSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  createdAt: Date,
-  auth: Boolean,
-});
+  authCreatedAt: {
+    type: Date,
+    default: Date.now()
+  },
+},
+  {
+    versionKey: false,
+  }
+);
+
 
 module.exports = mongoose.model("Auth", AuthSchema);

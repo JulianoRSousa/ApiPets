@@ -38,7 +38,6 @@ const upload = multer(uploadConfig);
 //deleteallauth;
 //  }
 
-routes.get("/", UserController.commandList); //OK//
 
 //IMAGE routes
 routes.post(
@@ -62,11 +61,13 @@ routes.post(
   upload.single("profilePicture"),
   UserController.setProfilePicture
 ); //OK//
-routes.post("/createlogin", UserController.createLogin); //OK//
-routes.get("/getuserbyemail", UserController.getUserByUsername); //OK//
+routes.post("/createuser", UserController.createUser); //OK//
+routes.get("/getuserbyusername", UserController.getUserByUsername); //OK//
+routes.get("/getuserbyemail", UserController.getUserByEmail); //OK//
 routes.get("/showallusers", UserController.showallusers); //OK//
 routes.get("/getuserbyid", UserController.getUserById); //OK//
-routes.delete("/deleteuserbyid", UserController.deleteUserById); //OK//
+routes.delete("/deleteuserbyuserid", UserController.deleteUserByUserId); //OK//
+routes.delete("/deleteuserbytoken", UserController.deleteUserByToken); //OK//
 
 //PETS routes
 routes.post(
