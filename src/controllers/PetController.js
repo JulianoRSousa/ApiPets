@@ -14,6 +14,18 @@ module.exports = {
     }
   },
 
+  async getPetByPetId(req, res) {
+    const { pet_id } = req.headers;
+
+    console.log('Received Id: ', pet_id)
+    try {
+      const petResult = await Pet.findOne({ _id: pet_id });
+      return res.status(200).json(petResult);
+    } catch (error) {
+      return res.status(500).json({ Error: "Invalid Pet token Format" });
+    }
+  },
+
   async getPetByToken(req, res) {
     const { token } = req.headers;
     try {
@@ -46,14 +58,13 @@ module.exports = {
       if (req.file) {
         const { originalname: name, size, key, location: url = "" } = req.file;
         const {
-          firstName,
-          lastName,
-          color,
-          coatSize,
-          type,
-          birthdate,
-          male,
-          pictures
+          petFullname,
+          petColor,
+          petCoatSize,
+          petType,
+          petBirthdate,
+          petIsMale,
+          petStatus,
         } = req.body;
         const { token } = req.headers;
 
@@ -69,16 +80,16 @@ module.exports = {
             });
 
             const pet = await Pet.create({
-              picture: image.key,
-              pictures: "",
-              type,
-              firstName: firstName,
-              lastName: lastName,
-              color,
-              coatSize,
-              birthdate,
-              male,
-              user: auth.user,
+              petPicture: image.key,
+              petPictureList: [image.key],
+              petType,
+              petFullname,
+              petColor,
+              petCoatSize,
+              petBirthdate,
+              petIsMale,
+              petStatus: petStatus ?? '0',
+              petUserTutor: auth.user,
             });
             return res.status(201).json(pet);
           } else {
@@ -90,39 +101,35 @@ module.exports = {
       } else {
         try {
           const {
-            firstName,
-            lastName,
-            color,
-            coatSize,
-            birthdate,
-            male,
+            petFullname,
+            petColor,
+            petCoatSize,
+            petBirthdate,
+            petIsMale,
+            petStatus
           } = req.body;
           const { token } = req.headers;
           const auth = await Auth.findOne({ _id: token });
           if (auth) {
             const pet = await Pet.create({
-              picture: "InitialPetProfile.jpg",
-              pictures: "",
-              status: "Neutral",
-              firstName: firstName,
-              lastName: lastName,
-              color: color,
-              coatSize: coatSize,
-              birthdate: birthdate,
-              male: male,
-              user: auth.user,
-              createdAt: Date.now(),
+              petStatus: petStatus ?? '0',
+              petFullname,
+              petColor,
+              petCoatSize,
+              petBirthdate,
+              petIsMale,
+              petUserTutor: auth.user,
             });
             return res.status(201).json(pet);
           } else {
             return res.status(401).json({ Error: "Invalid Token" });
           }
         } catch (error) {
-          return res.status(500).json({ Error: "Invalid Token Format" });
+          return res.status(500).json({ Error: error.message });
         }
       }
     } catch (error) {
-      return res.status(500).json({ "Internal Server Error": error.message });
+      return res.status(500).json({ Error: error.message });
     }
   },
 

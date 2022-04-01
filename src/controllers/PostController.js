@@ -2,6 +2,7 @@ const Post = require("../models/Post");
 const Auth = require("../models/Auth");
 const Image = require("../models/Image");
 const User = require("../models/User");
+const Pet = require("../models/Pet");
 
 module.exports = {
   async getPostByState(req, res) {
@@ -91,11 +92,11 @@ module.exports = {
           .sort({ _id: -1 })
           .skip(viewdItems)
           .limit(5)
-          .populate({ path: "user" })
-          .populate({ path: "pet" });
+          .populate({ path: "postUser" })
+          .populate({ path: "postPet" });
         return res.status(200).json(posts);
       }
-      return status(403).json({ error: "Invalid Token" });
+      return res.status(403).json({ error: "Invalid Token" });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
@@ -104,29 +105,29 @@ module.exports = {
   async createPost(req, res) {
     if (req.file) {
       const { originalname: name, size, key, location: url = "" } = req.file;
-      const { state, description } = req.body;
+      const { postStatus, postDescription } = req.body;
       const { pet_id, token } = req.headers;
 
-      const auth = await Auth.findOne({ _id: token });
-
+      const authResult = await Auth.findOne({ _id: token }).populate({ path: "user" });
+      const petResult = await Pet.findOne({ _id: pet_id })
       try {
-        if (auth) {
+        if (authResult && petResult) {
           try {
             const image = await Image.create({
               name,
               size,
               key,
               url,
-              user: auth.user,
+              user: authResult.user,
             });
 
             const post = await Post.create({
-              picture: image.key,
-              state,
-              description,
-              postedAt: Date.now(),
-              user: auth.user,
-              pet: pet_id,
+              postPicture: image.key,
+              postPictureList: [image.key],
+              postStatus,
+              postDescription,
+              postUser: authResult.user,
+              postPet: petResult,
             });
             return res.json(post);
           } catch (error) {
@@ -141,21 +142,21 @@ module.exports = {
         console.log("error.message = ", error.message);
       }
     } else {
-      const { state, description } = req.body;
+      const { postStatus, postDescription } = req.body;
       const { pet_id, token } = req.headers;
-
-      const auth = await Auth.findOne({ _id: token });
+      const authResult = await Auth.findOne({ _id: token }).populate({ path: "user" });
+      const petResult = await Pet.findOne({ _id: pet_id })
 
       try {
-        if (auth) {
+        if (authResult && petResult) {
           try {
             const post = await Post.create({
-              picture: "NoPicturePost.jpg",
-              state,
-              description,
-              postedAt: Date.now(),
-              user: auth.user,
-              pet: pet_id,
+              postPicture: "NoPicturePost.jpg",
+              postPictureList: ["NoPicturePost.jpg"],
+              postStatus,
+              postDescription,
+              postUser: authResult.user,
+              postPet: petResult,
             });
             return res.json(post);
           } catch (error) {
@@ -171,6 +172,35 @@ module.exports = {
       }
     }
   },
+
+  async deletePostDevMode(req, res) {
+    if (process.env.ENVIRONMENT == "dev") {
+      try {
+        var { post_id } = req.headers;
+        const postResult = await Post.findOne({ _id: post_id })
+        if (postResult) {
+          if (postResult?.postPicture == 'NoPicturePost.jpg') {
+            const deletedPost = await postResult.remove()
+            return res.status(200).json({ PostDeleted: deletedPost });
+          } else {
+            const deletedPost = await postResult.remove()
+            const imageResult = await Image.findOne({ key: postResult.postPicture })
+            const deletedImage = await imageResult.remove();
+            return res.status(200).json({ PostDeleted: deletedPost, ImageDelete: deletedImage });
+          }
+        } else {
+          return res.status(403).json({ Error: 'Post not found' });
+        }
+      } catch (error) {
+        return res.status(500).json({ "Internal Server Error": error.message });
+      }
+    } else {
+      console.log(process.env.ENVIRONMENT)
+      return res.status(500).json({ "Internal Server Error": 'You are not a dev' });
+    }
+  },
+
+
 
   async deletePost(req, res) {
     try {
@@ -212,15 +242,60 @@ module.exports = {
     }
   },
 
-  async UserDeletePosts(req, res) {
+  async deletePostBySessionToken(req, res) {
+
+    try {
+      var { token } = req.headers;
+      const authResult = await Auth.findOne({ _id: token })
+      console.log(authResult)
+      const postResult = await Post.deleteMany({ postUser: authResult.userId })
+
+      // for (let x = postResult.lastIndexOf(); x > 0; x--) {
+      //   const deletedNow = await Post.findOne({ postUser: authResult.userId })
+      //   const deleted = await deletedNow.remove();
+
+
+
+
+      //   if (postResult) {
+      //     if (postResult[x]?.postPicture == 'NoPicturePost.jpg') {
+      //       const deletedPost = await postResult[x].remove()
+      //       console.log('postDeleted: ', deletedNow, 'Deleted: ', deleted)
+      //     } else {
+      //       const deletedPost = await postResult.remove()
+      //       const imageResult = await Image.findOne({ key: postResult.postPicture })
+      //       const deletedImage = await imageResult.remove();
+      //       return res.status(200).json({ PostDeleted: deletedPost, ImageDelete: deletedImage });
+      //     }
+      //   } else {
+      //     return res.status(403).json({ Error: 'Post not found' });
+      //   }
+      // }
+      return res.status(200).json({ authResult: authResult, postResult: postResult });
+
+
+
+    } catch (error) {
+      return res.status(500).json({ "Internal Server Error": error.message });
+    }
+
+
+
+
+
+
+
+
+
+
     try {
       var { token } = req.headers;
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
-        const postData = await Post.findOne({ user: auth.user });
+        const postData = await Post.findOne({ userPost: auth.userId });
         if (postData) {
           const image = await Image.findOne({
-            key: postData.picture_url.replace(process.env.PETS_URL, ""),
+            key: postData.postPicture
           });
           if (image) {
             try {

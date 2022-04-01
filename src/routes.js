@@ -72,17 +72,18 @@ routes.delete("/deleteuserbytoken", UserController.deleteUserByToken); //OK//
 //PETS routes
 routes.post(
   "/createpet",
-  upload.single("profilePicture"),
+  upload.single("petPicture"),
   PetController.createPet
 ); //OK//
 routes.get("/getpetbyuserid", PetController.getPetByUserId); //OK//
+routes.get("/getpetbypetid", PetController.getPetByPetId); //OK//
 routes.get("/showallpets", PetController.showallpets); //OK//
 routes.get("/getpetbytoken", PetController.getPetByToken); //OK//
 routes.delete("/deletepet", PetController.deletepet); //OK//
 //routes.delete('/deleteallpets', PetController.deleteallpets);
 
 //UserPOST routes
-routes.post("/createpost", upload.single("picture"), PostController.createPost); //OK//
+routes.post("/createpost", upload.single("postPicture"), PostController.createPost); //OK//
 routes.get("/getpostbystate", PostController.getPostByState); //OK//
 routes.get("/getpostbytoken", PostController.getPostByToken); //OK//
 routes.get("/showallposts", PostController.showAllPosts); //OK//
@@ -90,7 +91,8 @@ routes.get("/getfeed", PostController.getFeed); //OK//
 routes.get("/getmainfeed", PostController.getMainFeed); //OK//
 routes.get("/getpage", PostController.getPage); //OK//
 routes.delete("/deletepost", PostController.deletePost); //OK//
-routes.delete("/UserDeletePosts", PostController.UserDeletePosts);
+routes.delete("/deletepostdevmode", PostController.deletePostDevMode); //OK//
+routes.delete("/deletepostbytoken", PostController.deletePostBySessionToken);
 
 //COMMENT routes
 routes.post("/createcomment", CommentController.createComment); //OK//

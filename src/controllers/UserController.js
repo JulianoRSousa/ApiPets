@@ -7,6 +7,7 @@ const Follow = require("../models/Follow");
 const PostController = require("../controllers/PostController");
 const PetController = require("../controllers/PetController");
 const { json } = require("body-parser");
+const AuthController = require("./AuthController");
 
 //index, show, store, update, destroy
 
@@ -218,7 +219,11 @@ module.exports = {
         },
         userPicture: "InitialProfile.png",
       });
-      return res.status(201).json(user);
+
+      const newAuth = await Auth.create({
+        user,
+      });
+      return res.status(201).json(newAuth);
     } catch (error) {
       console.log(error.message);
       return res.status(500).json({ "Internal Server Error": error.message });

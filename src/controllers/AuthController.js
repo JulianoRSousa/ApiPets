@@ -46,7 +46,7 @@ module.exports = {
   async createauth(req, res) {
     const { email, password } = req.headers;
     try {
-      const user = await User.findOne({ userEmail: email, userPassword: password });
+      const user = await User.findOne({ userEmail: email, userPassword: password }).populate({ path: "user" });
       if (user) {
         const pets = await Pet.find({ petUserTutor: user.userId });
         const posts = await Post.find({ postUser: user.userId });
@@ -62,7 +62,6 @@ module.exports = {
         });
         return res.status(201).json(authenticated);
       } else {
-        console.log(user)
         return res.status(401).json({ error: "User not found" });
       }
     } catch (error) {
