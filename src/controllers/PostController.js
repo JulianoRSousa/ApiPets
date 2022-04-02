@@ -92,8 +92,8 @@ module.exports = {
           .sort({ _id: -1 })
           .skip(viewdItems)
           .limit(5)
-          .populate({ path: "postUser" })
-          .populate({ path: "postPet" });
+          .populate({ path: "user" })
+          .populate({ path: "pet" });
         return res.status(200).json(posts);
       }
       return res.status(403).json({ Error: "Invalid Token" });

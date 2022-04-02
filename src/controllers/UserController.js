@@ -194,7 +194,7 @@ module.exports = {
           }
         }
       } else {
-        return res.status(401).json("The email: " + email.toUpperCase() + " is already being used");
+        return res.status(202).json("The email: " + email.toUpperCase() + " is already being used");
       }
 
       const taggable = (username + " " + fullname).split(" ").join(".");
