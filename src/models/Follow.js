@@ -1,4 +1,4 @@
-const mongoose =  require('mongoose');
+const mongoose = require('mongoose');
 
 const FollowSchema = new mongoose.Schema({
     follower: {
@@ -8,6 +8,10 @@ const FollowSchema = new mongoose.Schema({
     following: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
     },
 });
 

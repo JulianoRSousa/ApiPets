@@ -1,17 +1,20 @@
-const mongoose =  require('mongoose');
+const mongoose = require('mongoose');
 
 const ComplaintSchema = new mongoose.Schema({
     message: String,
-    caller_id: {
+    reason: String,
+    caller: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    post_id: {
+    post: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
     },
-    registerDate: String,
-    reason: String,
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    },
 });
 
 module.exports = mongoose.model('Complaint', ComplaintSchema);

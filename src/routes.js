@@ -84,7 +84,7 @@ routes.delete("/deletepet", PetController.deletepet); //OK//
 
 //UserPOST routes
 routes.post("/createpost", upload.single("postPicture"), PostController.createPost); //OK//
-routes.get("/getpostbystate", PostController.getPostByState); //OK//
+routes.get("/getpostbystatus", PostController.getPostByStatus); //OK//
 routes.get("/getpostbytoken", PostController.getPostByToken); //OK//
 routes.get("/showallposts", PostController.showAllPosts); //OK//
 routes.get("/getfeed", PostController.getFeed); //OK//
@@ -92,7 +92,7 @@ routes.get("/getmainfeed", PostController.getMainFeed); //OK//
 routes.get("/getpage", PostController.getPage); //OK//
 routes.delete("/deletepost", PostController.deletePost); //OK//
 routes.delete("/deletepostdevmode", PostController.deletePostDevMode); //OK//
-routes.delete("/deletepostbytoken", PostController.deletePostBySessionToken);
+routes.delete("/deleteallpostsbysessiontoken", PostController.deleteAllPostsBySessionToken);
 
 //COMMENT routes
 routes.post("/createcomment", CommentController.createComment); //OK//

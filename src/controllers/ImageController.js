@@ -1,8 +1,6 @@
 const Image = require('../models/Image');
 require("dotenv").config();
 
-
-
 module.exports = {
 
     async getImageByKey(req, res) {
@@ -33,23 +31,22 @@ module.exports = {
             if (process.env.ENVIRONMENT == "dev") {
                 if (req.file) {
                     const { originalname: name, size, key, location: url = "" } = req.file;
-                    
+
                     const image = await Image.create({
                         name,
                         size,
                         key,
-                        url,  
+                        url,
                     });
                     return res.status(201).json(image)
-                }else{
-                    return res.status(415).json({ 'Internal Server Error': 'Invalid Media Type' })
+                } else {
+                    return res.status(415).json({ Error: 'Invalid Media Type' })
                 }
             }
-            return res.status(401).json({ 'Error': 'No admin logged' })
+            return res.status(401).json({ Error: 'No admin logged' })
         } catch (error) {
-            return res.status(500).json({ 'Internal Server Error': error.message })
+            return res.status(500).json({ Error: error.message })
         }
-
     },
 
 
@@ -57,18 +54,14 @@ module.exports = {
         try {
             if (process.env.ENVIRONMENT == 'dev') {
                 const { key } = req.headers;
-                const image = await Image.findOne({ key: key })
-                await image.remove();
-                return res.status(201).json({ "Image Removed - Key": key });
+                const image = await Image.findOne({ key })
+                const ImageDeleted = await image.remove();
+                return res.status(201).json(ImageDeleted);
             } else {
-                return res.status(401).json({ "Error": "No system admin logged" })
+                return res.status(401).json({ Error: "No system admin logged" })
             }
         } catch (error) {
-            return res.status(500).json({ "Internal Server Error": error.message })
+            return res.status(500).json({ Error: error.message })
         }
-
     },
-
-
-
 };

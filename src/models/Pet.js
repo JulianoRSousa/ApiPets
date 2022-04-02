@@ -1,53 +1,53 @@
 const mongoose = require('mongoose');
 
 const PetSchema = new mongoose.Schema({
-    petId: String,
-    petPicture: {
+
+    fullname: String,
+    color: String,
+    coat: String,
+    birthdate: String,
+    isMale: String,
+    size: String,
+    breed: String,
+    dataVersion: Number,
+    picture: {
         type: String,
         default: "InitialPetProfile.jpg"
     },
-    petType: {
+    type: {
         type: String,
         default: 'dog'
     },
-    petFullname: String,
-    petColor: String,
-    petCoat: String,
-    petBirthdate: String,
-    petIsMale: String,
-    petSize: String,
-    petBreed: String,
-    petDataVersion: Number,
-    petStatus: {
+    status: {
         type: String,
         default: '0',
     },
-    petCreatedAt: {
+    createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now()
     },
-    petPictureList: [{
+    pictureList: [{
         type: String,
         default: "InitialPetProfile.jpg"
     }],
-    petUserTutor: {
+    userTutor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
 }, {
+    id: false,
     toJSON: {
         virtuals: true,
         versionKey: true,
         useProjection: true,
         transform: function (doc, ret) {
-            ret.petId = ret._id,
-                ret.petDataVersion = ret.__v, delete ret.__v
+            ret.petDataVersion = ret.__v, delete ret.__v
         }
     },
 });
 
-PetSchema.virtual('petPictureUrl').get(function () {
-    return process.env.PETS_URL + this.petPicture;
+PetSchema.virtual('pictureUrl').get(function () {
+    return process.env.PETS_URL + this.picture;
 })
 
 module.exports = mongoose.model('Pet', PetSchema);

@@ -6,8 +6,6 @@ const Image = require("../models/Image");
 const Follow = require("../models/Follow");
 const PostController = require("../controllers/PostController");
 const PetController = require("../controllers/PetController");
-const { json } = require("body-parser");
-const AuthController = require("./AuthController");
 
 //index, show, store, update, destroy
 
@@ -16,7 +14,7 @@ module.exports = {
   async getUserByUsername(req, res) {
     try {
       const username = req.headers.username.toLowerCase();
-      const user = await User.findOne({ userUsername: username });
+      const user = await User.findOne({ username });
       return res.status(200).json(user);
     } catch (error) {
       return res.status(500).json({ "Internal Server Error": error.message });
@@ -25,7 +23,7 @@ module.exports = {
   async getUserByEmail(req, res) {
     try {
       const email = req.headers.email.toLowerCase();
-      const user = await User.findOne({ userEmail: email });
+      const user = await User.findOne({ email });
       return res.status(200).json(user);
     } catch (error) {
       return res.status(500).json({ "Internal Server Error": error.message });
@@ -49,17 +47,17 @@ module.exports = {
       const { user_id } = req.headers;
       const user = await User.findOne({ _id: user_id });
       if (user) {
-        const pets = await Pet.find({ petUserTutor: user._id });
-        const posts = await Post.find({ postUser: user._id });
+        const pets = await Pet.find({ userTutor: user._id });
+        const posts = await Post.find({ user: user._id });
         const following = await Follow.find({ following: user._id });
         const follower = await Follow.find({ follower: user._id });
-        user.userPostsList = posts;
-        user.userPetsList = pets;
-        user.userFollowingsList = following;
-        user.userFollowersList = follower;
+        user.postList = posts;
+        user.petList = pets;
+        user.followingList = following;
+        user.followerList = follower;
         return res.status(200).json(user);
       } else {
-        return res.status(401).json({ error: "Invalid user" });
+        return res.status(401).json({ Error: "User not found" });
       }
     } catch (error) {
       return res.status(500).json({ Error: error.message });
@@ -72,7 +70,7 @@ module.exports = {
       const auth = await Auth.findOne({ _id: token });
 
       if (auth) {
-        const user = await User.findOne({ _id: auth.user });
+        const user = await User.findOne({ _id: auth.user._id });
         const pets = await Pet.find({ user: user._id });
         const posts = await Post.find({ user: user._id });
         user.postsCount = posts.length;
@@ -99,12 +97,13 @@ module.exports = {
               size,
               key,
               url,
+              user: auth.user
             });
 
             const user = await User.findOne({ _id: auth.user });
             user.picture = image.key;
             await user.save();
-            return res.json(user);
+            return res.status(201).json(user);
           } catch (error) {
             return res
               .status(500)
@@ -148,7 +147,7 @@ module.exports = {
       if (auth) {
         try {
           do {
-            var countPet = await Pet.find({ petUserTutor: auth.user._id });
+            var countPet = await Pet.find({ userTutor: auth.user._id });
             await PetController.UserDeleteAccount(token);
           } while (countPet.length > 0);
         } catch (error) {
@@ -156,7 +155,7 @@ module.exports = {
         }
         try {
           do {
-            var countPost = await Post.find({ postUser: auth.user._id });
+            var countPost = await Post.find({ user: auth.user._id });
             await PostController.UserDeleteAccount(token);
           } while (countPost.length > 0);
         } catch (error) {
@@ -167,12 +166,12 @@ module.exports = {
         const deleteAuth = await Auth.deleteOne({ _id: token });
         return res
           .status(201)
-          .json({ deleteUser, deleteAuth });
+          .json({ User: deleteUser, Auth: deleteAuth });
       } else {
-        return res.status(401).json({ error: "Invalid Token" });
+        return res.status(401).json({ Error: "Invalid Token" });
       }
     } catch (error) {
-      return res.status(500).json({ "Internal Sever Error": error.message });
+      return res.status(500).json({ Error: error.message });
     }
   },
 
@@ -181,14 +180,14 @@ module.exports = {
       const email = req.headers.email.toLowerCase();
       const { password, fullname, birthdate, latitude, longitude, cityCode, gender } = req.headers;
       let username = email.split("@")[0];
-      let validUsername = await User.findOne({ userUsername: username });
-      let validEmail = await User.findOne({ userEmail: email });
+      let validUsername = await User.findOne({ username });
+      let validEmail = await User.findOne({ email });
 
       if (!validEmail) {
         if (validUsername) {
           for (i = 1; validUsername; i++) {
             let newUser = username + i;
-            validUsername = await User.findOne({ userUsername: newUser });
+            validUsername = await User.findOne({ username: newUser });
             if (!validUsername) {
               username = newUser;
             }
@@ -199,25 +198,24 @@ module.exports = {
       }
 
       const taggable = (username + " " + fullname).split(" ").join(".");
-      const userTagsList = taggable.toUpperCase().split(".");
+      const tagList = taggable.toUpperCase().split(".");
       const upperName = username.toUpperCase();
-      userTagsList.push(upperName);
+      tagList.push(upperName);
 
       const user = await User.create({
-        userEmail: email,
-        userUsername: username,
-        userTagsList,
-        userPassword: password,
-        userNotificationsList: [],
-        userFullname: fullname,
-        userBirthdate: birthdate ?? '',
-        userGender: gender ?? '',
-        userLocation: {
+        email,
+        username,
+        tagList,
+        password,
+        fullname,
+        birthdate: birthdate ?? '',
+        gender: gender ?? '',
+        location: {
           latitude: latitude ?? '',
           longitude: longitude ?? '',
           cityCode: cityCode ?? ''
         },
-        userPicture: "InitialProfile.png",
+        picture: "InitialProfile.png",
       });
 
       const newAuth = await Auth.create({

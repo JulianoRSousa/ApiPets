@@ -1,52 +1,51 @@
 const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema({
-    postId: String,
-    postDescription: String,
-    postDataVersion: {
+    description: String,
+    dataVersion: {
         type: Number,
         default: 0
     },
-    postPicture: {
+    picture: {
         type: String,
         default: 'NoPicturePost.jpg'
     },
-    postPictureList: [
+    pictureList: [
         {
             type: mongoose.Schema.Types.String,
             default: 'NoPicturePost.jpg'
         }
     ],
-    postStatus: {
+    status: {
         type: String,
         default: '0',
     },
-    postCreatedAt: {
+    createdAt: {
         type: Date,
         default: Date.now()
     },
-    postUser: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    postPet: {
+    pet: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Pet'
     }
 }, {
+    id: false,
     toJSON: {
         virtuals: true,
         versionKey: true,
         useProjection: true,
         transform: function (doc, ret) {
-            ret.postId = ret._id,
-                ret.postDataVersion = ret.__v, delete ret.__v
+            ret.dataVersion = ret.__v, delete ret.__v
         }
     },
 });
 
-PostSchema.virtual('postPictureUrl').get(function () {
-    return process.env.PETS_URL + this.postPicture;
+PostSchema.virtual('pictureUrl').get(function () {
+    return process.env.PETS_URL + this.picture;
 });
 
 module.exports = mongoose.model('Post', PostSchema);

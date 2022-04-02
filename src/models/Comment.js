@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const CommentSchema = new mongoose.Schema({
+    message: String,
     commenter: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -9,8 +10,14 @@ const CommentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
     },
-    message: String,
-    registerDate: String,
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    },
+    editedAt: {
+        type: Date,
+        default: null
+    }
 });
 
 module.exports = mongoose.model('Comment', CommentSchema);

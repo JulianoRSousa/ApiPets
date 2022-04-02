@@ -7,7 +7,7 @@ module.exports = {
     const { user_id } = req.headers;
 
     try {
-      const pets = await Pet.find({ user: user_id });
+      const pets = await Pet.find({ userTutor: user_id });
       return res.status(200).json(pets);
     } catch (error) {
       return res.status(500).json({ Error: "Invalid User Format" });
@@ -16,13 +16,11 @@ module.exports = {
 
   async getPetByPetId(req, res) {
     const { pet_id } = req.headers;
-
-    console.log('Received Id: ', pet_id)
     try {
       const petResult = await Pet.findOne({ _id: pet_id });
       return res.status(200).json(petResult);
     } catch (error) {
-      return res.status(500).json({ Error: "Invalid Pet token Format" });
+      return res.status(500).json({ Error: "Invalid Pet Token Format" });
     }
   },
 
@@ -31,7 +29,7 @@ module.exports = {
     try {
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
-        const pets = await Pet.find({ user: auth.user });
+        const pets = await Pet.find({ userTutor: auth.user._id });
         return res.status(200).json(pets);
       } else {
         return res.status(403).json({ Error: "Invalid Token" });
@@ -47,7 +45,7 @@ module.exports = {
         const pets = await Pet.find();
         return res.status(200).json(pets);
       } catch (error) {
-        return res.status(403).json({ Error: "Cant Find Pets" });
+        return res.status(401).json({ Error: "Pets Not Found" });
       }
     }
     return res.status(403).json({ Error: "No system admin logged" });
@@ -58,13 +56,13 @@ module.exports = {
       if (req.file) {
         const { originalname: name, size, key, location: url = "" } = req.file;
         const {
-          petFullname,
-          petColor,
-          petCoatSize,
-          petType,
-          petBirthdate,
-          petIsMale,
-          petStatus,
+          fullname,
+          color,
+          coatSize,
+          type,
+          birthdate,
+          isMale,
+          status,
         } = req.body;
         const { token } = req.headers;
 
@@ -80,16 +78,16 @@ module.exports = {
             });
 
             const pet = await Pet.create({
-              petPicture: image.key,
-              petPictureList: [image.key],
-              petType,
-              petFullname,
-              petColor,
-              petCoatSize,
-              petBirthdate,
-              petIsMale,
-              petStatus: petStatus ?? '0',
-              petUserTutor: auth.user,
+              picture: image.key,
+              pictureList: [image.key],
+              type,
+              fullname,
+              color,
+              coatSize,
+              birthdate,
+              isMale,
+              status: status ?? '0',
+              userTutor: auth.user,
             });
             return res.status(201).json(pet);
           } else {
@@ -101,24 +99,24 @@ module.exports = {
       } else {
         try {
           const {
-            petFullname,
-            petColor,
-            petCoatSize,
-            petBirthdate,
-            petIsMale,
-            petStatus
+            fullname,
+            color,
+            coatSize,
+            birthdate,
+            isMale,
+            status
           } = req.body;
           const { token } = req.headers;
           const auth = await Auth.findOne({ _id: token });
           if (auth) {
             const pet = await Pet.create({
-              petStatus: petStatus ?? '0',
-              petFullname,
-              petColor,
-              petCoatSize,
-              petBirthdate,
-              petIsMale,
-              petUserTutor: auth.user,
+              status: status ?? '0',
+              fullname,
+              color,
+              coatSize,
+              birthdate,
+              isMale,
+              userTutor: auth.user,
             });
             return res.status(201).json(pet);
           } else {
@@ -135,12 +133,12 @@ module.exports = {
 
   async deletepet(req, res) {
     try {
-      const { pet, token } = req.headers;
+      const { pet_id, token } = req.headers;
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
-        const deletePet = await Pet.findOne({ _id: pet });
+        const deletePet = await Pet.findOne({ _id: pet_id });
         if (deletePet) {
-          if (deletePet.user == auth.user) {
+          if (deletePet.userTutor._id == auth.user._id) {
             if (deletePet.picture != "InitialPetProfile.jpg") {
               const image = await Image.findOne({ key: deletePet.picture });
               image.remove();
@@ -152,10 +150,10 @@ module.exports = {
               .json({ error: "User and pet does not match" });
           }
         } else {
-          return res.status(404).json({ error: "Pet not found" });
+          return res.status(403).json({ error: "Pet not found" });
         }
       } else {
-        return res.status(401).json({ error: "Invalid Token" });
+        return res.status(403).json({ error: "Invalid Token" });
       }
     } catch (error) {
       return res.status(500).json({ "Internal Server Error": error.message });
@@ -166,9 +164,9 @@ module.exports = {
     try {
       const auth = await Auth.findOne({ _id: token });
       if (auth) {
-        const petsData = await Pet.findOne({ petUserTutor: auth.user._id });
+        const petsData = await Pet.findOne({ userTutor: auth.user._id });
         if (petsData) {
-          const image = await Image.findOne({ key: petsData.petPicture });
+          const image = await Image.findOne({ key: petsData.picture });
           if (image) {
             try {
               await image.remove();
@@ -195,26 +193,4 @@ module.exports = {
       return res.status(500).json({ "Internal Server Error": error.message });
     }
   },
-  /*
-    async deleteallpets(req, res) {
-
-        try {
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-            await Pet.deleteOne();
-        } catch (error) {
-        }
-        return res.json({ message: 'Deleted' });
-    }
-*/
 };
