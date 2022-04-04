@@ -75,7 +75,6 @@ routes.post(
   upload.single("picture"),
   PetController.createPet
 ); //OK//
-routes.get("/getpetbyuserid", PetController.getPetByUserId); //OK//
 routes.get("/getpetbypetid", PetController.getPetByPetId); //OK//
 routes.get("/showallpets", PetController.showallpets); //OK//
 routes.get("/getpetbytoken", PetController.getPetByToken); //OK//
@@ -83,7 +82,7 @@ routes.delete("/deletepet", PetController.deletepet); //OK//
 //routes.delete('/deleteallpets', PetController.deleteallpets);
 
 //UserPOST routes
-routes.post("/createpost", upload.single("postPicture"), PostController.createPost); //OK//
+routes.post("/createpost", upload.single("picture"), PostController.createPost); //OK//
 routes.get("/getpostbystatus", PostController.getPostByStatus); //OK//
 routes.get("/getpostbytoken", PostController.getPostByToken); //OK//
 routes.get("/showallposts", PostController.showAllPosts); //OK//

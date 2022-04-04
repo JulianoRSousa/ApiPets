@@ -4,16 +4,6 @@ const Image = require("../models/Image");
 const User = require("../models/User");
 
 module.exports = {
-  async getPetByUserId(req, res) {
-    const { user_id } = req.headers;
-
-    try {
-      const pets = await Pet.find({ userTutor: user_id });
-      return res.status(200).json(pets);
-    } catch (error) {
-      return res.status(500).json({ Error: "Invalid User Format" });
-    }
-  },
 
   async getPetByPetId(req, res) {
     const { pet_id } = req.headers;
