@@ -108,7 +108,7 @@ module.exports = {
       const { status, description } = req.body;
       const { pet_id, token } = req.headers;
 
-      const authResult = await Auth.findOne({ _id: token }).populate({ path: "user" });
+      const authResult = await Auth.findOne({ _id: token }).populate({ path: "user" })
       const petResult = await Pet.findOne({ _id: pet_id })
       try {
         if (authResult && petResult) {
@@ -129,7 +129,11 @@ module.exports = {
               user: authResult.user,
               pet: petResult,
             });
-            return res.json(post);
+            const userInfo = await User.findOne({ _id: authResult.user._id })
+            const postList = await Post.find({ user: authResult.user._id })
+            userInfo.postList = postList;
+            userInfo.save();
+            return res.status(201).json(post);
           } catch (error) {
             return res
               .status(500)

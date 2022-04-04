@@ -15,10 +15,6 @@ const UserSchema = new mongoose.Schema(
       type: Date,
       default: Date.now()
     },
-    firstAccess: {
-      type: Boolean,
-      default: true,
-    },
     password: {
       type: String,
       select: false
@@ -26,7 +22,7 @@ const UserSchema = new mongoose.Schema(
     notificationList: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Notification'
+        ref: "Notification"
       }
     ],
     followingList: [

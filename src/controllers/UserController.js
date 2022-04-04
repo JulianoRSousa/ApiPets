@@ -43,16 +43,18 @@ module.exports = {
   },
 
   async getUserById(req, res) {
+
     try {
       const { user_id } = req.headers;
-      const user = await User.findOne({ _id: user_id });
+      const user = await User.findOne({ _id: user_id })
+        .populate({ path: 'petList' })
+        .populate({ path: 'postList' })
+        .populate({ path: 'pictureList' })
+
       if (user) {
-        const pets = await Pet.find({ userTutor: user._id });
-        const posts = await Post.find({ user: user._id });
+
         const following = await Follow.find({ following: user._id });
         const follower = await Follow.find({ follower: user._id });
-        user.postList = posts;
-        user.petList = pets;
         user.followingList = following;
         user.followerList = follower;
         return res.status(200).json(user);

@@ -7,16 +7,19 @@ const Follow = require("../models/Follow");
 //index, show, store, update, destroy
 
 module.exports = {
+
+
+
   async confirmauth(req, res) {
     const { token } = req.headers;
     if (token == null || token == "") {
       return res.status(403).json({ Error: "Initial Mode" });
     } else {
       try {
-        const authenticated = await Auth.findOne({ _id: token });
+        const authenticated = await Auth.findOne({ _id: token }).populate({ path: 'user' })
+        const userInfo = await User.findOne({ _id: authenticated.user._id }).populate({ path: 'petList' })
         if (authenticated) {
-          await authenticated.populate("user").execPopulate();
-          return res.status(200).json(authenticated);
+          return res.status(200).json(userInfo);
         } else {
           return res.status(401).json({ Error: "Invalid Token" });
         }

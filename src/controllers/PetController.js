@@ -1,6 +1,7 @@
 const Pet = require("../models/Pet");
 const Auth = require("../models/Auth");
 const Image = require("../models/Image");
+const User = require("../models/User");
 
 module.exports = {
   async getPetByUserId(req, res) {
@@ -89,6 +90,10 @@ module.exports = {
               status: status ?? '0',
               userTutor: auth.user,
             });
+            const petList = await Pet.find({ userTutor: auth.user })
+            const userInfo = await User.findOne({ _id: auth.user._id })
+            userInfo.petList = petList
+            userInfo.save();
             return res.status(201).json(pet);
           } else {
             return res.status(401).json({ Error: "Invalid Token" });
@@ -134,16 +139,15 @@ module.exports = {
   async deletepet(req, res) {
     try {
       const { pet_id, token } = req.headers;
-      const auth = await Auth.findOne({ _id: token });
+      const auth = await Auth.findOne({ _id: token })
       if (auth) {
-        const deletePet = await Pet.findOne({ _id: pet_id });
+        const deletePet = await Pet.findOneAndDelete({ _id: pet_id })
         if (deletePet) {
-          if (deletePet.userTutor._id == auth.user._id) {
-            if (deletePet.picture != "InitialPetProfile.jpg") {
-              const image = await Image.findOne({ key: deletePet.picture });
-              image.remove();
-            }
-            deletePet.remove();
+          if (String(deletePet.userTutor) == String(auth.user)) {
+            const image = await Image.findOne({ key: deletePet.picture });
+            deletePet.picture = image
+            image.remove();
+            return res.status(201).json(deletePet)
           } else {
             return res
               .status(403)
