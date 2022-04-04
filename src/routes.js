@@ -72,7 +72,7 @@ routes.delete("/deleteuserbytoken", UserController.deleteUserByToken); //OK//
 //PETS routes
 routes.post(
   "/createpet",
-  upload.single("petPicture"),
+  upload.single("picture"),
   PetController.createPet
 ); //OK//
 routes.get("/getpetbyuserid", PetController.getPetByUserId); //OK//
